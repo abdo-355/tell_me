@@ -1,13 +1,22 @@
 import express from "express";
-import {config} from "dotenv";
+import { config } from "dotenv";
+import mongoose from "mongoose";
+import bodyParser from "body-parser";
 
-const app = express()
+import authRouter from "./routes/auth";
+
+const app = express();
 config();
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/", (req, res, next) => {
-    console.log("it's working")
-})
+app.use("/auth", authRouter);
 
-app.listen(process.env.PORT ||  8080, () => {
-    console.log("connected on port 8080")
-})
+mongoose
+  .set("strictQuery", false)
+  .connect(process.env.MONGODB_URI)
+  .then(() => {
+    app.listen(process.env.PORT || 8080, () => {
+      console.log("connected on port 8080");
+    });
+  })
+  .catch((err) => console.log(err));
