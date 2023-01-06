@@ -8,13 +8,21 @@ router.post(
   "/signup",
   [
     body("firstName")
+      .trim()
       .notEmpty()
-      .isAlphanumeric()
-      .withMessage("first name cannot be empty"),
+      .withMessage("first name can't be empty")
+      .bail()
+      // if the first name is empty the is alpha  will never run
+      .isAlpha()
+      .withMessage("first name must be valid"),
     body("lastName")
+      .trim()
       .notEmpty()
-      .isAlphanumeric()
-      .withMessage("last name cannot be empty"),
+      .withMessage("last name can't be empty")
+      .bail()
+      // if the first name is empty the is alpha  will never run
+      .isAlpha()
+      .withMessage("last name must be valid"),
     body("email").isEmail().withMessage("please enter a valid email address"),
     body("password")
       .isLength({ min: 8 })
