@@ -1,15 +1,16 @@
 import { model, Schema } from "mongoose";
 
 interface IUser {
-  firsName: string;
+  firstName: string;
   lastName: string;
   email: string;
   password: string;
+  //for recieved messages
   messages: string[];
 }
 
 const UserSchema = new Schema<IUser>({
-  firsName: {
+  firstName: {
     type: String,
     required: true,
   },

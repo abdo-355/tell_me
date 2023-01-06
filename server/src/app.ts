@@ -7,7 +7,7 @@ import authRouter from "./routes/auth";
 
 const app = express();
 config();
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use("/auth", authRouter);
 
