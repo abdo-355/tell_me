@@ -1,5 +1,7 @@
 import Input from "../components/UI/Input";
 import styles from "./Signup.module.css";
+import ArrowLeft from "../components/UI/ArrowLeft";
+import { Link } from "react-router-dom";
 
 const Signup = () => {
   return (
@@ -36,6 +38,12 @@ const Signup = () => {
           </div>
         </form>
       </div>
+      <Link
+        to="/"
+        className="absolute h-10 w-10 top-5 left-5 hover:h-11 hover:w-11 transition-all"
+      >
+        <ArrowLeft styles="text-green-900" />
+      </Link>
     </div>
   );
 };
