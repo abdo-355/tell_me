@@ -13,8 +13,6 @@ export const signup: RequestHandler = async (req, res, next) => {
 
     const errors = validationResult(req);
 
-    console.log(errors.array());
-
     if (!errors.isEmpty()) {
       return res.status(400).json({ message: errors.array() });
     }
@@ -26,8 +24,6 @@ export const signup: RequestHandler = async (req, res, next) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-
-    console.log(hashedPassword);
 
     const user = new User({
       firstName,
@@ -42,5 +38,15 @@ export const signup: RequestHandler = async (req, res, next) => {
     res.json({ message: "user signed up successfully" });
   } catch (err) {
     res.status(500).json({ message: "an error occurred" });
+  }
+};
+
+export const login: RequestHandler = (req, res, next) => {
+  const { email, password } = req.body;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ message: errors.array() });
   }
 };
