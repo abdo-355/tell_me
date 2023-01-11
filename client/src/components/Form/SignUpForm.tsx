@@ -1,4 +1,5 @@
 import { useState, FormEventHandler } from "react";
+import axios from "axios";
 
 import Input from "../UI/Input";
 
@@ -25,7 +26,7 @@ const fields: IInputField[] = [
 ];
 
 const SignUpForm = () => {
-  const [formIsValid, setFormIsValid] = useState(true);
+  const [formIsValid, setFormIsValid] = useState(false);
 
   const [formData, setFormData] = useState<IFormFields>({
     fName: "",
@@ -43,9 +44,23 @@ const SignUpForm = () => {
     confirmPassword: "",
   });
 
+  const sendData = async () => {
+    if (!formIsValid) return;
+
+    const res = await axios.post("/auth/signup", {
+      firstName: formData.fName,
+      lastName: formData.lName,
+      email: formData.email,
+      password: formData.password,
+    });
+
+    console.log(res.data);
+  };
+
   const formSubmitHandler: FormEventHandler = (e) => {
     e.preventDefault();
 
+    setFormIsValid(true);
     if (formData.fName === "") {
       setErrors((prev) => {
         return { ...prev, fName: "First name can't be empty" };
@@ -83,7 +98,10 @@ const SignUpForm = () => {
       });
       setFormIsValid(false);
     }
+
+    sendData();
   };
+
   return (
     <form
       onSubmit={formSubmitHandler}
