@@ -1,19 +1,24 @@
-import { forwardRef, useState, FocusEventHandler } from "react";
+import { forwardRef, FocusEventHandler } from "react";
 
 interface Props {
   label: string;
   id: string;
   error?: string;
   type: "text" | "email" | "password";
+  setMessage?: (message: string) => void;
 }
 
 const Input = forwardRef<HTMLInputElement, Props>(
-  ({ id, label, type, error }, ref) => {
-    const [errorMessage, setErrorMessage] = useState(error || "");
-
+  ({ id, label, type, error, setMessage }, ref) => {
     const blurHandler: FocusEventHandler<HTMLInputElement> = (e) => {
-      if (e.target.value === "") {
-        setErrorMessage("this field can't be empty");
+      if (e.target.value === "" && setMessage) {
+        setMessage("This field can't be empty");
+      }
+    };
+
+    const focusHandler: FocusEventHandler<HTMLInputElement> = (e) => {
+      if (setMessage) {
+        setMessage("");
       }
     };
 
@@ -25,19 +30,17 @@ const Input = forwardRef<HTMLInputElement, Props>(
         <input
           type={type}
           id={id}
-          ref={ref}
           onBlur={blurHandler}
-          onFocus={() => setErrorMessage("")}
+          onFocus={focusHandler}
+          ref={ref}
           className={`w-full h-10 rounded-lg ${
-            errorMessage === ""
-              ? "border-green-900"
-              : "border-red-700 bg-red-200"
+            !error ? "border-green-900" : "border-red-700 bg-red-200"
           } border-2 px-2 text-xl`}
         />
-        {errorMessage !== "" && (
+        {!!error && (
           <div className="relative">
             <span className="block absolute h-0 -top-1 text-red-700">
-              {errorMessage}
+              {error}
             </span>
           </div>
         )}
