@@ -1,8 +1,8 @@
-import { useState, useRef, FormEventHandler } from "react";
+import { useState, FormEventHandler } from "react";
 
 import Input from "../UI/Input";
 
-interface IInputErrors {
+export interface IFormFields {
   fName: string;
   lName: string;
   email: string;
@@ -10,60 +10,71 @@ interface IInputErrors {
   confirmPassword: string;
 }
 
+interface IInputField {
+  id: keyof IFormFields;
+  label: string;
+  type: "text" | "email" | "password";
+}
+
+const fields: IInputField[] = [
+  { id: "fName", label: "First name", type: "text" },
+  { id: "lName", label: "Last name", type: "text" },
+  { id: "email", label: "Email", type: "email" },
+  { id: "password", label: "Password", type: "password" },
+  { id: "confirmPassword", label: "Confirm Password", type: "password" },
+];
+
 const SignUpForm = () => {
-  const [errors, setErrors] = useState<IInputErrors>({
+  const [formIsValid, setFormIsValid] = useState(true);
+
+  const [formData, setFormData] = useState<IFormFields>({
     fName: "",
     lName: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-  const [formIsValid, setFormIsValid] = useState(true);
 
-  const fNameRef = useRef<HTMLInputElement>(null);
-  const lNameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const confirmPasswordRef = useRef<HTMLInputElement>(null);
+  const [errors, setErrors] = useState<IFormFields>({
+    fName: "",
+    lName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const formSubmitHandler: FormEventHandler = (e) => {
     e.preventDefault();
 
-    const enteredFName = fNameRef.current?.value;
-    const enteredLName = lNameRef.current?.value;
-    const enteredEmail = emailRef.current?.value;
-    const enteredPassword = passwordRef.current?.value;
-    const enteredPasswordConfirm = confirmPasswordRef.current?.value;
-
-    if (enteredFName === "") {
+    if (formData.fName === "") {
       setErrors((prev) => {
         return { ...prev, fName: "First name can't be empty" };
       });
       setFormIsValid(false);
     }
 
-    if (enteredLName === "") {
+    if (formData.lName === "") {
       setErrors((prev) => {
         return { ...prev, lName: "Last name can't be empty" };
       });
       setFormIsValid(false);
     }
 
-    if (!enteredEmail?.includes("@") || !enteredEmail?.includes(".")) {
+    if (!formData.email.includes("@") || !formData.email.includes(".")) {
       setErrors((prev) => {
         return { ...prev, email: "Please enter a valid Email" };
       });
       setFormIsValid(false);
     }
 
-    if (enteredPassword!.length < 8) {
+    if (formData.password!.length < 8) {
       setErrors((prev) => {
         return { ...prev, password: "Password must be atleast 8 characters" };
       });
       setFormIsValid(false);
     }
 
-    if (enteredPasswordConfirm !== enteredPassword) {
+    if (formData.confirmPassword !== formData.password) {
       setErrors((prev) => {
         return {
           ...prev,
@@ -79,67 +90,33 @@ const SignUpForm = () => {
       className="absolute inset-x-10 top-10 bottom-5 overflow-clip"
     >
       <div className="flex">
-        <Input
-          ref={fNameRef}
-          id="fName"
-          label="First name"
-          type="text"
-          error={errors.fName}
-          setMessage={(message) =>
-            setErrors((prev) => {
-              return { ...prev, fName: message };
-            })
-          }
-        />
-        <Input
-          ref={lNameRef}
-          id="lName"
-          label="Last name"
-          type="text"
-          error={errors.lName}
-          setMessage={(message) =>
-            setErrors((prev) => {
-              return { ...prev, lName: message };
-            })
-          }
-        />
+        {fields
+          .filter((e, i) => i < 2)
+          .map((field) => (
+            <Input
+              key={field.id}
+              id={field.id}
+              label={field.label}
+              type={field.type}
+              error={errors[field.id]}
+              setData={setFormData}
+              setErrors={setErrors}
+            />
+          ))}
       </div>
-      <Input
-        ref={emailRef}
-        id="email"
-        label="Email"
-        type="email"
-        error={errors.email}
-        setMessage={(message) =>
-          setErrors((prev) => {
-            return { ...prev, email: message };
-          })
-        }
-      />
-      <Input
-        ref={passwordRef}
-        id="password"
-        label="Password"
-        type="password"
-        error={errors.password}
-        setMessage={(message) =>
-          setErrors((prev) => {
-            return { ...prev, password: message };
-          })
-        }
-      />
-      <Input
-        ref={confirmPasswordRef}
-        id="confirmPassword"
-        label="Confirm password"
-        type="password"
-        error={errors.confirmPassword}
-        setMessage={(message) =>
-          setErrors((prev) => {
-            return { ...prev, confirmPassword: message };
-          })
-        }
-      />
+      {fields
+        .filter((e, i) => i >= 2)
+        .map((field) => (
+          <Input
+            key={field.id}
+            id={field.id}
+            label={field.label}
+            type={field.type}
+            error={errors[field.id]}
+            setData={setFormData}
+            setErrors={setErrors}
+          />
+        ))}
       <span className="block mx-6">
         By signing up you agree to our{" "}
         <a
