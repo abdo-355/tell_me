@@ -7,8 +7,10 @@ import LoginForm from "../components/Form/LoginForm";
 
 const Form = () => {
   return (
-    <div className={`${styles.background} h-screen relative`}>
-      <div className="absolute inset-y-20 inset-x-16 mx-auto  max-w-xl shadow-gray-800 shadow-md rounded-xl bg-green-100">
+    <div
+      className={`${styles.background} h-screen relative flex justify-center items-center`}
+    >
+      <div className="relative flex-auto max-w-xl w-auto h-auto overflow-visible shadow-gray-800 shadow-md rounded-xl bg-green-100">
         <Routes>
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/login" element={<LoginForm />} />

@@ -26,7 +26,7 @@ const fields: IInputField[] = [
 ];
 
 const SignupForm = () => {
-  const [formIsValid, setFormIsValid] = useState(false);
+  const [formIsValid, setFormIsValid] = useState(true);
 
   const [formData, setFormData] = useState<ISignupFields>({
     fName: "",
@@ -60,7 +60,6 @@ const SignupForm = () => {
   const formSubmitHandler: FormEventHandler = (e) => {
     e.preventDefault();
 
-    setFormIsValid(true);
     if (formData.fName === "") {
       setErrors((prev) => {
         return { ...prev, fName: "First name can't be empty" };
@@ -103,10 +102,7 @@ const SignupForm = () => {
   };
 
   return (
-    <form
-      onSubmit={formSubmitHandler}
-      className="absolute inset-x-10 top-10 bottom-5 overflow-clip"
-    >
+    <form onSubmit={formSubmitHandler} className="mx-5 my-7">
       <div className="flex">
         {fields
           .filter((e, i) => i < 2)

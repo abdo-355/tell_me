@@ -24,7 +24,8 @@ export default function Header() {
                 <NavToggler open={open} />
                 {/*---------------------*/}
                 <Logo />
-                <NavButton content="sign up" />
+                <NavButton content="log in" path="/auth/login" />
+                <NavButton content="sign up" path="/auth/signup" />
               </div>
             </div>
 

@@ -20,7 +20,7 @@ const fields: IField[] = [
 ];
 
 const LoginForm = () => {
-  const [formIsValid, setFormIsValid] = useState(false);
+  const [formIsValid, setFormIsValid] = useState(true);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -33,9 +33,13 @@ const LoginForm = () => {
   });
 
   const sendData = async () => {
+    console.log("pressed");
+
     if (!formIsValid) return;
 
-    const res = await axios.post("/auth/signup", {
+    console.log("pressed");
+
+    const res = await axios.post("/auth/login", {
       email: formData.email,
       password: formData.password,
     });
@@ -43,10 +47,8 @@ const LoginForm = () => {
     console.log(res.data);
   };
 
-  const formSubmitHandler: FormEventHandler = (e) => {
+  const formSubmitHandler: FormEventHandler = async (e) => {
     e.preventDefault();
-
-    setFormIsValid(true);
 
     if (!formData.email.includes("@") || !formData.email.includes(".")) {
       setErrors((prev) => {
@@ -62,34 +64,28 @@ const LoginForm = () => {
       setFormIsValid(false);
     }
 
-    sendData();
+    await sendData();
   };
 
   return (
-    <form
-      onSubmit={formSubmitHandler}
-      className="absolute inset-x-10 top-10 bottom-5 overflow-clip"
-    >
-      {fields
-        .filter((e, i) => i >= 2)
-        .map((field) => (
-          <Input
-            key={field.id}
-            id={field.id}
-            label={field.label}
-            type={field.type}
-            error={errors[field.id]}
-            setData={setFormData}
-            setErrors={setErrors}
-          />
-        ))}
-
+    <form onSubmit={formSubmitHandler} className="mx-5 my-7">
+      {fields.map((field) => (
+        <Input
+          key={field.id}
+          id={field.id}
+          label={field.label}
+          type={field.type}
+          error={errors[field.id]}
+          setData={setFormData}
+          setErrors={setErrors}
+        />
+      ))}
       <div className="w-auto h-[7rem] flex items-center justify-center">
         <button
           type="submit"
           className="bg-green-800 text-white uppercase w-80 h-16 mx-5 text-3xl rounded-full"
         >
-          Sign up
+          log in
         </button>
       </div>
     </form>
