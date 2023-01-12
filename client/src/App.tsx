@@ -1,13 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 
 import Header from "./components/Header/Header";
-import Signup from "./pages/Signup";
+import Form from "./pages/Form";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Header />} />
-      <Route path="/signup" element={<Signup />} />
+      <Route path="/auth" element={<Form />} />
     </Routes>
   );
 };

@@ -6,21 +6,26 @@ import {
   ChangeEventHandler,
 } from "react";
 
-import { IFormFields } from "../Form/SignUpForm";
+import { ISignupFields } from "../Form/SignupForm";
+import { ILoginFields } from "../Form/LoginForm";
 
 interface Props {
   label: string;
-  id: keyof IFormFields;
+  id: keyof ISignupFields | keyof ILoginFields;
   error?: string;
   type: "text" | "email" | "password";
-  setData: Dispatch<SetStateAction<IFormFields>>;
-  setErrors: Dispatch<SetStateAction<IFormFields>>;
+  setData:
+    | Dispatch<SetStateAction<ISignupFields>>
+    | Dispatch<SetStateAction<ILoginFields>>;
+  setErrors:
+    | Dispatch<SetStateAction<ISignupFields>>
+    | Dispatch<SetStateAction<ILoginFields>>;
 }
 
 const Input: FC<Props> = ({ id, label, type, error, setData, setErrors }) => {
   const blurHandler: FocusEventHandler<HTMLInputElement> = (e) => {
     if (e.target.value === "") {
-      setErrors((prev) => {
+      setErrors((prev: any) => {
         const curr = { ...prev };
         curr[id] = "This field can't be empty";
         return curr;
@@ -29,7 +34,7 @@ const Input: FC<Props> = ({ id, label, type, error, setData, setErrors }) => {
   };
 
   const focusHandler: FocusEventHandler<HTMLInputElement> = (e) => {
-    setErrors((prev) => {
+    setErrors((prev: any) => {
       const curr = { ...prev };
       curr[id] = "";
       return curr;
@@ -37,7 +42,7 @@ const Input: FC<Props> = ({ id, label, type, error, setData, setErrors }) => {
   };
 
   const changeHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setData((prev) => {
+    setData((prev: any) => {
       const curr = { ...prev };
       curr[id] = e.target.value;
       return curr;

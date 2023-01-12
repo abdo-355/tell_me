@@ -1,14 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, Routes, Route } from "react-router-dom";
 
-import styles from "./Signup.module.css";
+import styles from "./styles.module.css";
 import ArrowLeft from "../components/UI/ArrowLeft";
-import SignUpForm from "../components/Form/SignUpForm";
+import SignupForm from "../components/Form/SignupForm";
+import LoginForm from "../components/Form/LoginForm";
 
-const Signup = () => {
+const Form = () => {
   return (
     <div className={`${styles.background} h-screen relative`}>
       <div className="absolute inset-y-20 inset-x-16 mx-auto  max-w-xl shadow-gray-800 shadow-md rounded-xl bg-green-100">
-        <SignUpForm />
+        <Routes>
+          <Route path="/signup" element={<SignupForm />} />
+          <Route path="/login" element={<LoginForm />} />
+        </Routes>
       </div>
       <Link
         to="/"
@@ -20,4 +24,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Form;

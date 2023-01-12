@@ -3,53 +3,39 @@ import axios from "axios";
 
 import Input from "../UI/Input";
 
-export interface ISignupFields {
-  fName: string;
-  lName: string;
+export interface ILoginFields {
   email: string;
   password: string;
-  confirmPassword: string;
 }
 
-interface IInputField {
-  id: keyof ISignupFields;
+interface IField {
+  id: keyof ILoginFields;
   label: string;
   type: "text" | "email" | "password";
 }
 
-const fields: IInputField[] = [
-  { id: "fName", label: "First name", type: "text" },
-  { id: "lName", label: "Last name", type: "text" },
+const fields: IField[] = [
   { id: "email", label: "Email", type: "email" },
   { id: "password", label: "Password", type: "password" },
-  { id: "confirmPassword", label: "Confirm Password", type: "password" },
 ];
 
-const SignupForm = () => {
+const LoginForm = () => {
   const [formIsValid, setFormIsValid] = useState(false);
 
-  const [formData, setFormData] = useState<ISignupFields>({
-    fName: "",
-    lName: "",
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
-  const [errors, setErrors] = useState<ISignupFields>({
-    fName: "",
-    lName: "",
+  const [errors, setErrors] = useState({
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
   const sendData = async () => {
     if (!formIsValid) return;
 
     const res = await axios.post("/auth/signup", {
-      firstName: formData.fName,
-      lastName: formData.lName,
       email: formData.email,
       password: formData.password,
     });
@@ -61,19 +47,6 @@ const SignupForm = () => {
     e.preventDefault();
 
     setFormIsValid(true);
-    if (formData.fName === "") {
-      setErrors((prev) => {
-        return { ...prev, fName: "First name can't be empty" };
-      });
-      setFormIsValid(false);
-    }
-
-    if (formData.lName === "") {
-      setErrors((prev) => {
-        return { ...prev, lName: "Last name can't be empty" };
-      });
-      setFormIsValid(false);
-    }
 
     if (!formData.email.includes("@") || !formData.email.includes(".")) {
       setErrors((prev) => {
@@ -89,16 +62,6 @@ const SignupForm = () => {
       setFormIsValid(false);
     }
 
-    if (formData.confirmPassword !== formData.password) {
-      setErrors((prev) => {
-        return {
-          ...prev,
-          confirmPassword: "This doesn't match the entered password",
-        };
-      });
-      setFormIsValid(false);
-    }
-
     sendData();
   };
 
@@ -107,21 +70,6 @@ const SignupForm = () => {
       onSubmit={formSubmitHandler}
       className="absolute inset-x-10 top-10 bottom-5 overflow-clip"
     >
-      <div className="flex">
-        {fields
-          .filter((e, i) => i < 2)
-          .map((field) => (
-            <Input
-              key={field.id}
-              id={field.id}
-              label={field.label}
-              type={field.type}
-              error={errors[field.id]}
-              setData={setFormData}
-              setErrors={setErrors}
-            />
-          ))}
-      </div>
       {fields
         .filter((e, i) => i >= 2)
         .map((field) => (
@@ -135,15 +83,7 @@ const SignupForm = () => {
             setErrors={setErrors}
           />
         ))}
-      <span className="block mx-6">
-        By signing up you agree to our{" "}
-        <a
-          href="/signup"
-          className="text-blue-900 underline underline-offset-2"
-        >
-          Privacy Policy
-        </a>
-      </span>
+
       <div className="w-auto h-[7rem] flex items-center justify-center">
         <button
           type="submit"
@@ -156,4 +96,4 @@ const SignupForm = () => {
   );
 };
 
-export default SignupForm;
+export default LoginForm;
