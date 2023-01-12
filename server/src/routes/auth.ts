@@ -31,11 +31,15 @@ router.post(
   authControllers.signup
 );
 
-router.post("/logout", [
-  body("email").isEmail().withMessage("please enter a valid email address"),
-  body("password")
-    .isLength({ min: 8 })
-    .withMessage("password must be atleast 8 characters"),
-]);
+router.post(
+  "/login",
+  [
+    body("email").isEmail().withMessage("please enter a valid email address"),
+    body("password")
+      .isLength({ min: 8 })
+      .withMessage("password must be atleast 8 characters"),
+  ],
+  authControllers.login
+);
 
 export default router;
