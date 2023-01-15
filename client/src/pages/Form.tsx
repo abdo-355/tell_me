@@ -2,7 +2,7 @@ import { Link, Routes, Route } from "react-router-dom";
 
 import styles from "./styles.module.css";
 import ArrowLeft from "../components/UI/ArrowLeft";
-import SignupForm from "../components/Form/SignupForm";
+import SignupForm from "../components/Form/SignUpForm";
 import LoginForm from "../components/Form/LoginForm";
 
 const Form = () => {

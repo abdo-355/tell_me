@@ -6,7 +6,7 @@ import {
   ChangeEventHandler,
 } from "react";
 
-import { ISignupFields } from "../Form/SignupForm";
+import { ISignupFields } from "../Form/SignUpForm";
 import { ILoginFields } from "../Form/LoginForm";
 
 interface Props {
@@ -45,6 +45,11 @@ const Input: FC<Props> = ({ id, label, type, error, setData, setErrors }) => {
     setData((prev: any) => {
       const curr = { ...prev };
       curr[id] = e.target.value;
+      return curr;
+    });
+    setErrors((prev: any) => {
+      const curr = { ...prev };
+      curr[id] = "";
       return curr;
     });
   };

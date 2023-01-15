@@ -26,7 +26,7 @@ const fields: IInputField[] = [
 ];
 
 const SignupForm = () => {
-  const [formIsValid, setFormIsValid] = useState(true);
+  let formIsValid = false;
 
   const [formData, setFormData] = useState<ISignupFields>({
     fName: "",
@@ -60,32 +60,34 @@ const SignupForm = () => {
   const formSubmitHandler: FormEventHandler = (e) => {
     e.preventDefault();
 
+    formIsValid = true;
+
     if (formData.fName === "") {
       setErrors((prev) => {
         return { ...prev, fName: "First name can't be empty" };
       });
-      setFormIsValid(false);
+      formIsValid = false;
     }
 
     if (formData.lName === "") {
       setErrors((prev) => {
         return { ...prev, lName: "Last name can't be empty" };
       });
-      setFormIsValid(false);
+      formIsValid = false;
     }
 
     if (!formData.email.includes("@") || !formData.email.includes(".")) {
       setErrors((prev) => {
         return { ...prev, email: "Please enter a valid Email" };
       });
-      setFormIsValid(false);
+      formIsValid = false;
     }
 
     if (formData.password!.length < 8) {
       setErrors((prev) => {
         return { ...prev, password: "Password must be atleast 8 characters" };
       });
-      setFormIsValid(false);
+      formIsValid = false;
     }
 
     if (formData.confirmPassword !== formData.password) {
@@ -95,7 +97,7 @@ const SignupForm = () => {
           confirmPassword: "This doesn't match the entered password",
         };
       });
-      setFormIsValid(false);
+      formIsValid = false;
     }
 
     sendData();

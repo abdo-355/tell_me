@@ -20,7 +20,7 @@ const fields: IField[] = [
 ];
 
 const LoginForm = () => {
-  const [formIsValid, setFormIsValid] = useState(true);
+  let formIsValid = false;
 
   const [formData, setFormData] = useState({
     email: "",
@@ -49,19 +49,19 @@ const LoginForm = () => {
 
   const formSubmitHandler: FormEventHandler = async (e) => {
     e.preventDefault();
-
+    formIsValid = true;
     if (!formData.email.includes("@") || !formData.email.includes(".")) {
       setErrors((prev) => {
         return { ...prev, email: "Please enter a valid Email" };
       });
-      setFormIsValid(false);
+      formIsValid = false;
     }
 
     if (formData.password!.length < 8) {
       setErrors((prev) => {
         return { ...prev, password: "Password must be atleast 8 characters" };
       });
-      setFormIsValid(false);
+      formIsValid = false;
     }
 
     await sendData();
