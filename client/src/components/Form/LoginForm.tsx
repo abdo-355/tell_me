@@ -1,7 +1,8 @@
-import { useState, FormEventHandler } from "react";
+import { useState, FormEventHandler, useContext } from "react";
 import axios from "axios";
 
 import Input from "../UI/Input";
+import authContext from "../../context/auth-context";
 
 export interface ILoginFields {
   email: string;
@@ -21,6 +22,7 @@ const fields: IField[] = [
 
 const LoginForm = () => {
   let formIsValid = false;
+  const auth = useContext(authContext);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -33,18 +35,20 @@ const LoginForm = () => {
   });
 
   const sendData = async () => {
-    console.log("pressed");
-
     if (!formIsValid) return;
-
-    console.log("pressed");
 
     const res = await axios.post("/auth/login", {
       email: formData.email,
       password: formData.password,
     });
 
-    console.log(res.data);
+    if (res.status !== 202) {
+      throw new Error("something went wrong");
+    }
+
+    const { token } = res.data;
+
+    auth.addUser(token);
   };
 
   const formSubmitHandler: FormEventHandler = async (e) => {

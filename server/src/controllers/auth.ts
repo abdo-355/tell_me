@@ -69,5 +69,5 @@ export const login: RequestHandler = async (req, res, next) => {
     { expiresIn: "7d" }
   );
 
-  res.status(202).json({ token, userId: user._id.toString() });
+  res.status(202).json({ token });
 };
