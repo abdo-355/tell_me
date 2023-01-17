@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Outlet, useLocation, Navigate } from "react-router-dom";
 
-import Header from "../components/Header/Header";
+import Navbar from "../components/Navbar/Navbar";
 import authContext from "../context/auth-context";
 
 const Layout = () => {
@@ -15,7 +15,7 @@ const Layout = () => {
         <Navigate to="/auth/signup" />
       ) : (
         <>
-          <Header />
+          <Navbar />
           <Outlet />
         </>
       )}

@@ -12,9 +12,9 @@ const navigation = [
   { name: "Calendar", href: "#", current: false },
 ];
 
-export default function Header() {
+const Navbar = () => {
   return (
-    <header>
+    <>
       <Disclosure as="nav" className="bg-green-500">
         {({ open }) => (
           <>
@@ -39,6 +39,7 @@ export default function Header() {
           </>
         )}
       </Disclosure>
-    </header>
+    </>
   );
-}
+};
+export default Navbar;
