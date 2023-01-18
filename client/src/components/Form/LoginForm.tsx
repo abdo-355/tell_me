@@ -1,4 +1,5 @@
 import { useState, FormEventHandler, useContext } from "react";
+import { NavLink } from "react-router-dom";
 import axios from "axios";
 
 import Input from "../UI/Input";
@@ -92,6 +93,15 @@ const LoginForm = () => {
           log in
         </button>
       </div>
+      <span className="block text-center -mb-3">
+        Don't have an account?{" "}
+        <NavLink
+          className="text-blue-700 hover:text-green-700 underline underline-offset-2"
+          to="/auth/signup"
+        >
+          Signup
+        </NavLink>
+      </span>
     </form>
   );
 };
