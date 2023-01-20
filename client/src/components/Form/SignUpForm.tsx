@@ -48,7 +48,7 @@ const SignupForm = () => {
   const sendData = async () => {
     if (!formIsValid) return;
 
-    const res = await axios.post("/auth/signup", {
+    const res = await axios.post("http://localhost:8080/auth/signup", {
       firstName: formData.fName,
       lastName: formData.lName,
       email: formData.email,

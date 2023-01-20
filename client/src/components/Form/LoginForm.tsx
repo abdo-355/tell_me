@@ -38,7 +38,7 @@ const LoginForm = () => {
   const sendData = async () => {
     if (!formIsValid) return;
 
-    const res = await axios.post("/auth/login", {
+    const res = await axios.post("http://localhost:8080/auth/login", {
       email: formData.email,
       password: formData.password,
     });
