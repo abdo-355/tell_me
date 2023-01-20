@@ -13,6 +13,10 @@ app.use(cors());
 
 app.use("/auth", authRouter);
 
+// for testing
+export default app;
+//-------------------
+
 mongoose
   .set("strictQuery", false)
   .connect(process.env.MONGODB_URI)
