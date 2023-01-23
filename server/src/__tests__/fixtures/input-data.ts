@@ -4,3 +4,8 @@ export const signupInput = {
   email: "test@tester.com",
   password: "PasswordString",
 };
+
+export const loginInput = {
+  email: "test@tester.com",
+  password: "PasswordString",
+};
