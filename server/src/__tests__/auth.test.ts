@@ -1,7 +1,7 @@
 import app from "../app";
 import supertest from "supertest";
 
-import { signupInput } from "../fixtures/input-data";
+import { signupInput } from "./fixtures/input-data";
 import User from "../models/User";
 
 describe("Sign up", () => {
