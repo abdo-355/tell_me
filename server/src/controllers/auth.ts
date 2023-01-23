@@ -36,7 +36,7 @@ export const signup: RequestHandler = async (req, res, next) => {
 
     await user.save();
 
-    res.json({ message: "user signed up successfully" });
+    res.status(201).json({ message: "user signed up successfully" });
   } catch (err) {
     res.status(500).json({ message: "an error occurred" });
   }
