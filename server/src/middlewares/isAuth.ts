@@ -1,6 +1,15 @@
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 
+// to save the userId in the request object
+declare global {
+  namespace Express {
+    interface Request {
+      userId: string;
+    }
+  }
+}
+
 const isAuth: RequestHandler = (req, res, next) => {
   const tokenHeader = req.headers["authorization"];
   const token = tokenHeader && tokenHeader.split(" ")[1];

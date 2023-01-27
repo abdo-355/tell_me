@@ -5,6 +5,8 @@ interface IUser {
   lastName: string;
   email: string;
   password: string;
+  // path to send messages to
+  path: string;
   //for recieved messages
   messages: string[];
 }
@@ -25,6 +27,10 @@ const UserSchema = new Schema<IUser>({
   password: {
     type: String,
     required: true,
+  },
+  path: {
+    type: String,
+    default: "",
   },
   messages: [{ type: String }],
 });
