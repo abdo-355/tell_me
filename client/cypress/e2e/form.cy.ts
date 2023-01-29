@@ -42,7 +42,6 @@ describe("using forms", () => {
     });
 
     //the user logged in if the userId is in the local storage
-    //@ts-ignore
     cy.readLocalStorage("token").should("equal", token);
   });
 });
