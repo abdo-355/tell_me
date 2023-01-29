@@ -42,6 +42,7 @@ const LoginForm = () => {
       email: formData.email,
       password: formData.password,
     });
+    console.log(res);
 
     if (res.status !== 202) {
       throw new Error("something went wrong");

@@ -1,5 +1,5 @@
 import { useState, FormEventHandler } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Input from "../UI/Input";
@@ -27,6 +27,7 @@ const fields: IInputField[] = [
 ];
 
 const SignupForm = () => {
+  const navigate = useNavigate();
   let formIsValid = false;
 
   const [formData, setFormData] = useState<ISignupFields>({
@@ -55,7 +56,9 @@ const SignupForm = () => {
       password: formData.password,
     });
 
-    console.log(res.data);
+    if (res.status === 200) {
+      navigate("/auth/login");
+    }
   };
 
   const formSubmitHandler: FormEventHandler = (e) => {
