@@ -1,4 +1,4 @@
-import { useReducer, Reducer, FC, ReactNode } from "react";
+import { useReducer, Reducer, FC, ReactNode, useEffect } from "react";
 
 import authContext, { IAuthContext } from "./auth-context";
 
@@ -39,6 +39,14 @@ const AuthProvider: FC<Props> = ({ children }) => {
     dispatch({ type: "REMOVEUSER" });
     localStorage.removeItem("token");
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      dispatch({ type: "ADDUSER", payload: { token } });
+    }
+  }, []);
 
   const authState: IAuthContext = {
     token: state.token,
