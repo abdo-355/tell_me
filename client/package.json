@@ -27,6 +27,11 @@
     "test:cypress": "cypress open",
     "eject": "react-scripts eject"
   },
+  "jest": {
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!axios)"
+    ]
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
