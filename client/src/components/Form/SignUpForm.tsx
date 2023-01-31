@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Input from "../UI/Input";
+import { emailRegex } from "../../data/regex";
 
 export interface ISignupFields {
   fName: string;
@@ -80,7 +81,7 @@ const SignupForm = () => {
       formIsValid = false;
     }
 
-    if (!formData.email.includes("@") || !formData.email.includes(".")) {
+    if (!emailRegex.test(formData.email)) {
       setErrors((prev) => {
         return { ...prev, email: "Please enter a valid Email" };
       });

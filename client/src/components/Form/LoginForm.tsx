@@ -4,6 +4,7 @@ import axios from "axios";
 
 import Input from "../UI/Input";
 import authContext from "../../context/auth-context";
+import { emailRegex } from "../../data/regex";
 
 export interface ILoginFields {
   email: string;
@@ -56,7 +57,7 @@ const LoginForm = () => {
   const formSubmitHandler: FormEventHandler = async (e) => {
     e.preventDefault();
     formIsValid = true;
-    if (!formData.email.includes("@") || !formData.email.includes(".")) {
+    if (!emailRegex.test(formData.email)) {
       setErrors((prev) => {
         return { ...prev, email: "Please enter a valid Email" };
       });
@@ -74,7 +75,7 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={formSubmitHandler} className="mx-5 my-7">
+    <form onSubmit={formSubmitHandler} className="mx-5 my-7" noValidate>
       {fields.map((field) => (
         <Input
           key={field.id}
