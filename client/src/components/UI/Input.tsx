@@ -65,7 +65,8 @@ const Input: FC<Props> = ({ id, label, type, error, setData, setErrors }) => {
         onBlur={blurHandler}
         onFocus={focusHandler}
         onChange={changeHandler}
-        aria-errormessage={`${id}errmsg`}
+        aria-errormessage={`${id}ErrMsg`}
+        aria-invalid="true"
         className={`w-full h-10 rounded-lg ${
           !error ? "border-green-900" : "border-red-700 bg-red-200"
         } border-2 px-2 text-xl`}
@@ -73,7 +74,7 @@ const Input: FC<Props> = ({ id, label, type, error, setData, setErrors }) => {
       {!!error && (
         <div className="relative">
           <span
-            id={`${id}errmsg`}
+            id={`${id}ErrMsg`}
             className="block absolute h-0 -top-1 text-red-700"
           >
             {error}
