@@ -4,19 +4,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import axios from "axios";
 
 import LoginForm from "./LoginForm";
-
-const invalidEmails = [
-  "plainaddress",
-  "#@%^%#$@#$@#.com",
-  "@example.com",
-  "Joe Smith <email@example.com>",
-  "email.example.com",
-  "email@example@example.com",
-  ".email@example.com",
-  "email.@example.com",
-  "email..email@example.com",
-  "email@example.com (Joe Smith)",
-];
+import { invalidEmails } from "../../data/testing";
 
 describe("<LoginForm />", () => {
   describe("everything renders properly", () => {
