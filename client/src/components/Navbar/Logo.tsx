@@ -1,9 +1,14 @@
+import { Link } from "react-router-dom";
+
 import logo from "../../assets/logo-text.png";
 import logoOnly from "../../assets/logo-only.png";
 
 const Logo = () => {
   return (
-    <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+    <Link
+      to="/"
+      className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start"
+    >
       <div className="flex flex-shrink-0 items-center bg-white px-2 sm:px-3 py-2 rounded-full shadow-md hover:shadow-green-700 hover:scale-105 transition-all my-2">
         <img
           className="hidden h-9 w-auto sm:block"
@@ -17,7 +22,7 @@ const Logo = () => {
           alt="website logo"
         />
       </div>
-    </div>
+    </Link>
   );
 };
 
