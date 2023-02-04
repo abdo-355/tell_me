@@ -1,29 +1,37 @@
 import { useState, useEffect, useCallback } from "react";
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 
 axios.defaults.baseURL = process.env.REACT_APP_BACKEND;
 
-const useAxios = (axiosParams: AxiosRequestConfig) => {
-  const [response, setResponse] = useState<AxiosResponse>();
-  const [error, setError] = useState<AxiosError>();
-  const [loading, setLoading] = useState(true);
+type TMethods = "get" | "post" | "put" | "patch" | "delete";
 
-  const fetchData = useCallback(async (params: AxiosRequestConfig) => {
+const useAxios = (url: string, method: TMethods, data?: Object) => {
+  const [loading, setloading] = useState(true);
+  const [error, setError] = useState<AxiosError | null>(null);
+  const [responseData, setResponseData] = useState<any>({});
+  const [statusCode, setStatusCode] = useState(0);
+
+  const fetchData = useCallback(async () => {
     try {
-      const res = await axios.request(params);
-      setResponse(res);
-    } catch (err: any) {
-      setError(err);
+      const res = !data
+        ? await axios({ url, method })
+        : await axios({ url, method, data });
+
+      setResponseData(res.data);
+      setStatusCode(res.status);
+    } catch (err) {
+      setError(err as AxiosError);
+      setStatusCode((err as AxiosError).status || 400);
     } finally {
-      setLoading(false);
+      setloading(false);
     }
-  }, []);
+  }, [data, method, url]);
 
   useEffect(() => {
-    fetchData(axiosParams);
-  }, [axiosParams, fetchData]);
+    fetchData();
+  }, [fetchData]);
 
-  return { response, loading, error };
+  return { fetchData, responseData, loading, error, statusCode };
 };
 
 export default useAxios;
