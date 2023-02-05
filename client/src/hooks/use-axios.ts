@@ -12,8 +12,8 @@ const useAxios = (url: string, method: TMethods, body?: Object) => {
   const request = useCallback(async () => {
     try {
       const res = !body
-        ? await axios({ url, method })
-        : await axios({ url, method, data: body });
+        ? await axios.request({ url, method })
+        : await axios.request({ url, method, data: body });
 
       setData(res.data);
       setStatusCode(res.status);
