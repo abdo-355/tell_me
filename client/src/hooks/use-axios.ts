@@ -1,23 +1,21 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import axios, { AxiosError } from "axios";
-
-axios.defaults.baseURL = process.env.REACT_APP_BACKEND;
 
 type TMethods = "get" | "post" | "put" | "patch" | "delete";
 
-const useAxios = (url: string, method: TMethods, data?: Object) => {
+const useAxios = (url: string, method: TMethods, body?: Object) => {
   const [loading, setloading] = useState(true);
   const [error, setError] = useState<AxiosError | null>(null);
-  const [responseData, setResponseData] = useState<any>({});
+  const [data, setData] = useState<any>(null);
   const [statusCode, setStatusCode] = useState(0);
 
-  const fetchData = useCallback(async () => {
+  const request = useCallback(async () => {
     try {
-      const res = !data
+      const res = !body
         ? await axios({ url, method })
-        : await axios({ url, method, data });
+        : await axios({ url, method, data: body });
 
-      setResponseData(res.data);
+      setData(res.data);
       setStatusCode(res.status);
     } catch (err) {
       setError(err as AxiosError);
@@ -25,13 +23,9 @@ const useAxios = (url: string, method: TMethods, data?: Object) => {
     } finally {
       setloading(false);
     }
-  }, [data, method, url]);
+  }, [body, method, url]);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  return { fetchData, responseData, loading, error, statusCode };
+  return { request, data, loading, error, statusCode };
 };
 
 export default useAxios;
