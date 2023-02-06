@@ -1,10 +1,20 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import axios from "axios";
 
 import LoginForm from "./LoginForm";
 import { invalidEmails } from "../../data/testing";
+
+const mockWindow = window;
+
+jest.mock("../../hooks/use-axios", () => () => ({
+  request: jest.fn(async () => {
+    //@ts-ignore
+    mockWindow.fetchCalled = true;
+  }),
+  statusCode: 202,
+  data: { token: "token" },
+}));
 
 describe("<LoginForm />", () => {
   describe("everything renders properly", () => {
@@ -89,14 +99,15 @@ describe("<LoginForm />", () => {
     });
 
     test("form submits successfully if fields are valid", () => {
-      const axiosPost = jest.spyOn(axios, "post");
       renderComponent();
 
       userEvent.type(getEmail(), "email@example.com");
       userEvent.type(getPassword(), "password");
 
       clickLogin();
-      expect(axiosPost).toBeCalledTimes(1);
+
+      //@ts-ignore
+      expect(window.fetchCalled).toBe(true);
     });
   });
 });

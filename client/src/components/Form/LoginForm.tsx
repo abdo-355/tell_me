@@ -1,6 +1,6 @@
 import { useState, FormEventHandler, useContext } from "react";
 import { NavLink } from "react-router-dom";
-import axios from "axios";
+import useAxios from "../../hooks/use-axios";
 
 import Input from "../UI/Input";
 import authContext from "../../context/auth-context";
@@ -36,20 +36,25 @@ const LoginForm = () => {
     password: "",
   });
 
+  const { request, data, statusCode } = useAxios(
+    "http://localhost:8080/auth/login",
+    "post",
+    {
+      email: formData.email,
+      password: formData.password,
+    }
+  );
+
   const sendData = async () => {
     if (!formIsValid) return;
 
-    const res = await axios.post("http://localhost:8080/auth/login", {
-      email: formData.email,
-      password: formData.password,
-    });
-    console.log(res);
+    await request();
 
-    if (res.status !== 202) {
+    if (statusCode !== 202) {
       throw new Error("something went wrong");
     }
 
-    const { token } = res.data;
+    const { token } = data;
 
     auth.addUser(token);
   };
@@ -57,6 +62,7 @@ const LoginForm = () => {
   const formSubmitHandler: FormEventHandler = async (e) => {
     e.preventDefault();
     formIsValid = true;
+
     if (!emailRegex.test(formData.email)) {
       setErrors((prev) => {
         return { ...prev, email: "Please enter a valid Email" };
