@@ -1,6 +1,6 @@
 import { useState, FormEventHandler } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import axios from "axios";
+import useAxios from "../../hooks/use-axios";
 
 import Input from "../UI/Input";
 import { emailRegex } from "../../data/regex";
@@ -47,17 +47,23 @@ const SignupForm = () => {
     confirmPassword: "",
   });
 
-  const sendData = async () => {
-    if (!formIsValid) return;
-
-    const res = await axios.post("http://localhost:8080/auth/signup", {
+  const { request, statusCode } = useAxios(
+    "http://localhost:8080/auth/signup",
+    "post",
+    {
       firstName: formData.fName,
       lastName: formData.lName,
       email: formData.email,
       password: formData.password,
-    });
+    }
+  );
 
-    if (res.status === 200) {
+  const sendData = async () => {
+    if (!formIsValid) return;
+
+    await request();
+
+    if (statusCode === 200) {
       navigate("/auth/login");
     }
   };
