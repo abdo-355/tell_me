@@ -1,16 +1,19 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import GeneratedLink from "./GeneratedLink";
+
+Object.assign(navigator, {
+  clipboard: {
+    writeText: jest.fn((str: string) => {}),
+  },
+});
 
 describe("<GeneratedLink />", () => {
   it("should render successfully", () => {
     render(<GeneratedLink data={{ path: "" }} />);
 
-    const copyButton = screen.getByRole("button", {
-      name: /copy to clipboard/i,
-    });
-
-    expect(copyButton).toBeInTheDocument();
+    expect(getButton()).toBeInTheDocument();
     expect(getField()).toBeInTheDocument();
   });
 
@@ -26,9 +29,24 @@ describe("<GeneratedLink />", () => {
 
     expect(getField().value).toBe("http://localhost/messages/generatedPath");
   });
+
+  it("should copy the url to the clipboard when clicking the copy button", () => {
+    render(<GeneratedLink data={{ path: "generatedPath" }} />);
+
+    userEvent.click(getButton());
+
+    expect(navigator.clipboard.writeText).toBeCalledWith(
+      "http://localhost/messages/generatedPath"
+    );
+  });
 });
 
-// helper function
+// helper functions
+
 const getField = () => {
   return screen.getByRole("textbox") as HTMLInputElement;
+};
+
+const getButton = () => {
+  return screen.getByRole("button", { name: /copy to clipboard/i });
 };
