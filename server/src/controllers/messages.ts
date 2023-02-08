@@ -8,7 +8,7 @@ export const getPath: RequestHandler = async (req, res, next) => {
     const user = await User.findOne({ _id: req.userId });
 
     if (!user.path) {
-      const generatedPath = randomBytes(12).toString("hex");
+      const generatedPath = randomBytes(8).toString("hex");
       user.path = generatedPath;
       await user.save();
       return res.status(200).json({ path: generatedPath });
