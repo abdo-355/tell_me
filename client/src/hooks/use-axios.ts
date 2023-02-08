@@ -1,5 +1,6 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import axios, { AxiosError } from "axios";
+import authContext from "../context/auth-context";
 
 type TMethods = "get" | "post" | "put" | "patch" | "delete";
 
@@ -9,11 +10,18 @@ const useAxios = (url: string, method: TMethods, body?: Object) => {
   const [data, setData] = useState<any>(null);
   const [statusCode, setStatusCode] = useState(0);
 
+  const { token } = useContext(authContext);
+
   const request = useCallback(async () => {
     try {
-      const res = !body
-        ? await axios.request({ url, method })
-        : await axios.request({ url, method, data: body });
+      const res = await axios.request({
+        url,
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: body,
+      });
 
       setData(res.data);
       setStatusCode(res.status);
@@ -23,7 +31,7 @@ const useAxios = (url: string, method: TMethods, body?: Object) => {
     } finally {
       setloading(false);
     }
-  }, [body, method, url]);
+  }, [body, method, token, url]);
 
   return { request, data, loading, error, statusCode };
 };
