@@ -1,9 +1,10 @@
 import { RequestHandler } from "express";
 import { randomBytes } from "crypto";
+import { validationResult } from "express-validator";
 
 import User from "../models/User";
 
-export const getPath: RequestHandler = async (req, res, next) => {
+export const getPath: RequestHandler = async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.userId });
 
@@ -17,5 +18,31 @@ export const getPath: RequestHandler = async (req, res, next) => {
     return res.status(200).json({ path: user.path });
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const postMessage: RequestHandler = async (req, res) => {
+  try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(403).json({ errors: errors.array() });
+    }
+
+    const path = req.params.userpath;
+
+    const user = await User.findOne({ path });
+
+    if (!user) {
+      return res.status(404).json({ error: "invalid URL" });
+    }
+
+    const message = req.body.message;
+    user.messages.push(message);
+    await user.save();
+
+    res.status(201).json({ message: "message sent successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "something went wrong" });
   }
 };
