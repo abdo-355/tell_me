@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Form from "./pages/Form";
 import LinkGenerator from "./pages/LinkGenerator";
 import SendMessage from "./pages/SendMessage";
+import Messages from "./pages/Messages";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/getURL" element={<LinkGenerator />} />
+        <Route path="/messages" element={<Messages />} />
       </Route>
     </Routes>
   );
