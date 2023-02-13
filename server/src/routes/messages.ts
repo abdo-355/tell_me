@@ -2,7 +2,7 @@ import { Router } from "express";
 import { body } from "express-validator";
 
 import isAuth from "../middlewares/isAuth";
-import { getPath, postMessage } from "../controllers/messages";
+import { getPath, postMessage, getMessages } from "../controllers/messages";
 
 const router = Router();
 
@@ -16,5 +16,7 @@ router.post(
     .withMessage("please provide a 'message' with the request"),
   postMessage
 );
+
+router.get("/", isAuth, getMessages);
 
 export default router;
