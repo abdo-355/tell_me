@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 
 // for future nav links
-const links = [{ url: "/getUrl", name: "url" }];
+const links = [
+  { url: "/getUrl", name: "url" },
+  { url: "/messages", name: "messages" },
+];
 
 const NavLinks = () => {
   return (
