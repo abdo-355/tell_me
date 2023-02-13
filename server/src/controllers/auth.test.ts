@@ -3,7 +3,7 @@ import supertest from "supertest";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import { signupInput, loginInput } from "./fixtures/input-data";
+import { signupInput, loginInput } from "../fixtures/input-data";
 import User from "../models/User";
 
 describe("Sign up", () => {
