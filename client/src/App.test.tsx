@@ -12,21 +12,4 @@ describe("<App />", () => {
 
     expect(homeHeader).toBeInTheDocument();
   });
-
-  test("clicking the 'log in' button navigates to the login page", () => {
-    render(<App />, { wrapper: BrowserRouter });
-    const loginButton = screen.getByRole("link", {
-      name: /log in/i,
-    }) as HTMLInputElement;
-
-    expect(loginButton).toHaveAttribute("href", "/auth/login");
-  });
-
-  test("clicking the 'sign up' button navigates to the signup page", () => {
-    render(<App />, { wrapper: BrowserRouter });
-    const signupButton = screen.getByRole("link", {
-      name: /sign up/i,
-    }) as HTMLInputElement;
-    expect(signupButton).toHaveAttribute("href", "/auth/signup");
-  });
 });

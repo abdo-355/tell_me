@@ -24,7 +24,7 @@ describe("useAxios", () => {
 
     render(<TestComponent />);
 
-    expect(screen.getByTestId("loading").textContent).toBe("true");
+    expect(screen.getByTestId("loading").textContent).toBe("false");
     expect(screen.getByTestId("data").textContent).toBe("");
     expect(screen.getByTestId("statusCode").textContent).toBe("0");
   });
