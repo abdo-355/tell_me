@@ -4,13 +4,14 @@ import { useParams } from "react-router-dom";
 import styles from "./styles.module.css";
 import Navbar from "../components/Navbar/Navbar";
 import useAxios from "../hooks/use-axios";
+import LoadingSpinner from "../components/UI/LoadingSpinner";
 
 const SendMessage = () => {
   const [error, setError] = useState("");
   const [messageValue, setMessageValue] = useState("");
   const { usertpath } = useParams();
 
-  const { request } = useAxios(
+  const { request, loading } = useAxios(
     `http://localhost:8080/messages/${usertpath}`,
     "post",
     {
@@ -64,8 +65,9 @@ const SendMessage = () => {
           <button
             onClick={handleSend}
             className="bg-green-900 w-40 h-12 mx-auto rounded-full font-roboto tracking-wider text-white text-2xl font-semibold"
+            disabled={loading}
           >
-            SEND
+            {loading ? <LoadingSpinner /> : "SEND"}
           </button>
         </div>
       </div>

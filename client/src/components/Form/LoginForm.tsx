@@ -5,6 +5,7 @@ import useAxios from "../../hooks/use-axios";
 import Input from "../UI/Input";
 import authContext from "../../context/auth-context";
 import { emailRegex } from "../../data/regex";
+import LoadingSpinner from "../UI/LoadingSpinner";
 
 export interface ILoginFields {
   email: string;
@@ -36,7 +37,7 @@ const LoginForm = () => {
     password: "",
   });
 
-  const { request, data, statusCode } = useAxios(
+  const { request, data, statusCode, loading } = useAxios(
     "http://localhost:8080/auth/login",
     "post",
     {
@@ -97,8 +98,9 @@ const LoginForm = () => {
         <button
           type="submit"
           className="bg-green-800 text-white uppercase w-80 h-16 mx-5 text-3xl rounded-full"
+          disabled={loading}
         >
-          log in
+          {loading ? <LoadingSpinner /> : "log in"}
         </button>
       </div>
       <span className="block text-center -mb-3">

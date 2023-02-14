@@ -5,7 +5,7 @@ import authContext from "../context/auth-context";
 type TMethods = "get" | "post" | "put" | "patch" | "delete";
 
 const useAxios = (url: string, method: TMethods, body?: Object) => {
-  const [loading, setloading] = useState(true);
+  const [loading, setloading] = useState(false);
   const [error, setError] = useState<AxiosError | null>(null);
   const [data, setData] = useState<any>(null);
   const [statusCode, setStatusCode] = useState(0);
@@ -14,6 +14,7 @@ const useAxios = (url: string, method: TMethods, body?: Object) => {
 
   const request = useCallback(async () => {
     try {
+      setloading(true);
       const res = await axios.request({
         url,
         method,

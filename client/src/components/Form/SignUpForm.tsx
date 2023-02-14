@@ -4,6 +4,7 @@ import useAxios from "../../hooks/use-axios";
 
 import Input from "../UI/Input";
 import { emailRegex } from "../../data/regex";
+import LoadingSpinner from "../UI/LoadingSpinner";
 
 export interface ISignupFields {
   fName: string;
@@ -47,7 +48,7 @@ const SignupForm = () => {
     confirmPassword: "",
   });
 
-  const { request, statusCode } = useAxios(
+  const { request, statusCode, loading } = useAxios(
     "http://localhost:8080/auth/signup",
     "post",
     {
@@ -157,8 +158,9 @@ const SignupForm = () => {
         <button
           type="submit"
           className="bg-green-800 text-white uppercase w-80 h-16 mx-5 text-3xl rounded-full"
+          disabled={loading}
         >
-          Sign up
+          {loading ? <LoadingSpinner /> : "Sign up"}
         </button>
       </div>
       <span className="block text-center -mb-3">
