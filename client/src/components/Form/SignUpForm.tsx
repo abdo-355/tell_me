@@ -63,11 +63,11 @@ const SignupForm = () => {
     if (!formIsValid) return;
 
     await request();
-
-    if (statusCode === 200) {
-      navigate("/auth/login");
-    }
   };
+
+  if (statusCode === 200) {
+    navigate("/auth/login");
+  }
 
   const formSubmitHandler: FormEventHandler = (e) => {
     e.preventDefault();

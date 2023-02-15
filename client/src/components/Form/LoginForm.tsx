@@ -1,11 +1,11 @@
 import { useState, FormEventHandler, useContext } from "react";
-import { NavLink } from "react-router-dom";
-import useAxios from "../../hooks/use-axios";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import Input from "../UI/Input";
 import authContext from "../../context/auth-context";
 import { emailRegex } from "../../data/regex";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import useAxios from "../../hooks/use-axios";
 
 export interface ILoginFields {
   email: string;
@@ -26,6 +26,7 @@ const fields: IField[] = [
 const LoginForm = () => {
   let formIsValid = false;
   const auth = useContext(authContext);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -50,15 +51,16 @@ const LoginForm = () => {
     if (!formIsValid) return;
 
     await request();
-
-    if (statusCode !== 202) {
-      throw new Error("something went wrong");
-    }
-
-    const { token } = data;
-
-    auth.addUser(token);
   };
+
+  // act upon statusCode change
+  if (statusCode !== 202 && statusCode !== 0) {
+    throw new Error("something went wrong");
+  } else if (statusCode === 202) {
+    const { token } = data;
+    auth.addUser(token);
+    navigate("/messages");
+  }
 
   const formSubmitHandler: FormEventHandler = async (e) => {
     e.preventDefault();

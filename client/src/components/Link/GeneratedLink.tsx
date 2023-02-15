@@ -10,8 +10,12 @@ const GeneratedLink: React.FC<Props> = ({ data }) => {
   const path = data ? origin + "/messages/" + data.path : "";
 
   const copyToClipboard = async () => {
-    if (path) {
-      await window.navigator.clipboard.writeText(path);
+    try {
+      if (path) {
+        await window.navigator.clipboard.writeText(path);
+      }
+    } catch (err) {
+      throw err;
     }
   };
 
