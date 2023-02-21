@@ -6,17 +6,28 @@ import LoginForm from "./LoginForm";
 import { invalidEmails } from "../../data/testing";
 
 const mockWindow = window;
+const mockStatus = jest.fn(() => 0);
 
 jest.mock("../../hooks/use-axios", () => () => ({
   request: jest.fn(async () => {
     //@ts-ignore
     mockWindow.fetchCalled = true;
   }),
-  statusCode: 202,
+  statusCode: mockStatus(),
   data: { token: "token" },
 }));
 
+const mockNavigate = jest.fn();
+
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: () => mockNavigate,
+}));
+
 describe("<LoginForm />", () => {
+  beforeEach(() => {
+    mockStatus.mockReturnValue(0);
+  });
   describe("everything renders properly", () => {
     test("have two input fields(email and password) and 'log in' button", () => {
       renderComponent();
@@ -98,7 +109,7 @@ describe("<LoginForm />", () => {
       );
     });
 
-    test("form submits successfully if fields are valid", () => {
+    test("form submits successfully and redirected to the messages page if fields are valid", () => {
       renderComponent();
 
       userEvent.type(getEmail(), "email@example.com");
@@ -108,6 +119,14 @@ describe("<LoginForm />", () => {
 
       //@ts-ignore
       expect(window.fetchCalled).toBe(true);
+    });
+
+    test("component redirects to the messages page for 202 status code", () => {
+      mockStatus.mockReturnValue(202);
+
+      renderComponent();
+
+      expect(mockNavigate).toBeCalled();
     });
   });
 });
