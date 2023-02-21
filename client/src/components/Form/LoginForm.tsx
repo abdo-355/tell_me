@@ -84,7 +84,7 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={formSubmitHandler} className="mx-5 my-7" noValidate>
+    <form onSubmit={formSubmitHandler} className="mx-0 sm:mx-5 my-7" noValidate>
       {fields.map((field) => (
         <Input
           key={field.id}
@@ -96,10 +96,10 @@ const LoginForm = () => {
           setErrors={setErrors}
         />
       ))}
-      <div className="w-auto h-[7rem] flex items-center justify-center">
+      <div className="w-auto h-20 sm:h-[7rem] flex items-center justify-center">
         <button
           type="submit"
-          className="bg-green-800 text-white uppercase w-80 h-16 mx-5 text-3xl rounded-full"
+          className="bg-green-800 text-white uppercase w-40 sm:w-80 h-10 sm:h-16 mx-5 text-xl sm:text-3xl rounded-full"
           disabled={loading}
         >
           {loading ? <LoadingSpinner /> : "log in"}

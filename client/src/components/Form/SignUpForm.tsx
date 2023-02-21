@@ -116,7 +116,7 @@ const SignupForm = () => {
   };
 
   return (
-    <form onSubmit={formSubmitHandler} className="mx-5 my-7">
+    <form onSubmit={formSubmitHandler} className="mt-20 xsm:mt-5 mb-5 my-7">
       <div className="flex">
         {fields
           .filter((e, i) => i < 2)
@@ -154,10 +154,10 @@ const SignupForm = () => {
           Privacy Policy
         </a>
       </span>
-      <div className="w-auto h-[7rem] flex items-center justify-center">
+      <div className="w-auto h-28 sm:h-[7rem] flex items-center justify-center">
         <button
           type="submit"
-          className="bg-green-800 text-white uppercase w-80 h-16 mx-5 text-3xl rounded-full"
+          className="bg-green-800 text-white uppercase w-48 sm:w-80 h-12 sm:h-16 mx-5 text-xl sm:text-3xl rounded-full"
           disabled={loading}
         >
           {loading ? <LoadingSpinner /> : "Sign up"}

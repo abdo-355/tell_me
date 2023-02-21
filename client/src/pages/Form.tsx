@@ -10,7 +10,7 @@ const Form = () => {
     <div
       className={`${styles.background} h-screen relative flex justify-center items-center`}
     >
-      <div className="relative flex-auto max-w-xl w-auto h-auto overflow-visible shadow-gray-800 shadow-md rounded-xl bg-green-100">
+      <div className="relative flex-auto max-w-xl w-auto h-auto -mt-10 xsm:mt-10 xsm:mb-10 overflow-visible shadow-gray-800 shadow-md rounded-xl bg-green-100">
         <Routes>
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/login" element={<LoginForm />} />

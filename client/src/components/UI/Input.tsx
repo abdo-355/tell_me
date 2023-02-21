@@ -55,7 +55,7 @@ const Input: FC<Props> = ({ id, label, type, error, setData, setErrors }) => {
   };
 
   return (
-    <div className="flex-1 mx-5 mb-3 pb-2">
+    <div className="flex-1 mx-2 sm:mx-5 mb-3 pb-2">
       <label htmlFor={id} className="block text-lg pb-2">
         {label}
       </label>
