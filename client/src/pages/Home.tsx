@@ -12,7 +12,7 @@ const Home = () => {
       />
       <HeaderText />
       <HeaderImage />
-      <div className="absolute inset-x-0 bottom-0 z-10 md:z-0 bg-white h-[26vh] header-triangle"></div>
+      <div className="hidden sm:block absolute inset-x-0 bottom-0 z-10 md:z-0 bg-white h-[26vh] header-triangle"></div>
     </header>
   );
 };
