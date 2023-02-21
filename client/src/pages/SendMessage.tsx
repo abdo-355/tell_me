@@ -54,20 +54,11 @@ const SendMessage = () => {
 
   return (
     <>
-      <Modal
-        open={modalIsOpen}
-        onClose={() => {
-          setModalIsOpen(false);
-          setMessageValue("");
-        }}
-      >
-        {modalMessage}
-      </Modal>
       <Navbar />
       <div
         className={`${styles.background} flex justify-center items-center h-[calc(100vh-64px)]`}
       >
-        <div className="flex flex-col bg-green-600 border-2 border-green-900 p-5 rounded-2xl shadow-2xl">
+        <div className="absolute inset-x-3 sm:relative sm:inset-x-auto flex flex-col bg-green-600 border-2 border-green-900 p-5 rounded-2xl shadow-2xl">
           <label
             htmlFor="message"
             className="text-white font-roboto text-xl pb-2"
@@ -75,7 +66,7 @@ const SendMessage = () => {
             Enter your message
           </label>
           <textarea
-            className="w-96 h-60 rounded-md border-[1px] border-green-700 shadow-md bg-green-100 px-5 py-2 text-xl text-gray-700 focus:shadow-green-400 focus:border-transparent focus:outline-none mb-10 z-10"
+            className="w-auto sm:w-96 h-60 rounded-md border-[1px] border-green-700 shadow-md bg-green-100 px-5 py-2 text-xl text-gray-700 focus:shadow-green-400 focus:border-transparent focus:outline-none mb-10 z-10"
             aria-errormessage="messageErr"
             aria-invalid="true"
             id="message"
@@ -102,6 +93,15 @@ const SendMessage = () => {
           </button>
         </div>
       </div>
+      <Modal
+        open={modalIsOpen}
+        onClose={() => {
+          setModalIsOpen(false);
+          setMessageValue("");
+        }}
+      >
+        {modalMessage}
+      </Modal>
     </>
   );
 };
