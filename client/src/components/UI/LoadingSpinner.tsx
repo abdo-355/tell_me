@@ -3,7 +3,7 @@ const LoadingSpinner: React.FC<{ className?: string }> = ({ className }) => {
     <>
       <svg
         aria-hidden="true"
-        className="inline w-full max-w-sm max-h-24 p-2 h-full mr-2 text-gray-200 animate-spin dark:text-green-200 fill-green-700"
+        className={`inline w-full max-w-sm max-h-24 p-2 h-full mr-2 text-gray-200 animate-spin dark:text-green-200 fill-green-700 ${className}`}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

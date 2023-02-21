@@ -17,16 +17,16 @@ const LinkGenerator = () => {
     <div
       className={`${styles.background} h-[calc(100vh-64px)] flex justify-center items-center`}
     >
-      <div className="flex items-center justify-around bg-green-400 h-40 w-4/6 rounded-3xl border-black border-2 shadow-xl">
+      <div className="flex items-center justify-around flex-col tall:flex-col md:flex-row bg-green-400 h-48 tall:h-52 md:h-40 xsm:w-11/12 sm:w-5/6 lg:w-4/6 rounded-3xl border-black border-2 shadow-xl">
         {/* to display the link and the copy button */}
         <GeneratedLink data={data} />
         <button
           title="Generate shareable link"
           onClick={generate}
-          className="bg-green-100 h-3/5 w-1/5 rounded-xl border-gray-900 border-2 text-4xl mr-5"
+          className="bg-green-100 h-4/5 sm:w-1/5 tall:w-1/5 aspect-video rounded-xl border-gray-900 border-2 text-xl sm:text-2xl md:text-3xl tall:text-3xl my-3 md:mr-5"
           disabled={loading}
         >
-          {loading ? <LoadingSpinner /> : "Generate"}
+          {loading ? <LoadingSpinner className="h-11 md:h-14" /> : "Generate"}
         </button>
       </div>
     </div>
