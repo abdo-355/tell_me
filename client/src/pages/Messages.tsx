@@ -21,16 +21,16 @@ const Messages = () => {
 
   return (
     <div
-      className={`${styles.background} h-[calc(100vh-64px)] flex justify-center items-center`}
+      className={`${styles.background} min-h-[calc(100vh-64px)] flex justify-center items-center`}
     >
       {loading ? (
         <LoadingSpinner />
       ) : !data || data.messages.length === 0 ? (
-        <h1 className="text-5xl uppercase font-roboto font-semibold tracking-wider text-green-700 drop-shadow-2xl ">
+        <h1 className="text-3xl sm:text-5xl uppercase font-roboto font-semibold tracking-wider text-green-700 drop-shadow-2xl text-center">
           No messages sent
         </h1>
       ) : (
-        <div className="w-4/5 grid grid-cols-3 gap-3">
+        <div className="max-w-screen-xl w-full mx-5 lg:mx-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 my-24">
           {data.messages.map((message: string) => (
             <Message key={message} message={message} />
           ))}
