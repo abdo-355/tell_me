@@ -1,17 +1,21 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import styles from "./styles.module.css";
 import Navbar from "../components/Navbar/Navbar";
 import useAxios from "../hooks/use-axios";
 import LoadingSpinner from "../components/UI/LoadingSpinner";
+import Modal from "../components/UI/Modal/Modal";
 
 const SendMessage = () => {
   const [error, setError] = useState("");
   const [messageValue, setMessageValue] = useState("");
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const { usertpath } = useParams();
 
-  const { request, loading } = useAxios(
+  let [modalMessage, setModalMessage] = useState("");
+
+  const { request, loading, statusCode } = useAxios(
     `http://localhost:8080/messages/${usertpath}`,
     "post",
     {
@@ -24,8 +28,25 @@ const SendMessage = () => {
       setError("Message can't be empty");
     } else {
       await request();
+      showModal();
     }
   };
+
+  const showModal = useCallback(() => {
+    if (statusCode !== 201 && statusCode !== 0) {
+      setModalMessage(
+        `Something went wrong! please try again status-code: ${statusCode}`
+      );
+      setModalIsOpen(true);
+    } else if (statusCode === 201) {
+      setModalMessage("Message sent successfully");
+      setModalIsOpen(true);
+    }
+  }, [statusCode]);
+
+  useEffect(() => {
+    showModal();
+  }, [showModal]);
 
   const handleFocus = () => {
     setError("");
@@ -33,6 +54,15 @@ const SendMessage = () => {
 
   return (
     <>
+      <Modal
+        open={modalIsOpen}
+        onClose={() => {
+          setModalIsOpen(false);
+          setMessageValue("");
+        }}
+      >
+        {modalMessage}
+      </Modal>
       <Navbar />
       <div
         className={`${styles.background} flex justify-center items-center h-[calc(100vh-64px)]`}
@@ -51,6 +81,7 @@ const SendMessage = () => {
             id="message"
             onFocus={handleFocus}
             onChange={(e) => setMessageValue(e.target.value)}
+            value={messageValue}
           />
           {!!error && (
             <div className="relative h-0">
