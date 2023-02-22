@@ -8,6 +8,7 @@ interface Props {
 
 export interface IAuthState {
   token: string;
+  isLoggedIn: boolean;
 }
 
 type TAction =
@@ -18,7 +19,7 @@ const authReducer: Reducer<IAuthState, TAction> = (state, action) => {
   if (action.type === "ADDUSER") {
     return action.payload;
   } else if (action.type === "REMOVEUSER") {
-    return { token: "" };
+    return { token: "", isLoggedIn: false };
   }
   return state;
 };
@@ -26,12 +27,13 @@ const authReducer: Reducer<IAuthState, TAction> = (state, action) => {
 const AuthProvider: FC<Props> = ({ children }) => {
   const initialstate = {
     token: "",
+    isLoggedIn: false,
   };
 
   const [state, dispatch] = useReducer(authReducer, initialstate);
 
   const handleAddUser = (token: string) => {
-    dispatch({ type: "ADDUSER", payload: { token } });
+    dispatch({ type: "ADDUSER", payload: { token, isLoggedIn: true } });
     localStorage.setItem("token", token);
   };
 
@@ -44,12 +46,13 @@ const AuthProvider: FC<Props> = ({ children }) => {
     const token = localStorage.getItem("token");
 
     if (token) {
-      dispatch({ type: "ADDUSER", payload: { token } });
+      dispatch({ type: "ADDUSER", payload: { token, isLoggedIn: true } });
     }
   }, []);
 
   const authState: IAuthContext = {
     token: state.token,
+    isLoggedIn: state.isLoggedIn,
     addUser: handleAddUser,
     removeUser: handleRemoveUser,
   };

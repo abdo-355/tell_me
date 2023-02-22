@@ -9,6 +9,7 @@ export interface IAuthContext extends IAuthState {
 
 const authContext = createContext<IAuthContext>({
   token: "",
+  isLoggedIn: false,
   addUser: () => {},
   removeUser: () => {},
 });

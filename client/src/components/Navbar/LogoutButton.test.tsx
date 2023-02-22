@@ -1,4 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import {
+  render,
+  screen,
+  waitForElementToBeRemoved,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -23,7 +27,7 @@ describe("<LogoutButton />", () => {
     expect(modalText).toBeInTheDocument();
   });
 
-  it("clicking the yes button triggers the userRemove method and navigates to the home page", () => {
+  it("clicking the 'yes' button triggers the userRemove method and navigates to the home page", () => {
     renderComponent();
     clickButton();
 
@@ -35,7 +39,22 @@ describe("<LogoutButton />", () => {
     expect(mockNavigate).toBeCalledWith("/");
   });
 
-  it.todo("clicking the no button closes the modal");
+  it("clicking the 'no' button closes the modal", async () => {
+    renderComponent();
+    clickButton();
+
+    const noButton = screen.getByRole("button", { name: /no/i });
+    const modalText = screen.queryByText(/Are you sure you want to logout/i);
+
+    userEvent.click(noButton);
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByText(/Are you sure you want to logout/i)
+    );
+
+    expect(mockRemoveUser).not.toBeCalled();
+    expect(modalText).not.toBeInTheDocument();
+  });
 });
 
 //helper functions
