@@ -1,10 +1,14 @@
+import { useState } from "react";
+
 import { ClipboardDocumentIcon } from "@heroicons/react/24/outline";
+import Modal from "../UI/Modal/Modal";
 
 interface Props {
   data: { path: string };
 }
 
 const GeneratedLink: React.FC<Props> = ({ data }) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const { origin } = window.location;
 
   const path = data ? origin + "/messages/" + data.path : "";
@@ -13,9 +17,10 @@ const GeneratedLink: React.FC<Props> = ({ data }) => {
     try {
       if (path) {
         await window.navigator.clipboard.writeText(path);
+        setModalIsOpen(true);
       }
     } catch (err) {
-      throw err;
+      console.log(err);
     }
   };
 
@@ -35,6 +40,14 @@ const GeneratedLink: React.FC<Props> = ({ data }) => {
         value={path}
         readOnly
       />
+      <Modal
+        open={modalIsOpen}
+        onClose={() => {
+          setModalIsOpen(false);
+        }}
+      >
+        URL copied to the clipboard
+      </Modal>
     </div>
   );
 };
