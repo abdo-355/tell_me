@@ -1,5 +1,4 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen, act } from "@testing-library/react";
 
 import GeneratedLink from "./GeneratedLink";
 
@@ -30,10 +29,12 @@ describe("<GeneratedLink />", () => {
     expect(getField().value).toBe("http://localhost/messages/generatedPath");
   });
 
-  it("should copy the url to the clipboard when clicking the copy button", () => {
+  it("should copy the url to the clipboard when clicking the copy button", async () => {
     render(<GeneratedLink data={{ path: "generatedPath" }} />);
 
-    userEvent.click(getButton());
+    await act(async () => {
+      getButton().click();
+    });
 
     expect(navigator.clipboard.writeText).toBeCalledWith(
       "http://localhost/messages/generatedPath"

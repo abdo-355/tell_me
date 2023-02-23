@@ -35,7 +35,7 @@ describe("<SignupForm />", () => {
     test("have a link to redirect to the the login page", () => {
       renderComponent();
 
-      const loginLink = screen.getByRole("link", { name: /login/i });
+      const loginLink = screen.getAllByRole("link", { name: /login/i })[0];
 
       expect(loginLink).toHaveAttribute("href", "/auth/login");
     });

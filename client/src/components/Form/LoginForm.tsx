@@ -1,4 +1,4 @@
-import { useState, FormEventHandler, useContext } from "react";
+import { useState, FormEventHandler, useContext, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import Input from "../UI/Input";
@@ -6,6 +6,7 @@ import authContext from "../../context/auth-context";
 import { emailRegex } from "../../data/regex";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import useAxios from "../../hooks/use-axios";
+import Modal from "../UI/Modal/Modal";
 
 export interface ILoginFields {
   email: string;
@@ -28,6 +29,10 @@ const LoginForm = () => {
   const auth = useContext(authContext);
   const navigate = useNavigate();
 
+  // for the errors
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -38,7 +43,7 @@ const LoginForm = () => {
     password: "",
   });
 
-  const { request, data, statusCode, loading } = useAxios(
+  const { request, data, statusCode, loading, error } = useAxios(
     "http://localhost:8080/auth/login",
     "post",
     {
@@ -49,18 +54,29 @@ const LoginForm = () => {
 
   const sendData = async () => {
     if (!formIsValid) return;
-
     await request();
   };
 
-  // act upon statusCode change
-  if (statusCode !== 202 && statusCode !== 0) {
-    throw new Error("something went wrong");
-  } else if (statusCode === 202) {
-    const { token } = data;
-    auth.addUser(token);
-    navigate("/");
-  }
+  useEffect(() => {
+    // act upon statusCode change
+    if (statusCode === 202) {
+      const { token } = data;
+      auth.addUser(token);
+      navigate("/");
+    } else if (
+      error &&
+      (error.response?.status === 403 || error.response?.status === 404)
+    ) {
+      setModalIsOpen(true);
+      setModalMessage("Email or password is incorrect");
+    } else if (statusCode !== 202 && statusCode !== 0) {
+      setModalIsOpen(true);
+      // setModalMessage(error)
+      setModalMessage(
+        `Oops! something went wrong, please try again. status code ${statusCode}`
+      );
+    }
+  }, [auth, data, error, navigate, statusCode]);
 
   const formSubmitHandler: FormEventHandler = async (e) => {
     e.preventDefault();
@@ -114,6 +130,15 @@ const LoginForm = () => {
           Signup
         </NavLink>
       </span>
+      <Modal
+        open={modalIsOpen}
+        onClose={() => {
+          setModalIsOpen(false);
+          setModalMessage("");
+        }}
+      >
+        {modalMessage}
+      </Modal>
     </form>
   );
 };

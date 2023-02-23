@@ -6,7 +6,9 @@ type TMethods = "get" | "post" | "put" | "patch" | "delete";
 
 const useAxios = (url: string, method: TMethods, body?: Object) => {
   const [loading, setloading] = useState(false);
-  const [error, setError] = useState<AxiosError | null>(null);
+  const [error, setError] = useState<AxiosError<{ message: string }> | null>(
+    null
+  );
   const [data, setData] = useState<any>(null);
   const [statusCode, setStatusCode] = useState(0);
 
@@ -27,7 +29,7 @@ const useAxios = (url: string, method: TMethods, body?: Object) => {
       setData(res.data);
       setStatusCode(res.status);
     } catch (err) {
-      setError(err as AxiosError);
+      setError(err as AxiosError<{ message: string }>);
       setStatusCode((err as AxiosError).status || 400);
     } finally {
       setloading(false);

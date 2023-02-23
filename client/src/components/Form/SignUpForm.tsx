@@ -1,10 +1,11 @@
-import { useState, FormEventHandler } from "react";
+import { useState, useEffect, FormEventHandler } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useAxios from "../../hooks/use-axios";
 
 import Input from "../UI/Input";
 import { emailRegex } from "../../data/regex";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import Modal from "../UI/Modal/Modal";
 
 export interface ISignupFields {
   fName: string;
@@ -32,6 +33,10 @@ const SignupForm = () => {
   const navigate = useNavigate();
   let formIsValid = false;
 
+  // for the errors
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
   const [formData, setFormData] = useState<ISignupFields>({
     fName: "",
     lName: "",
@@ -48,7 +53,7 @@ const SignupForm = () => {
     confirmPassword: "",
   });
 
-  const { request, statusCode, loading } = useAxios(
+  const { request, statusCode, loading, error } = useAxios(
     "http://localhost:8080/auth/signup",
     "post",
     {
@@ -64,10 +69,6 @@ const SignupForm = () => {
 
     await request();
   };
-
-  if (statusCode === 200) {
-    navigate("/auth/login");
-  }
 
   const formSubmitHandler: FormEventHandler = (e) => {
     e.preventDefault();
@@ -114,6 +115,20 @@ const SignupForm = () => {
 
     sendData();
   };
+
+  useEffect(() => {
+    // act upon statusCode change
+    if (statusCode === 201) {
+      navigate("/auth/login");
+    } else if (error && error.response?.status === 400) {
+      setModalIsOpen(true);
+      setModalMessage(error.response.data!.message);
+    } else if (statusCode !== 200 && statusCode !== 0) {
+      setModalIsOpen(true);
+      // setModalMessage(error)
+      setModalMessage(`Oops! something went wrong, please try again`);
+    }
+  }, [error, navigate, statusCode]);
 
   return (
     <form onSubmit={formSubmitHandler} className="mt-20 xsm:mt-5 mb-5 my-7">
@@ -172,6 +187,21 @@ const SignupForm = () => {
           Login
         </NavLink>
       </span>
+      <Modal
+        open={modalIsOpen}
+        onClose={() => {
+          setModalIsOpen(false);
+          setModalMessage("");
+        }}
+      >
+        <span className="w-full mr-2">{modalMessage}</span>
+        <NavLink
+          className="text-blue-700 hover:text-green-700 underline underline-offset-2"
+          to="/auth/login"
+        >
+          Login
+        </NavLink>
+      </Modal>
     </form>
   );
 };
