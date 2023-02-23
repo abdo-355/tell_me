@@ -59,7 +59,7 @@ const LoginForm = () => {
   } else if (statusCode === 202) {
     const { token } = data;
     auth.addUser(token);
-    navigate("/messages");
+    navigate("/");
   }
 
   const formSubmitHandler: FormEventHandler = async (e) => {
