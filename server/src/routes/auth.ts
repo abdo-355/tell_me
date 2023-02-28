@@ -1,6 +1,9 @@
 import { Router } from "express";
-import * as authControllers from "../controllers/auth";
 import { body } from "express-validator";
+import passport from "passport";
+
+import * as authControllers from "../controllers/auth";
+import "../strategies/google";
 
 const router = Router();
 
@@ -40,6 +43,21 @@ router.post(
       .withMessage("password must be atleast 8 characters"),
   ],
   authControllers.login
+);
+
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["email", "profile"] })
+);
+router.get(
+  "/google/redirect",
+  passport.authenticate("google", {
+    failureRedirect: "/login",
+    successRedirect: "http://localhost:3000/",
+  }),
+  (req, res) => {
+    res.redirect("http://localhost:3000/");
+  }
 );
 
 export default router;
