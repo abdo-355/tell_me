@@ -20,7 +20,7 @@ const HeaderText = () => {
       </h3>
       {isLoggedIn ? (
         <NavLink
-          to="/auth/signup"
+          to="/messages"
           className="text-green-800 hover:text-white bg-white hover:bg-green-900 text-xl tall:text-2xl hover:scale-105 font-semibold transition-all duration-200 z-10 py-2 px-5 rounded-2xl border-green-700 hover:border-white border-4 shadow-xl ml-2 translate"
         >
           Check Messages{" "}

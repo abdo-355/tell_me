@@ -48,9 +48,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
 
     if (token) {
       dispatch({ type: "ADDUSER", payload: { token, isLoggedIn: true } });
-      console.log(getCookie("token"))
     } else if (getCookie("token")) {
-      console.log(getCookie("token"))
       // for google login
       handleAddUser(getCookie("token"))
       deleteCookie("token")
