@@ -45,18 +45,22 @@ router.post(
   authControllers.login
 );
 
+// for login with google
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
+
+// for login with google redirect
 router.get(
   "/google/redirect",
   passport.authenticate("google", {
     failureRedirect: "http://localhost:3000/auth/login",
   }),
   (req, res) => {
-    console.log(req.user);
-    res.redirect("http://localhost:3000/");
+    // we send the token as cookie
+    res.cookie("token", (req.user as { token: string }).token);
+    res.redirect("http://localhost:3000");
   }
 );
 
