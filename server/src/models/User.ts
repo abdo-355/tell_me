@@ -39,7 +39,9 @@ const UserSchema = new Schema<IUser>({
     type: String,
     default: "",
   },
-  messages: [{ type: String }],
+  messages: {
+    type: [String],
+  },
 });
 
 export default model<IUser>("User", UserSchema);
