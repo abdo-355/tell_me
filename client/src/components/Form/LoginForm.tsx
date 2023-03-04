@@ -7,6 +7,7 @@ import { emailRegex } from "../../data/regex";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import useAxios from "../../hooks/use-axios";
 import Modal from "../UI/Modal/Modal";
+import SigninWithGoogleButton from "../UI/Signin/SigninWithGoogleButton";
 
 export interface ILoginFields {
   email: string;
@@ -120,6 +121,10 @@ const LoginForm = () => {
         >
           {loading ? <LoadingSpinner /> : "log in"}
         </button>
+      </div>
+      <p className="text-center text-2xl border-black border-opacity-30 border-b-2 leading-[.4rem] my-5 mx-8"><span className="bg-green-100 px-3 text-gray-700">or</span></p>
+      <div className="flex justify-center items-center my-5">
+        <SigninWithGoogleButton />
       </div>
       <span className="block text-center -mb-3">
         Don't have an account?{" "}

@@ -15,11 +15,11 @@ interface Props {
   error?: string;
   type: "text" | "email" | "password";
   setData:
-    | Dispatch<SetStateAction<ISignupFields>>
-    | Dispatch<SetStateAction<ILoginFields>>;
+  | Dispatch<SetStateAction<ISignupFields>>
+  | Dispatch<SetStateAction<ILoginFields>>;
   setErrors:
-    | Dispatch<SetStateAction<ISignupFields>>
-    | Dispatch<SetStateAction<ILoginFields>>;
+  | Dispatch<SetStateAction<ISignupFields>>
+  | Dispatch<SetStateAction<ILoginFields>>;
 }
 
 const Input: FC<Props> = ({ id, label, type, error, setData, setErrors }) => {
@@ -67,9 +67,8 @@ const Input: FC<Props> = ({ id, label, type, error, setData, setErrors }) => {
         onChange={changeHandler}
         aria-errormessage={`${id}ErrMsg`}
         aria-invalid="true"
-        className={`w-full h-10 rounded-lg ${
-          !error ? "border-green-900" : "border-red-700 bg-red-200"
-        } border-2 px-2 text-xl`}
+        className={`w-full h-10 rounded-lg ${!error ? "border-green-900" : "border-red-700 bg-red-200"
+          } border-2 px-2 text-xl`}
       />
       {!!error && (
         <div className="relative">
