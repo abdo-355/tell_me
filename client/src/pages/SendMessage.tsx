@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import styles from "./styles.module.css";
-import Navbar from "../components/Navbar/Navbar";
 import useAxios from "../hooks/use-axios";
 import LoadingSpinner from "../components/UI/LoadingSpinner";
 import Modal from "../components/UI/Modal/Modal";
@@ -54,9 +53,8 @@ const SendMessage = () => {
 
   return (
     <>
-      <Navbar />
       <div
-        className={`${styles.background} flex justify-center items-center h-[calc(100vh-64px)]`}
+        className={`${styles.background} flex justify-center items-center h-screen`}
       >
         <div className="absolute inset-x-3 sm:relative sm:inset-x-auto flex flex-col bg-green-600 border-2 border-green-900 p-5 rounded-2xl shadow-2xl">
           <label
