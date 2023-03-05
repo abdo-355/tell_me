@@ -6,6 +6,7 @@ interface IUser {
   email: string;
   password?: string;
   googleId?: string;
+  facebookId?: string;
   // path to send messages to
   path: string;
   //for recieved messages
@@ -28,13 +29,18 @@ const UserSchema = new Schema<IUser>({
   password: {
     type: String,
     required() {
-      return !this.googleId;
+      return !this.googleId && !this.facebookId;
     },
   },
   googleId: {
     type: String,
     unique: true,
   },
+  facebookId: {
+    type: String,
+    unique: true,
+  },
+
   path: {
     type: String,
     default: "",

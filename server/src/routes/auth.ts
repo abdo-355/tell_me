@@ -3,7 +3,7 @@ import { body } from "express-validator";
 import passport from "passport";
 
 import * as authControllers from "../controllers/auth";
-import "../strategies/google";
+import "../strategies/auth-stratigies";
 
 const router = Router();
 
@@ -64,4 +64,22 @@ router.get(
   }
 );
 
+// for login with facebook
+router.get(
+  "/facebook",
+  passport.authenticate("facebook", { scope: ["email"] })
+);
+
+// for login with facebook redirect
+router.get(
+  "/facebook/redirect",
+  passport.authenticate("facebook", {
+    failureRedirect: "http://localhost:3000/auth/login",
+  }),
+  (req, res) => {
+    // we send the token as cookie
+    res.cookie("token", (req.user as { token: string }).token);
+    res.redirect("http://localhost:3000");
+  }
+);
 export default router;
