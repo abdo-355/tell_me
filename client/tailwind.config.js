@@ -6,6 +6,11 @@ module.exports = {
       roboto: ["Roboto", "sans-serif"],
     },
     extend: {
+      colors: {
+        // facebook blue theme color
+        "fb-blue": "#1877f2",
+        "fb-blue-darker": "#0c63b8",
+      },
       screens: {
         xsm: "300px",
         // tablet portrait mode compatibility
