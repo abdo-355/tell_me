@@ -18,7 +18,7 @@ const Form = () => {
       </div>
       <Link
         to="/"
-        className="absolute h-10 w-10 top-5 left-5 hover:bg-green-300 hover:bg-opacity-30 hover:rounded-lg hover:h-11 hover:w-11 transition-all"
+        className="absolute h-10 w-10 top-5 left-2 xsm:left-5 hover:bg-green-300 hover:bg-opacity-30 hover:rounded-lg hover:h-11 hover:w-11 transition-all"
       >
         <ArrowLeft styles="text-green-900" />
       </Link>

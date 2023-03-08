@@ -15,6 +15,8 @@ module.exports = {
         xsm: "300px",
         // tablet portrait mode compatibility
         tall: { raw: "(min-height: 920px) and (max-width: 900px)" },
+        // short screen compatibility
+        hsm: { raw: "(max-height: 741px) and (max-width: 640px)" },
       },
     },
   },
