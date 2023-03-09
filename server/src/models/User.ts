@@ -4,6 +4,8 @@ interface IUser {
   firstName: string;
   lastName: string;
   email: string;
+  verified: boolean;
+  verificationCode: string;
   password?: string;
   googleId?: string;
   facebookId?: string;
@@ -25,6 +27,16 @@ const UserSchema = new Schema<IUser>({
   email: {
     type: String,
     required: true,
+  },
+  verified: {
+    type: Boolean,
+    required: true,
+  },
+  verificationCode: {
+    type: String,
+    required() {
+      return !this.verified;
+    },
   },
   password: {
     type: String,
