@@ -3,8 +3,10 @@ import { validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { config } from "dotenv";
+import crypto from "crypto";
 
 import User from "../models/User";
+import sendMail from "../utils/email";
 
 config();
 
@@ -24,20 +26,43 @@ export const signup: RequestHandler = async (req, res, next) => {
       return res.status(400).json({ message: "this email already exists" });
     }
 
+    // hash the password
     const hashedPassword = await bcrypt.hash(password, 12);
+
+    // generate verification code
+    const verificationCode = crypto.randomBytes(10).toString("hex");
 
     const user = new User({
       firstName,
       lastName,
       email,
+      verified: false,
+      verificationCode,
       password: hashedPassword,
       messages: [],
     });
 
     await user.save();
 
-    res.status(201).json({ message: "user signed up successfully" });
+    // send verification email
+    await sendMail(
+      email,
+      "Verify your email",
+      `
+    <p>Thank you for registering on TellMe. Please click on the link below to verify your email:
+    </p>
+    <a href="${req.protocol}://${req.get(
+        "host"
+      )}/verify-email/${verificationCode}">
+      Verify your email
+      </a>
+    <p>happy messaging</p>
+  `
+    );
+
+    res.status(201).json({ message: "email verification sent" });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: "an error occurred" });
   }
 };

@@ -46,11 +46,9 @@ const UserSchema = new Schema<IUser>({
   },
   googleId: {
     type: String,
-    unique: true,
   },
   facebookId: {
     type: String,
-    unique: true,
   },
 
   path: {
