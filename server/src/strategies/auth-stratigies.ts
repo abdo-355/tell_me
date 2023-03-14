@@ -29,6 +29,7 @@ passport.use(
             email: profile._json.email,
             firstName: profile.name.givenName,
             lastName: profile.name.familyName,
+            verified: true,
             googleId: profile.id,
           });
 
@@ -75,6 +76,7 @@ passport.use(
             email: profile._json.email,
             firstName: profile._json.first_name,
             lastName: profile._json.last_name,
+            verified: true,
             facebookId: profile.id,
           });
 
