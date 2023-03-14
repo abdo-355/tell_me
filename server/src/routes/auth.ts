@@ -34,6 +34,9 @@ router.post(
   authControllers.signup
 );
 
+// for email verification
+router.get("/verify-email/:verificationCode", authControllers.verifyEmail);
+
 router.post(
   "/login",
   [
@@ -82,4 +85,5 @@ router.get(
     res.redirect("http://localhost:3000");
   }
 );
+
 export default router;

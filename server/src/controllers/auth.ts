@@ -53,7 +53,7 @@ export const signup: RequestHandler = async (req, res, next) => {
     </p>
     <a href="${req.protocol}://${req.get(
         "host"
-      )}/verify-email/${verificationCode}">
+      )}/auth/verify-email/${verificationCode}">
       Verify your email
       </a>
     <p>happy messaging</p>
@@ -63,6 +63,27 @@ export const signup: RequestHandler = async (req, res, next) => {
     res.status(201).json({ message: "email verification sent" });
   } catch (err) {
     console.log(err);
+    res.status(500).json({ message: "an error occurred" });
+  }
+};
+
+export const verifyEmail: RequestHandler = async (req, res, next) => {
+  try {
+    const verificationCode = req.params.verificationCode;
+
+    const user = await User.findOne({ verificationCode });
+
+    if (!user) {
+      return res.status(404).json({ message: "Invalid verification code" });
+    } else {
+      // remove the verification code field and set verified to true
+      await User.updateOne(
+        { _id: user._id },
+        { $unset: { verificationCode: 1 }, $set: { verified: true } }
+      );
+      res.status(302).json({ message: "email verfied successfully" });
+    }
+  } catch (err) {
     res.status(500).json({ message: "an error occurred" });
   }
 };
