@@ -37,6 +37,9 @@ router.post(
 // for email verification
 router.get("/verify-email/:verificationCode", authControllers.verifyEmail);
 
+// re-send verification email
+router.post("/resend-email", authControllers.resendEmail);
+
 router.post(
   "/login",
   [

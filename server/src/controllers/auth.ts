@@ -67,6 +67,37 @@ export const signup: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const resendEmail: RequestHandler = async (req, res) => {
+  const token = req.body.token;
+
+  jwt.verify(
+    token,
+    process.env.SECRET_KEY,
+    async (err, { userId }: { userId: string }) => {
+      if (err) return res.status(401).json({ message: err.message });
+
+      const user = await User.findById(userId);
+
+      await sendMail(
+        user.email,
+        "Verify your email",
+        `
+      <p>Thank you for registering on TellMe. Please click on the link below to verify your email:
+      </p>
+      <a href="${req.protocol}://${req.get("host")}/auth/verify-email/${
+          user.verificationCode
+        }">
+        Verify your email
+        </a>
+      <p>happy messaging</p>
+    `
+      );
+
+      res.status(200).json({ message: "Email verification sent successfully" });
+    }
+  );
+};
+
 export const verifyEmail: RequestHandler = async (req, res, next) => {
   try {
     const verificationCode = req.params.verificationCode;

@@ -6,12 +6,14 @@ import Form from "./pages/Form";
 import LinkGenerator from "./pages/LinkGenerator";
 import SendMessage from "./pages/SendMessage";
 import Messages from "./pages/Messages";
+import Email from "./pages/Email";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/auth/*" element={<Form />} />
       <Route path="/messages/:usertpath" element={<SendMessage />} />
+      <Route path="/email/*" element={<Email />} />
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/getURL" element={<LinkGenerator />} />
