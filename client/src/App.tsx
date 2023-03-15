@@ -13,11 +13,11 @@ const App = () => {
     <Routes>
       <Route path="/auth/*" element={<Form />} />
       <Route path="/messages/:usertpath" element={<SendMessage />} />
-      <Route path="/email/*" element={<Email />} />
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/getURL" element={<LinkGenerator />} />
         <Route path="/messages" element={<Messages />} />
+        <Route path="/email/*" element={<Email />} />
       </Route>
     </Routes>
   );

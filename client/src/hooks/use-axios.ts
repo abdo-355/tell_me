@@ -1,5 +1,7 @@
 import { useState, useCallback, useContext } from "react";
 import axios, { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
+
 import authContext from "../context/auth-context";
 
 type TMethods = "get" | "post" | "put" | "patch" | "delete";
@@ -13,6 +15,8 @@ const useAxios = (url: string, method: TMethods, body?: Object) => {
   const [statusCode, setStatusCode] = useState(0);
 
   const { token } = useContext(authContext);
+
+  const navigate = useNavigate();
 
   const request = useCallback(async () => {
     try {
@@ -29,12 +33,21 @@ const useAxios = (url: string, method: TMethods, body?: Object) => {
       setData(res.data);
       setStatusCode(res.status);
     } catch (err) {
-      setError(err as AxiosError<{ message: string }>);
-      setStatusCode((err as AxiosError).status || 400);
+      const axiosErr = err as AxiosError<{ message: string }>;
+
+      // if email not verified
+      if (
+        axiosErr.response!.status === 401 &&
+        axiosErr.response!.data!.message === "email not verified"
+      ) {
+        navigate("/email/not-verified");
+      }
+      setError(axiosErr);
+      setStatusCode(axiosErr.status || 400);
     } finally {
       setloading(false);
     }
-  }, [body, method, token, url]);
+  }, [body, method, navigate, token, url]);
 
   return { request, data, loading, error, statusCode };
 };
