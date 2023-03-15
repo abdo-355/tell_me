@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axios from "axios";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import useAxios from "./use-axios";
 
@@ -22,7 +23,12 @@ describe("useAxios", () => {
       );
     };
 
-    render(<TestComponent />);
+    render(<BrowserRouter>
+      <Routes>
+        <Route path="/" element={<TestComponent />} />
+      </Routes>
+    </BrowserRouter>
+    );
 
     expect(screen.getByTestId("loading").textContent).toBe("false");
     expect(screen.getByTestId("data").textContent).toBe("");
@@ -39,19 +45,23 @@ describe("useAxios", () => {
     const TestComponent = () => {
       const { request, loading, data, statusCode } = useAxios("", "get");
 
-      return (
-        <>
-          <button onClick={() => request()} data-testid="submitButton">
-            Click
-          </button>
-          {loading && <span data-testid="loading">loading is true</span>}
-          {data && <span data-testid="data">{data.test}</span>}
-          {statusCode && <span data-testid="statusCode">{statusCode}</span>}
-        </>
+      return (<>
+        <button onClick={() => request()} data-testid="submitButton">
+          Click
+        </button>
+        {loading && <span data-testid="loading">loading is true</span>}
+        {data && <span data-testid="data">{data.test}</span>}
+        {statusCode && <span data-testid="statusCode">{statusCode}</span>}
+      </>
       );
     };
 
-    render(<TestComponent />);
+    render(<BrowserRouter>
+      <Routes>
+        <Route path="/" element={<TestComponent />} />
+      </Routes>
+    </BrowserRouter>
+    );
 
     userEvent.click(screen.getByTestId("submitButton"));
 
@@ -89,7 +99,12 @@ describe("useAxios", () => {
       );
     };
 
-    render(<TestComponent />);
+    render(<BrowserRouter>
+      <Routes>
+        <Route path="/" element={<TestComponent />} />
+      </Routes>
+    </BrowserRouter>
+    );
 
     userEvent.click(screen.getByTestId("submitButton"));
 
