@@ -6,18 +6,20 @@ import Form from "./pages/Form";
 import LinkGenerator from "./pages/LinkGenerator";
 import SendMessage from "./pages/SendMessage";
 import Messages from "./pages/Messages";
-import Email from "./pages/Email";
+import EmailNotVerified from "./pages/Email/EmailNotVerified"
+import EmailVerified from "./pages/Email/EmailVerified"
 
 const App = () => {
   return (
     <Routes>
       <Route path="/auth/*" element={<Form />} />
       <Route path="/messages/:usertpath" element={<SendMessage />} />
+      <Route path="/email/verified" element={<EmailVerified />} />
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/getURL" element={<LinkGenerator />} />
         <Route path="/messages" element={<Messages />} />
-        <Route path="/email/*" element={<Email />} />
+        <Route path="/email/not-verified" element={<EmailNotVerified />} />
       </Route>
     </Routes>
   );
