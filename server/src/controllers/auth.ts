@@ -112,7 +112,7 @@ export const verifyEmail: RequestHandler = async (req, res, next) => {
         { _id: user._id },
         { $unset: { verificationCode: 1 }, $set: { verified: true } }
       );
-      res.status(302).json({ message: "email verfied successfully" });
+      res.redirect(`${process.env.FRONT_END}/email/verified`);
     }
   } catch (err) {
     res.status(500).json({ message: "an error occurred" });
