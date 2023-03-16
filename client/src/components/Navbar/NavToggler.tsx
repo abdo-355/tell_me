@@ -8,7 +8,7 @@ interface Props {
 
 const NavToggler: FC<Props> = ({ open }) => {
   return (
-    <div className="absolute left-0 flex items-center sm:hidden">
+    <div className="flex-initial left-0 flex items-center sm:hidden z-30">
       <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-white">
         <span className="sr-only">Open main menu</span>
         {open ? (

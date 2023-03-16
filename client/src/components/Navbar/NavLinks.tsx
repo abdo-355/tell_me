@@ -8,7 +8,7 @@ const links = [
 
 const NavLinks = () => {
   return (
-    <div className="flex items-center h-full">
+    <div className="hidden sm:flex flex-initial items-center h-full">
       {links.map((link) => (
         <Link
           key={link.url}
