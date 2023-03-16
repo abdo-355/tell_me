@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 // for future nav links
-const links = [
+export const links = [
   { url: "/geturl", name: "url" },
   { url: "/messages", name: "messages" },
 ];
