@@ -30,7 +30,7 @@ const Messages = () => {
           No messages sent
         </h1>
       ) : (
-        <div className="max-w-screen-xl w-full mx-5 lg:mx-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 my-24">
+        <div className="max-w-screen-xl w-full mx-5 lg:mx-20 flex flex-wrap justify-center my-24">
           {data.messages.map((message: string) => (
             <Message key={message} message={message} />
           ))}
