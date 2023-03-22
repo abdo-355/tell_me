@@ -23,7 +23,7 @@ const LogoutButton = () => {
     <>
       <button
         onClick={clickHandler}
-        className="flex-initial font-sans text-white text-2xl sm:bg-green-600 sm:hover:bg-green-700 px-0 sm:px-3 py-1 rounded-full sm:tracking-wider sm:uppercase -ml-10"
+        className="flex-initial font-sans text-white text-2xl sm:bg-green-600 sm:hover:bg-green-700 px-0 sm:px-3 py-1 rounded-full sm:tracking-wider sm:uppercase -ml-10 sm:ml-0"
       >
         Log out
       </button>
