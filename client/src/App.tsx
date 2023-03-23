@@ -8,6 +8,7 @@ import SendMessage from "./pages/SendMessage";
 import Messages from "./pages/Messages";
 import EmailNotVerified from "./pages/Email/EmailNotVerified"
 import EmailVerified from "./pages/Email/EmailVerified"
+import NotFound from "./pages/NotFound";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/messages" element={<Messages />} />
         <Route path="/email/not-verified" element={<EmailNotVerified />} />
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
