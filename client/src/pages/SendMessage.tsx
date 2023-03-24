@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { io, Socket } from "socket.io-client";
 
 import styles from "./styles.module.css";
 import useAxios from "../hooks/use-axios";
 import LoadingSpinner from "../components/UI/LoadingSpinner";
 import Modal from "../components/UI/Modal/Modal";
+
+let socket: Socket;
 
 const SendMessage = () => {
   const [error, setError] = useState("");
@@ -26,7 +29,8 @@ const SendMessage = () => {
     if (!messageValue) {
       setError("Message can't be empty");
     } else {
-      await request();
+      socket.emit("send-message", messageValue, usertpath)
+
       showModal();
     }
   };
@@ -44,8 +48,12 @@ const SendMessage = () => {
   }, [statusCode]);
 
   useEffect(() => {
-    showModal();
-  }, [showModal]);
+    socket = io(process.env.REACT_APP_BACKEND!)
+
+    return () => {
+      socket.disconnect();
+    }
+  }, []);
 
   const handleFocus = () => {
     setError("");
