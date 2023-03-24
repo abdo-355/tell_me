@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
 
 import styles from "./styles.module.css";
-import useAxios from "../hooks/use-axios";
 import LoadingSpinner from "../components/UI/LoadingSpinner";
 import Modal from "../components/UI/Modal/Modal";
 
@@ -13,17 +12,10 @@ const SendMessage = () => {
   const [error, setError] = useState("");
   const [messageValue, setMessageValue] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { usertpath } = useParams();
 
   let [modalMessage, setModalMessage] = useState("");
-
-  const { request, loading, statusCode } = useAxios(
-    `http://localhost:8080/messages/${usertpath}`,
-    "post",
-    {
-      message: messageValue,
-    }
-  );
 
   const handleSend = async () => {
     if (!messageValue) {
@@ -31,21 +23,16 @@ const SendMessage = () => {
     } else {
       socket.emit("send-message", messageValue, usertpath)
 
-      showModal();
+      setLoading(true);
+
+      // After a 300ms delay, set the loading state back to false and display a success message
+      setTimeout(() => {
+        setLoading(false)
+        setModalMessage("Message sent successfully");
+        setModalIsOpen(true);
+      }, 300)
     }
   };
-
-  const showModal = useCallback(() => {
-    if (statusCode !== 201 && statusCode !== 0) {
-      setModalMessage(
-        `Something went wrong! please try again status-code: ${statusCode}`
-      );
-      setModalIsOpen(true);
-    } else if (statusCode === 201) {
-      setModalMessage("Message sent successfully");
-      setModalIsOpen(true);
-    }
-  }, [statusCode]);
 
   useEffect(() => {
     socket = io(process.env.REACT_APP_BACKEND!)
