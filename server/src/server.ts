@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-import app, { httpServer as http } from "./app";
+import { httpServer as http } from "./app";
 
 mongoose
   .set("strictQuery", false)

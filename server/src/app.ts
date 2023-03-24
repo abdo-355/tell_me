@@ -4,10 +4,12 @@ import { config } from "dotenv";
 import passport from "passport";
 import session from "express-session";
 import { createServer } from "http";
+import { Server, Socket } from "socket.io";
+import jwt from "jsonwebtoken";
 
 import authRouter from "./routes/auth";
 import messagesRouter from "./routes/messages";
-import { Server } from "socket.io";
+import messagesSocket from "./sockets/messages";
 
 const app = express();
 config();
@@ -34,8 +36,35 @@ app.use(passport.session());
 app.use("/auth", authRouter);
 app.use("/messages", messagesRouter);
 
+export interface ICustomSocket extends Socket {
+  userId?: string;
+}
+
+// socket authentication
+io.use((socket: ICustomSocket, next) => {
+  const tokenHeader = socket.handshake.headers["authorization"];
+  const token = tokenHeader && tokenHeader.split(" ")[1];
+
+  // Verify the token and extract the user ID
+  if (token) {
+    jwt.verify(
+      token,
+      process.env.SECRET_KEY,
+      (err, { userId }: { userId: string }) => {
+        if (err) return next(new Error("Invalid token"));
+
+        // Attach the user ID to the socket object
+        socket.userId = userId;
+        next();
+      }
+    );
+  } else {
+    next();
+  }
+});
+
 io.on("connection", (socket) => {
-  console.log(socket.id);
+  messagesSocket(socket);
 });
 
 export default app;
