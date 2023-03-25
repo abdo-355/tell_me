@@ -22,12 +22,10 @@ const messagesSocket = async (socket: ICustomSocket) => {
     await user.save();
 
     // we fing the socket id of the recieving user if exists
-    const recievingUser = sockets.find(
-      (s) => s.userId === user._id.toString()
-    ).socketId;
+    const recievingUser = sockets.find((s) => s.userId === user._id.toString());
 
     if (recievingUser) {
-      io.to(recievingUser).emit("new-message", message);
+      io.to(recievingUser.socketId).emit("new-message", message);
     }
   });
 
