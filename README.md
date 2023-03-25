@@ -34,7 +34,7 @@ exposing the sender Identity
 ![recieved messages page](https://images.zenhubusercontent.com/641e69bba2d3b289364b33b5/a3e8046a-ff85-4d1e-b1c2-36424ca383f6)
 
 * Real-time update whenever a new message is sent
-![real-time message update](https://user-images.githubusercontent.com/104834523/227696919-a48042fc-a25d-4f6d-a7c3-c6c2d3b61f83.gif)
+![real-time message update](https://user-images.githubusercontent.com/104834523/227697055-e15200a6-0a60-4cd4-a824-f5bd4b4c5b60.gif)
 
 * fully responsive
 ![mobile screens](https://images.zenhubusercontent.com/641e69bba2d3b289364b33b5/423a4059-f52f-4c1b-9296-fbe8ce4a7192)
