@@ -64,7 +64,7 @@ const LoginForm = () => {
     if (statusCode === 202) {
       const { token } = data;
       auth.addUser(token);
-      navigate("/");
+      navigate("/messages");
     } else if (
       error &&
       (error.response?.status === 403 || error.response?.status === 404)
@@ -123,7 +123,9 @@ const LoginForm = () => {
           {loading ? <LoadingSpinner /> : "log in"}
         </button>
       </div>
-      <p className="text-center text-2xl border-black border-opacity-30 border-b-2 leading-[.4rem] my-5 mx-8"><span className="bg-green-100 px-3 text-gray-700">or</span></p>
+      <p className="text-center text-2xl border-black border-opacity-30 border-b-2 leading-[.4rem] my-5 mx-8">
+        <span className="bg-green-100 px-3 text-gray-700">or</span>
+      </p>
       <div className="flex flex-1 flex-col items-center mx-2 sm:mx-5">
         <GoogleButton mode="Log in" />
         <FacebookButton mode="Log in" />
