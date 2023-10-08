@@ -17,7 +17,7 @@ config();
 export const httpServer = createServer(app);
 export const io = new Server(httpServer, {
   cors: {
-    origin: [process.env.FRONT_END],
+    origin: process.env.FRONT_END,
   },
 });
 
