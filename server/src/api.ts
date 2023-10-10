@@ -4,8 +4,8 @@ import { config } from "dotenv";
 import passport from "passport";
 import session from "express-session";
 
-import authRouter from "../routes/auth";
-import messagesRouter from "../routes/messages";
+import authRouter from "./routes/auth";
+import messagesRouter from "./routes/messages";
 
 const app = express();
 config();
