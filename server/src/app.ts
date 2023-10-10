@@ -6,6 +6,7 @@ import session from "express-session";
 import { createServer } from "http";
 import { Server, Socket } from "socket.io";
 import jwt from "jsonwebtoken";
+import ServerlessHttp from "serverless-http";
 
 import authRouter from "./routes/auth";
 import messagesRouter from "./routes/messages";
@@ -33,12 +34,12 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/auth", authRouter);
-app.use("/messages", messagesRouter);
-
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.send("The server is working");
 });
+
+app.use("/api/auth", authRouter);
+app.use("/api/messages", messagesRouter);
 
 export interface ICustomSocket extends Socket {
   userId?: string;
@@ -70,5 +71,7 @@ io.use((socket: ICustomSocket, next) => {
 io.on("connection", (socket) => {
   messagesSocket(socket);
 });
+
+export const handler = ServerlessHttp(app);
 
 export default app;
