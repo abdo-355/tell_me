@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev --respawn src/server.ts",
+    "dev": "ts-node-dev --respawn src/server.ts",
     "test": "jest --verbose --watch",
     "tsc": "tsc",
     "prepare": "npm run tsc",
-    "start:prod": "node dist/server.js"
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
