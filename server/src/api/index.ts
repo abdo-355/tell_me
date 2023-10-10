@@ -4,8 +4,8 @@ import { config } from "dotenv";
 import passport from "passport";
 import session from "express-session";
 
-import authRouter from "./routes/auth";
-import messagesRouter from "./routes/messages";
+import authRouter from "../routes/auth";
+import messagesRouter from "../routes/messages";
 
 const app = express();
 config();
@@ -22,11 +22,11 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.send("The server is working");
 });
 
-app.use("/auth", authRouter);
-app.use("/messages", messagesRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/messages", messagesRouter);
 
 export default app;
