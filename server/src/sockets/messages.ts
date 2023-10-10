@@ -1,6 +1,6 @@
 import User from "../models/User";
-import { ICustomSocket } from "../app";
-import { io } from "../app";
+// import { ICustomSocket } from "../api";
+// import { io } from "../api";
 
 let sockets: { socketId: string; userId: string }[] = [];
 

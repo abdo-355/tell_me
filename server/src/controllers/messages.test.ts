@@ -2,7 +2,7 @@ import supertest from "supertest";
 import jwt from "jsonwebtoken";
 import { config } from "dotenv";
 
-import app from "../app";
+import app from "../api";
 import User from "../models/User";
 
 config();
