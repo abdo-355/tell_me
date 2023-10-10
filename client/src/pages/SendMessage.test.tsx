@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
@@ -31,16 +31,16 @@ describe("<SendMessage />", () => {
     //@ts-ignore
     expect(mockWindow.requestCalled).toBeFalsy();
   });
-  // it("should submit the form successfully with valid input", async () => {
-  //   renderComponent();
+  it("should submit the form successfully with valid input", async () => {
+    renderComponent();
 
-  //   userEvent.type(getTextarea(), "test");
-  //   await act(async () => {
-  //     getButton().click();
-  //   });
-  //   //@ts-ignore
-  //   expect(mockWindow.requestCalled).toBeTruthy();
-  // });
+    userEvent.type(getTextarea(), "test");
+    await act(async () => {
+      getButton().click();
+    });
+    //@ts-ignore
+    expect(mockWindow.requestCalled).toBeTruthy();
+  });
 });
 
 // helper functions

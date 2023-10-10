@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
-import { httpServer as http } from "./app";
+import app from "./app";
 
 mongoose
   .set("strictQuery", false)
   .connect(process.env.MONGODB_URI)
   .then(() => {
-    http.listen(process.env.PORT || 8080, () => {
+    app.listen(process.env.PORT || 8080, () => {
       console.log("connected on port 8080");
     });
   })
