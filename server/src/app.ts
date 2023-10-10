@@ -36,6 +36,10 @@ app.use(passport.session());
 app.use("/auth", authRouter);
 app.use("/messages", messagesRouter);
 
+app.get("/", (req, res) => {
+  res.send("The server is working");
+});
+
 export interface ICustomSocket extends Socket {
   userId?: string;
 }
