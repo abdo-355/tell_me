@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
 import passport from "passport";
-import session from "express-session";
+import session from "cookie-session";
 
 import authRouter from "./routes/auth";
 import messagesRouter from "./routes/messages";
