@@ -11,13 +11,7 @@ const app = express();
 config();
 
 app.use(express.json());
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", process.env.FRONT_END);
-  res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  next();
-});
-app.use(cors({ origin: process.env.FRONT_END }));
+app.use(cors({ origin: process.env.FRONT_END + "/*" }));
 app.use(
   session({
     secret: process.env.EXPRESS_SESSION_SECRET,
