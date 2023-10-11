@@ -11,7 +11,7 @@ const app = express();
 config();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: process.env.FRONT_END }));
 app.use(
   session({
     secret: process.env.EXPRESS_SESSION_SECRET,
