@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 
 const LinkGenerator = () => {
   const { request, data, loading } = useAxios(
-    "http://localhost:8080/messages/path",
+    `${process.env.REACT_APP_BACKEND}/messages/path`,
     "get"
   );
 

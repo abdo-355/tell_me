@@ -46,7 +46,7 @@ const LoginForm = () => {
   });
 
   const { request, data, statusCode, loading, error } = useAxios(
-    "http://localhost:8080/auth/login",
+    `${process.env.REACT_APP_BACKEND}/auth/login`,
     "post",
     {
       email: formData.email,

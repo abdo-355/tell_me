@@ -56,7 +56,7 @@ const SignupForm = () => {
   });
 
   const { request, statusCode, loading, error } = useAxios(
-    "http://localhost:8080/auth/signup",
+    `${process.env.REACT_APP_BACKEND}/auth/signup/`,
     "post",
     {
       firstName: formData.fName,
@@ -133,7 +133,10 @@ const SignupForm = () => {
   }, [error, navigate, statusCode]);
 
   return (
-    <form onSubmit={formSubmitHandler} className="mt-20 xsm:mt-5 mb-5 my-7 pt-0 hsm:pt-36">
+    <form
+      onSubmit={formSubmitHandler}
+      className="mt-20 xsm:mt-5 mb-5 my-7 pt-0 hsm:pt-36"
+    >
       <div className="flex">
         {fields
           .filter((e, i) => i < 2)
@@ -180,7 +183,9 @@ const SignupForm = () => {
           {loading ? <LoadingSpinner /> : "Sign up"}
         </button>
       </div>
-      <p className="text-center text-2xl border-black border-opacity-30 border-b-2 leading-[.4rem] my-2 mx-8"><span className="bg-green-100 px-3 text-gray-700">or</span></p>
+      <p className="text-center text-2xl border-black border-opacity-30 border-b-2 leading-[.4rem] my-2 mx-8">
+        <span className="bg-green-100 px-3 text-gray-700">or</span>
+      </p>
       <div className="flex flex-1 flex-col md:flex-row justify-around items-center mx-2 sm:mx-5">
         <GoogleButton mode="Sign up" />
         <FacebookButton mode="Sign up" />
