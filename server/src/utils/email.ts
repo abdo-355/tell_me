@@ -11,18 +11,16 @@ const sendMail = async (email: string, subject: string, content: string) => {
       pass: process.env.MAILING_PASSWORD,
     },
   });
-
-  transporter
-    .sendMail({
+  try {
+    await transporter.sendMail({
       from: process.env.MAILING_EMAIL,
       to: email,
       subject: subject,
       html: content,
-    })
-    .then()
-    .catch((err) => {
-      console.log(err);
     });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export default sendMail;
