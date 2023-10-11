@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-import app from "./api";
+import app from "./app";
 
 mongoose
   .set("strictQuery", false)

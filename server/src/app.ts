@@ -4,8 +4,8 @@ import { config } from "dotenv";
 import passport from "passport";
 import session from "express-session";
 
-import authRouter from "../routes/auth";
-import messagesRouter from "../routes/messages";
+import authRouter from "./routes/auth";
+import messagesRouter from "./routes/messages";
 
 const app = express();
 config();
@@ -30,14 +30,3 @@ app.use("/api/auth", authRouter);
 app.use("/api/messages", messagesRouter);
 
 export default app;
-import mongoose from "mongoose";
-
-mongoose
-  .set("strictQuery", false)
-  .connect(process.env.MONGODB_URI)
-  .then(() => {
-    app.listen(process.env.PORT || 8080, () => {
-      console.log("connected on port 8080");
-    });
-  })
-  .catch((err) => console.log(err));

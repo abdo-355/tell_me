@@ -1,4 +1,4 @@
-import app from "../api";
+import app from "../../api";
 import supertest from "supertest";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";

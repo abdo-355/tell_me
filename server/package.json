@@ -1,14 +1,15 @@
 {
-  "name": "secrets-project",
+  "name": "TellMe",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/api/index.ts",
+    "start": "nodemon src/server.ts",
     "test": "jest --verbose --watch",
     "tsc": "tsc",
     "prepare": "npm run tsc",
-    "start:prod": "node dist/server.js"
+    "start:prod": "node dist/server.js",
+    "vercel-build": "echo hello"
   },
   "keywords": [],
   "author": "",
