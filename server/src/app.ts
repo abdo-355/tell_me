@@ -3,6 +3,7 @@ import cors from "cors";
 import { config } from "dotenv";
 import passport from "passport";
 import session from "cookie-session";
+import mongoose from "mongoose";
 
 import authRouter from "./routes/auth";
 import messagesRouter from "./routes/messages";
@@ -33,5 +34,10 @@ app.get("/api", (req, res) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/messages", messagesRouter);
+
+mongoose
+  .set("strictQuery", false)
+  .connect(process.env.MONGODB_URI)
+  .catch((err) => console.log(err));
 
 export default app;
