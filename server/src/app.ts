@@ -11,7 +11,16 @@ const app = express();
 config();
 
 app.use(express.json());
-// app.use(cors({ origin: process.env.FRONT_END }));
+//enables cors
+app.use(
+  cors({
+    allowedHeaders: ["sessionId", "Content-Type"],
+    exposedHeaders: ["sessionId"],
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
+  })
+);
 app.use(
   session({
     secret: process.env.EXPRESS_SESSION_SECRET,
@@ -21,26 +30,6 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use((req, res, next) => {
-  // fixing the cors problem
-  res.setHeader("Access-Control-Allow-Origin", "*");
-
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
-
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type"
-  );
-
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-
-  // Pass to next layer of middleware
-  next();
-});
 
 app.get("/api", (req, res) => {
   res.send("The server is working");
