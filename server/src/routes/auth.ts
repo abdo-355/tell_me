@@ -7,6 +7,10 @@ import "../strategies/auth-stratigies";
 
 const router = Router();
 
+router.get("/", (req, res) => {
+  res.send("the auth route");
+});
+
 router.post(
   "/signup",
   [
