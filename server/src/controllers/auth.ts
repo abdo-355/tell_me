@@ -53,7 +53,7 @@ export const signup: RequestHandler = async (req, res, next) => {
     </p>
     <a href="${req.protocol}://${req.get(
         "host"
-      )}/auth/verify-email/${verificationCode}">
+      )}/api/auth/verify-email/${verificationCode}">
       Verify your email
       </a>
     <p>happy messaging</p>
