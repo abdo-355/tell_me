@@ -53,7 +53,7 @@ export const getMessages: RequestHandler = async (req, res, next) => {
   try {
     const user = await User.findById(req.userId);
 
-    res.status(200).json({ messages: user.messages });
+    res.status(200).json({ messages: user.messages.reverse() });
   } catch (err) {
     res.status(500).json({ error: "ab error occured" });
   }
