@@ -21,14 +21,17 @@ app.use(
     allowedHeaders: "Content-Type,Authorization",
   })
 );
+app.set("trust proxy", 1);
 app.use(
   session({
     secret: process.env.EXPRESS_SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
+    cookie: { sameSite: "none", secure: true },
   })
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
 
