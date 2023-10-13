@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
 import passport from "passport";
-import session from "cookie-session";
+import session from "express-session";
 import mongoose from "mongoose";
 
 import authRouter from "./routes/auth";
@@ -15,14 +15,16 @@ app.use(express.json());
 //enables cors
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:3000",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    allowedHeaders: "*",
+    allowedHeaders: "Content-Type,Authorization",
   })
 );
 app.use(
   session({
     secret: process.env.EXPRESS_SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
   })
 );
 app.use(passport.initialize());
