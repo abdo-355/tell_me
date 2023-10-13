@@ -3,6 +3,7 @@ import cors from "cors";
 import { config } from "dotenv";
 import passport from "passport";
 import session from "express-session";
+import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
 
 import authRouter from "./routes/auth";
@@ -25,6 +26,7 @@ app.use(
     secret: process.env.EXPRESS_SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
   })
 );
 app.use(passport.initialize());
