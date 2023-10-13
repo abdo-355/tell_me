@@ -69,11 +69,7 @@ router.get(
   }),
   (req, res) => {
     // we send the token as cookie
-    // res.cookie("token", (req.user as { token: string }).token);
-    res.setHeader(
-      "Set-Cookie",
-      `token=${(req.user as { token: string }).token}; path=/;`
-    );
+    res.cookie("token", (req.user as { token: string }).token);
     res.redirect(process.env.FRONT_END);
   }
 );
@@ -92,11 +88,7 @@ router.get(
   }),
   (req, res) => {
     // we send the token as cookie
-    // res.cookie("token", (req.user as { token: string }).token);
-    res.setHeader(
-      "Set-Cookie",
-      `token=${(req.user as { token: string }).token}; path=/;`
-    );
+    res.cookie("token", (req.user as { token: string }).token);
     res.redirect(process.env.FRONT_END);
   }
 );
