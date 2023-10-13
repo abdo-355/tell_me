@@ -65,12 +65,12 @@ router.get(
 router.get(
   "/google/redirect",
   passport.authenticate("google", {
-    failureRedirect: "http://localhost:3000/auth/login",
+    failureRedirect: `${process.env.FRONT_END}/auth/login`,
   }),
   (req, res) => {
     // we send the token as cookie
     res.cookie("token", (req.user as { token: string }).token);
-    res.redirect("http://localhost:3000");
+    res.redirect(process.env.FRONT_END);
   }
 );
 
@@ -84,12 +84,12 @@ router.get(
 router.get(
   "/facebook/redirect",
   passport.authenticate("facebook", {
-    failureRedirect: "http://localhost:3000/auth/login",
+    failureRedirect: `${process.env.FRONT_END}/auth/login`,
   }),
   (req, res) => {
     // we send the token as cookie
     res.cookie("token", (req.user as { token: string }).token);
-    res.redirect("http://localhost:3000");
+    res.redirect(process.env.FRONT_END);
   }
 );
 
