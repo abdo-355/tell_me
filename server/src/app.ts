@@ -19,16 +19,16 @@ app.use(
     origin: process.env.FRONT_END,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: "Content-Type,Authorization",
+    credentials: true,
   })
 );
 app.set("trust proxy", 1);
 app.use(
   session({
     secret: process.env.EXPRESS_SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
-    cookie: { sameSite: "none", secure: true },
   })
 );
 

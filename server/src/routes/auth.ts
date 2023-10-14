@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, cookie } from "express-validator";
 import passport from "passport";
 
 import * as authControllers from "../controllers/auth";
@@ -68,8 +68,6 @@ router.get(
     failureRedirect: `${process.env.FRONT_END}/auth/login`,
   }),
   (req, res) => {
-    // we send the token as cookie
-    res.cookie("token", (req.user as { token: string }).token);
     res.redirect(process.env.FRONT_END);
   }
 );
@@ -87,10 +85,11 @@ router.get(
     failureRedirect: `${process.env.FRONT_END}/auth/login`,
   }),
   (req, res) => {
-    // we send the token as cookie
-    res.cookie("token", (req.user as { token: string }).token);
     res.redirect(process.env.FRONT_END);
   }
 );
+
+// getting the user token
+router.get("/getuser", authControllers.getUser);
 
 export default router;

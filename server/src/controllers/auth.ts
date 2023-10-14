@@ -148,3 +148,11 @@ export const login: RequestHandler = async (req, res, next) => {
 
   res.status(202).json({ token });
 };
+
+export const getUser: RequestHandler = (req, res) => {
+  if (req.user) {
+    res.json({ token: (req.user as { token: string }).token });
+    return 0;
+  }
+  res.status(200);
+};

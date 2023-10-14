@@ -1,7 +1,7 @@
 import { useReducer, Reducer, FC, ReactNode, useEffect } from "react";
-import getCookie, { deleteCookie } from "../utils/getCookie";
 
 import authContext, { IAuthContext } from "./auth-context";
+import axios from "axios";
 
 interface Props {
   children: ReactNode;
@@ -45,13 +45,16 @@ const AuthProvider: FC<Props> = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
     if (token) {
-      dispatch({ type: "ADDUSER", payload: { token, isLoggedIn: true } });
-    } else if (getCookie("token")) {
-      // for google login
-      handleAddUser(getCookie("token"))
-      deleteCookie("token")
+      handleAddUser(token);
+    } else {
+      axios
+        .get(`${process.env.REACT_APP_BACKEND}/auth/getuser`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          handleAddUser(res.data.token);
+        });
     }
   }, []);
 
