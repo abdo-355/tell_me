@@ -151,8 +151,11 @@ export const login: RequestHandler = async (req, res, next) => {
 
 export const getUser: RequestHandler = (req, res) => {
   if (req.user) {
-    res.json({ token: (req.user as { token: string }).token });
+    res
+      .clearCookie("connect.sid", { path: "/" })
+      .json({ token: (req.user as { token: string }).token });
     return 0;
+  } else {
+    res.json({ message: "No user found" });
   }
-  res.status(200);
 };

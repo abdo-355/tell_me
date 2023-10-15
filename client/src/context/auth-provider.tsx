@@ -53,7 +53,12 @@ const AuthProvider: FC<Props> = ({ children }) => {
           withCredentials: true,
         })
         .then((res) => {
-          handleAddUser(res.data.token);
+          if (res.data.token) {
+            handleAddUser(res.data.token);
+          }
+        })
+        .catch((err) => {
+          console.log("no token found");
         });
     }
   }, []);
