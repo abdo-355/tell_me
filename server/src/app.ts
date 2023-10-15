@@ -36,7 +36,7 @@ app.use(
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
   })
 );
-
+app.disable("view cache");
 app.use(passport.initialize());
 app.use(passport.session());
 
