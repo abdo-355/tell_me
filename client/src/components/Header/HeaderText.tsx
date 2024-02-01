@@ -15,8 +15,8 @@ const HeaderText = () => {
       <h3 className="flex-initial my-5 text-white font-semibold md:font-extrabold tall:font-semibold font-roboto text-xl md:text-base tall:text-lg text-center md:text-left drop-shadow-lg tracking-wider w-auto sm:w-2/3 md:w-auto tall:w-3/4">
         Create your Profile Link and Send it to all your contacts to check what
         do your friends and family think about you. With the help of TellMe, you
-        can recieve anonymous compliments, recommendations and criticism easily
-        for free!
+        can recieve anonymous compliments, recommendations and constructive
+        criticism easily for free!
       </h3>
       {isLoggedIn ? (
         <NavLink
