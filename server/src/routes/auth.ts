@@ -20,7 +20,63 @@ router.post(
       .withMessage("first name can't be empty")
       .bail()
       // if the first name is empty the is alpha  will never run
-      .isAlpha("ar" || "en-AU" || "en-GB" || "en-US" || "en-ZA" || "en-ZM")
+      .isAlpha("ar" ||
+          "ar-AE" ||
+          "ar-BH" ||
+          "ar-DZ" ||
+          "ar-EG" ||
+          "ar-IQ" ||
+          "ar-JO" ||
+          "ar-KW" ||
+          "ar-LB" ||
+          "ar-LY" ||
+          "ar-MA" ||
+          "ar-QA" ||
+          "ar-QM" ||
+          "ar-SA" ||
+          "ar-SD" ||
+          "ar-SY" ||
+          "ar-TN" ||
+          "ar-YE" ||
+          "az-AZ" ||
+          "bg-BG" ||
+          "cs-CZ" ||
+          "da-DK" ||
+          "de-DE" ||
+          "el-GR" ||
+          "en-AU" ||
+          "en-GB" ||
+          "en-HK" ||
+          "en-IN" ||
+          "en-NZ" ||
+          "en-US" ||
+          "en-ZA" ||
+          "en-ZM" ||
+          "es-ES" ||
+          "fa-AF" ||
+          "fa-IR" ||
+          "fr-FR" ||
+          "he" ||
+          "hu-HU" ||
+          "id-ID" ||
+          "it-IT" ||
+          "ku-IQ" ||
+          "nb-NO" ||
+          "nl-NL" ||
+          "nn-NO" ||
+          "pl-PL" ||
+          "pt-BR" ||
+          "pt-PT" ||
+          "ru-RU" ||
+          "sk-SK" ||
+          "sl-SI" ||
+          "sr-RS" ||
+          "sr-RS@latin" ||
+          "sv-SE" ||
+          "th-TH" ||
+          "tr-TR" ||
+          "uk-UA" ||
+          "vi-VN")
       .withMessage("first name must be valid"),
     body("lastName")
       .trim()
@@ -28,7 +84,63 @@ router.post(
       .withMessage("last name can't be empty")
       .bail()
       // if the first name is empty the is alpha  will never run
-      .isAlpha("ar" || "en-AU" || "en-GB" || "en-US" || "en-ZA" || "en-ZM")
+      .isAlpha("ar" ||
+          "ar-AE" ||
+          "ar-BH" ||
+          "ar-DZ" ||
+          "ar-EG" ||
+          "ar-IQ" ||
+          "ar-JO" ||
+          "ar-KW" ||
+          "ar-LB" ||
+          "ar-LY" ||
+          "ar-MA" ||
+          "ar-QA" ||
+          "ar-QM" ||
+          "ar-SA" ||
+          "ar-SD" ||
+          "ar-SY" ||
+          "ar-TN" ||
+          "ar-YE" ||
+          "az-AZ" ||
+          "bg-BG" ||
+          "cs-CZ" ||
+          "da-DK" ||
+          "de-DE" ||
+          "el-GR" ||
+          "en-AU" ||
+          "en-GB" ||
+          "en-HK" ||
+          "en-IN" ||
+          "en-NZ" ||
+          "en-US" ||
+          "en-ZA" ||
+          "en-ZM" ||
+          "es-ES" ||
+          "fa-AF" ||
+          "fa-IR" ||
+          "fr-FR" ||
+          "he" ||
+          "hu-HU" ||
+          "id-ID" ||
+          "it-IT" ||
+          "ku-IQ" ||
+          "nb-NO" ||
+          "nl-NL" ||
+          "nn-NO" ||
+          "pl-PL" ||
+          "pt-BR" ||
+          "pt-PT" ||
+          "ru-RU" ||
+          "sk-SK" ||
+          "sl-SI" ||
+          "sr-RS" ||
+          "sr-RS@latin" ||
+          "sv-SE" ||
+          "th-TH" ||
+          "tr-TR" ||
+          "uk-UA" ||
+          "vi-VN")
       .withMessage("last name must be valid"),
     body("email").isEmail().withMessage("please enter a valid email address"),
     body("password")
