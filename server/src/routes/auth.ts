@@ -20,132 +20,30 @@ router.post(
       .withMessage("first name can't be empty")
       .bail()
       // if the first name is empty the is alpha  will never run
-      .isAlpha(
-        "ar" ||
-          "ar-AE" ||
-          "ar-BH" ||
-          "ar-DZ" ||
-          "ar-EG" ||
-          "ar-IQ" ||
-          "ar-JO" ||
-          "ar-KW" ||
-          "ar-LB" ||
-          "ar-LY" ||
-          "ar-MA" ||
-          "ar-QA" ||
-          "ar-QM" ||
-          "ar-SA" ||
-          "ar-SD" ||
-          "ar-SY" ||
-          "ar-TN" ||
-          "ar-YE" ||
-          "az-AZ" ||
-          "bg-BG" ||
-          "cs-CZ" ||
-          "da-DK" ||
-          "de-DE" ||
-          "el-GR" ||
-          "en-AU" ||
-          "en-GB" ||
-          "en-HK" ||
-          "en-IN" ||
-          "en-NZ" ||
-          "en-US" ||
-          "en-ZA" ||
-          "en-ZM" ||
-          "es-ES" ||
-          "fa-AF" ||
-          "fa-IR" ||
-          "fr-FR" ||
-          "he" ||
-          "hu-HU" ||
-          "id-ID" ||
-          "it-IT" ||
-          "ku-IQ" ||
-          "nb-NO" ||
-          "nl-NL" ||
-          "nn-NO" ||
-          "pl-PL" ||
-          "pt-BR" ||
-          "pt-PT" ||
-          "ru-RU" ||
-          "sk-SK" ||
-          "sl-SI" ||
-          "sr-RS" ||
-          "sr-RS@latin" ||
-          "sv-SE" ||
-          "th-TH" ||
-          "tr-TR" ||
-          "uk-UA" ||
-          "vi-VN"
-      )
-      .withMessage("first name must be valid"),
+      .custom((value) => {
+        // Add a custom validation function here that checks for English and Arabic characters
+        // Example: Only allow alphanumeric characters and spaces in English and Arabic
+        const regex = /^[a-zA-Z0-9 \u0600-\u06FF]+$/;
+        if (!regex.test(value)) {
+          throw new Error("first name must be valid");
+        }
+        return true;
+      }),
     body("lastName")
       .trim()
       .notEmpty()
       .withMessage("last name can't be empty")
       .bail()
       // if the first name is empty the is alpha  will never run
-      .isAlpha(
-        "ar" ||
-          "ar-AE" ||
-          "ar-BH" ||
-          "ar-DZ" ||
-          "ar-EG" ||
-          "ar-IQ" ||
-          "ar-JO" ||
-          "ar-KW" ||
-          "ar-LB" ||
-          "ar-LY" ||
-          "ar-MA" ||
-          "ar-QA" ||
-          "ar-QM" ||
-          "ar-SA" ||
-          "ar-SD" ||
-          "ar-SY" ||
-          "ar-TN" ||
-          "ar-YE" ||
-          "az-AZ" ||
-          "bg-BG" ||
-          "cs-CZ" ||
-          "da-DK" ||
-          "de-DE" ||
-          "el-GR" ||
-          "en-AU" ||
-          "en-GB" ||
-          "en-HK" ||
-          "en-IN" ||
-          "en-NZ" ||
-          "en-US" ||
-          "en-ZA" ||
-          "en-ZM" ||
-          "es-ES" ||
-          "fa-AF" ||
-          "fa-IR" ||
-          "fr-FR" ||
-          "he" ||
-          "hu-HU" ||
-          "id-ID" ||
-          "it-IT" ||
-          "ku-IQ" ||
-          "nb-NO" ||
-          "nl-NL" ||
-          "nn-NO" ||
-          "pl-PL" ||
-          "pt-BR" ||
-          "pt-PT" ||
-          "ru-RU" ||
-          "sk-SK" ||
-          "sl-SI" ||
-          "sr-RS" ||
-          "sr-RS@latin" ||
-          "sv-SE" ||
-          "th-TH" ||
-          "tr-TR" ||
-          "uk-UA" ||
-          "vi-VN"
-      )
-      .withMessage("last name must be valid"),
+      .custom((value) => {
+        // Add a custom validation function here that checks for English and Arabic characters
+        // Example: Only allow alphanumeric characters and spaces in English and Arabic
+        const regex = /^[a-zA-Z0-9 \u0600-\u06FF]+$/;
+        if (!regex.test(value)) {
+          throw new Error("last name must be valid");
+        }
+        return true;
+      }),
     body("email").isEmail().withMessage("please enter a valid email address"),
     body("password")
       .isLength({ min: 8 })
