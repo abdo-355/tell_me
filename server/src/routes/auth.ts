@@ -20,16 +20,30 @@ router.post(
       .withMessage("first name can't be empty")
       .bail()
       // if the first name is empty the is alpha  will never run
-      .isAlpha("ar" || "en-AU" || "en-GB" || "en-US" || "en-ZA" || "en-ZM")
-      .withMessage("first name must be valid"),
+      .custom((value) => {
+        // Add a custom validation function here that checks for English and Arabic characters
+        // Example: Only allow alphanumeric characters and spaces in English and Arabic
+        const regex = /^[a-zA-Z0-9 \u0600-\u06FF]+$/;
+        if (!regex.test(value)) {
+          throw new Error("first name must be valid");
+        }
+        return true;
+      }),
     body("lastName")
       .trim()
       .notEmpty()
       .withMessage("last name can't be empty")
       .bail()
       // if the first name is empty the is alpha  will never run
-      .isAlpha("ar" || "en-AU" || "en-GB" || "en-US" || "en-ZA" || "en-ZM")
-      .withMessage("last name must be valid"),
+      .custom((value) => {
+        // Add a custom validation function here that checks for English and Arabic characters
+        // Example: Only allow alphanumeric characters and spaces in English and Arabic
+        const regex = /^[a-zA-Z0-9 \u0600-\u06FF]+$/;
+        if (!regex.test(value)) {
+          throw new Error("last name must be valid");
+        }
+        return true;
+      }),
     body("email").isEmail().withMessage("please enter a valid email address"),
     body("password")
       .isLength({ min: 8 })
