@@ -25,7 +25,7 @@ const Messages = () => {
         <LoadingSpinner />
       ) : !data || data.messages.length === 0 ? (
         <h1 className="text-3xl sm:text-5xl uppercase font-roboto font-semibold tracking-wider text-green-700 drop-shadow-2xl text-center">
-          No messages sent
+          No messages received
         </h1>
       ) : (
         <div className="max-w-screen-xl w-full mx-5 lg:mx-20 flex flex-wrap justify-center my-24">
