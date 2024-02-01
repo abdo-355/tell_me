@@ -28,7 +28,7 @@ router.post(
       .withMessage("last name can't be empty")
       .bail()
       // if the first name is empty the is alpha  will never run
-      .isAlpha()
+      .isAlpha("ar" || "en-AU" || "en-GB" || "en-US" || "en-ZA" || "en-ZM")
       .withMessage("last name must be valid"),
     body("email").isEmail().withMessage("please enter a valid email address"),
     body("password")
