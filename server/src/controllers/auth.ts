@@ -30,14 +30,16 @@ export const signup: RequestHandler = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     // generate verification code
-    const verificationCode = crypto.randomBytes(10).toString("hex");
+    // ------------------------------------------
+    // const verificationCode = crypto.randomBytes(10).toString("hex");
+    // ------------------------------------------
 
     const user = new User({
       firstName,
       lastName,
       email,
-      verified: false,
-      verificationCode,
+      verified: true,
+      // verificationCode,
       password: hashedPassword,
       messages: [],
     });
@@ -45,21 +47,22 @@ export const signup: RequestHandler = async (req, res, next) => {
     await user.save();
 
     // send verification email
-    await sendMail(
-      email,
-      "Verify your email",
-      `
-    <p>Thank you for registering on TellMe. Please click on the link below to verify your email:
-    </p>
-    <a href="${req.protocol}://${req.get(
-        "host"
-      )}/api/auth/verify-email/${verificationCode}">
-      Verify your email
-      </a>
-    <p>happy messaging</p>
-  `
-    );
-
+  //   // -------------------------------------
+  //   await sendMail(
+  //     email,
+  //     "Verify your email",
+  //     `
+  //   <p>Thank you for registering on TellMe. Please click on the link below to verify your email:
+  //   </p>
+  //   <a href="${req.protocol}://${req.get(
+  //       "host"
+  //     )}/api/auth/verify-email/${verificationCode}">
+  //     Verify your email
+  //     </a>
+  //   <p>happy messaging</p>
+  // `
+  //   );
+// -------------------------------------------------
     res.status(201).json({ message: "email verification sent" });
   } catch (err) {
     console.log(err);
