@@ -1,8 +1,6 @@
 # TellMe
 
-TellMe is a fullstack app that helps the user to know what other people think about him by generating a link that he can
-send to anyone or post on social media then other people can send recommendations, criticism, feelings, ...etc. without
-exposing the sender Identity
+A fullstack app that helps the user to know what other people think about him by generating a link that he can send to anyone or post on social media then other people can send recommendations, criticism, harsh truths, ...etc. without exposing the sender's identity.
 
 
 ![Screenshot 2023-03-25 051607.png](https://images.zenhubusercontent.com/641e69bba2d3b289364b33b5/9f38f23a-4d23-4bf7-b9fe-cf0a487c0f10)
