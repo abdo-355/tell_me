@@ -5,7 +5,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.7",
     "@heroicons/react": "^2.0.13",
-    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
@@ -57,7 +57,7 @@
     "@testing-library/cypress": "^9.0.0",
     "autoprefixer": "^10.4.13",
     "cypress": "^12.4.1",
-    "postcss": "^8.4.21",
+    "postcss": "^8.4.31",
     "tailwindcss": "^3.2.4"
   }
 }

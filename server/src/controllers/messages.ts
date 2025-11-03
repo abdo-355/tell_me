@@ -3,6 +3,7 @@ import { randomBytes } from "crypto";
 import { validationResult } from "express-validator";
 
 import User from "../models/User";
+import { io } from "../server";
 
 export const getPath: RequestHandler = async (req, res) => {
   try {
@@ -43,6 +44,9 @@ export const postMessage: RequestHandler = async (req, res) => {
     user.messages.push(message);
     await user.save();
 
+    io.to(path).emit("newMessage", message);
+    console.log("emitted newMessage to", path);
+
     res.status(201).json({ message: "message sent successfully" });
   } catch (err) {
     res.status(500).json({ message: "something went wrong" });
@@ -53,7 +57,7 @@ export const getMessages: RequestHandler = async (req, res, next) => {
   try {
     const user = await User.findById(req.userId);
 
-    res.status(200).json({ messages: user.messages.reverse() });
+    res.status(200).json({ messages: user.messages.reverse(), path: user.path });
   } catch (err) {
     res.status(500).json({ error: "ab error occured" });
   }

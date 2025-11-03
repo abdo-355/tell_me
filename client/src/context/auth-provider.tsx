@@ -49,7 +49,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
       handleAddUser(token);
     } else {
       axios
-        .get(`${process.env.REACT_APP_BACKEND}/auth/getuser`, {
+        .get(`${process.env.REACT_APP_BACKEND}/api/auth/getuser`, {
           withCredentials: true,
         })
         .then((res) => {

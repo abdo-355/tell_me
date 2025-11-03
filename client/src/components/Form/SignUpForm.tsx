@@ -56,7 +56,7 @@ const SignupForm = () => {
   });
 
   const { request, statusCode, loading, error } = useAxios(
-    `${process.env.REACT_APP_BACKEND}/auth/signup/`,
+    `${process.env.REACT_APP_BACKEND}/api/auth/signup/`,
     "post",
     {
       firstName: formData.fName,

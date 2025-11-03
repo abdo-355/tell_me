@@ -44,6 +44,10 @@ app.get("/api", (req, res) => {
   res.send("The server is working");
 });
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 app.use("/api/auth", authRouter);
 app.use("/api/messages", messagesRouter);
 

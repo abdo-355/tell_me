@@ -8,7 +8,7 @@ import styles from "../styles.module.css"
 
 const NotVerified = () => {
     const { token } = useContext(authContext)
-    const { request, loading } = useAxios(`${process.env.REACT_APP_BACKEND}/auth/resend-email`, "post", { token })
+    const { request, loading } = useAxios(`${process.env.REACT_APP_BACKEND}/api/auth/resend-email`, "post", { token })
 
     const handleClick = () => {
         request()

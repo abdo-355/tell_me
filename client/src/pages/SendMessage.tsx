@@ -15,7 +15,7 @@ const SendMessage = () => {
   let [modalMessage, setModalMessage] = useState("");
 
   const { request, loading, statusCode } = useAxios(
-    `${process.env.REACT_APP_BACKEND}/messages/${usertpath}`,
+    `${process.env.REACT_APP_BACKEND}/api/messages/${usertpath}`,
     "post",
     {
       message: messageValue,
