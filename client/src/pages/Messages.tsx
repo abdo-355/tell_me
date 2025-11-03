@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import io from "socket.io-client";
+import { useEffect, useState, useRef } from "react";
+import io, { Socket } from "socket.io-client";
 
 import Message from "../components/Message/Message";
 import styles from "./styles.module.css";
@@ -12,6 +12,7 @@ const Messages = () => {
     "get"
   );
   const [messages, setMessages] = useState<string[]>([]);
+  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,22 +22,33 @@ const Messages = () => {
   }, [request]);
 
   useEffect(() => {
-    if (data) {
-      setMessages(data.messages);
-      const socket = io(process.env.REACT_APP_BACKEND!);
+    if (!socketRef.current) {
+      socketRef.current = io(process.env.REACT_APP_BACKEND!, {
+        withCredentials: true,
+      });
+      const socket = socketRef.current;
       console.log("connecting socket to", process.env.REACT_APP_BACKEND);
       socket.on("connect", () => console.log("socket connected"));
       socket.on("connect_error", (err) => console.log("socket connect error", err));
-      socket.emit("join", data.path);
-      console.log("emitted join for", data.path);
+      socket.on("disconnect", () => console.log("socket disconnected"));
       socket.on("newMessage", (message: string) => {
         console.log("received newMessage", message);
         setMessages((prev) => [message, ...prev]);
       });
-      return () => {
-        socket.disconnect();
-      };
     }
+
+    if (data && socketRef.current) {
+      setMessages(data.messages);
+      socketRef.current.emit("join", data.path);
+      console.log("emitted join for", data.path);
+    }
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
+    };
   }, [data]);
 
   return (

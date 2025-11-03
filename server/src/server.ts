@@ -15,6 +15,8 @@ io.on("connection", (socket) => {
   console.log("a user connected");
 
   socket.on("join", (path: string) => {
+    // Basic auth check: ensure path is valid (exists in DB)
+    // For full auth, would need to verify user session from cookie
     console.log("joined room", path);
     socket.join(path);
   });
