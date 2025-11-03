@@ -6,8 +6,8 @@ import Input from "../UI/Input";
 import { emailRegex } from "../../data/regex";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import Modal from "../UI/Modal/Modal";
-import GoogleButton from "../UI/Auth/GoogleButton";
-import FacebookButton from "../UI/Auth/FacebookButton";
+// import GoogleButton from "../UI/Auth/GoogleButton";
+// import FacebookButton from "../UI/Auth/FacebookButton";
 
 export interface ISignupFields {
   fName: string;
@@ -187,8 +187,8 @@ const SignupForm = () => {
         <span className="bg-green-100 px-3 text-gray-700">or</span>
       </p>
       <div className="flex flex-1 flex-col md:flex-row justify-around items-center mx-2 sm:mx-5">
-        <GoogleButton mode="Sign up" />
-        <FacebookButton mode="Sign up" />
+        {/* <GoogleButton mode="Sign up" /> */}
+        {/* <FacebookButton mode="Sign up" /> */}
       </div>
       <span className="block text-center -mb-3">
         Already have an account?{" "}

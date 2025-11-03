@@ -7,8 +7,8 @@ import { emailRegex } from "../../data/regex";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import useAxios from "../../hooks/use-axios";
 import Modal from "../UI/Modal/Modal";
-import GoogleButton from "../UI/Auth/GoogleButton";
-import FacebookButton from "../UI/Auth/FacebookButton";
+// import GoogleButton from "../UI/Auth/GoogleButton";
+// import FacebookButton from "../UI/Auth/FacebookButton";
 
 export interface ILoginFields {
   email: string;
@@ -127,8 +127,8 @@ const LoginForm = () => {
         <span className="bg-green-100 px-3 text-gray-700">or</span>
       </p>
       <div className="flex flex-1 flex-col items-center mx-2 sm:mx-5">
-        <GoogleButton mode="Log in" />
-        <FacebookButton mode="Log in" />
+        {/* <GoogleButton mode="Log in" /> */}
+        {/* <FacebookButton mode="Log in" /> */}
       </div>
       <span className="block text-center -mb-3">
         Don't have an account?{" "}

@@ -70,38 +70,38 @@ router.post(
 );
 
 // for login with google
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
-);
+// router.get(
+//   "/google",
+//   passport.authenticate("google", { scope: ["email", "profile"] })
+// );
 
 // for login with google redirect
-router.get(
-  "/google/redirect",
-  passport.authenticate("google", {
-    failureRedirect: `${process.env.FRONT_END}/auth/login`,
-  }),
-  (req, res) => {
-    res.redirect(process.env.FRONT_END);
-  }
-);
+// router.get(
+//   "/google/redirect",
+//   passport.authenticate("google", {
+//     failureRedirect: `${process.env.FRONT_END}/auth/login`,
+//   }),
+//   (req, res) => {
+//     res.redirect(process.env.FRONT_END);
+//   }
+// );
 
 // for login with facebook
-router.get(
-  "/facebook",
-  passport.authenticate("facebook", { scope: ["email"] })
-);
+// router.get(
+//   "/facebook",
+//   passport.authenticate("facebook", { scope: ["email"] })
+// );
 
 // for login with facebook redirect
-router.get(
-  "/facebook/redirect",
-  passport.authenticate("facebook", {
-    failureRedirect: `${process.env.FRONT_END}/auth/login`,
-  }),
-  (req, res) => {
-    res.redirect(process.env.FRONT_END);
-  }
-);
+// router.get(
+//   "/facebook/redirect",
+//   passport.authenticate("facebook", {
+//     failureRedirect: `${process.env.FRONT_END}/auth/login`,
+//   }),
+//   (req, res) => {
+//     res.redirect(process.env.FRONT_END);
+//   }
+// );
 
 // getting the user token
 router.get("/getuser", authControllers.getUser);
