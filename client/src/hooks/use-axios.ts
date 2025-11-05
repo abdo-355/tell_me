@@ -28,6 +28,7 @@ const useAxios = (url: string, method: TMethods, body?: Object) => {
           Authorization: `Bearer ${token}`,
         },
         data: body,
+        withCredentials: true,
       });
 
       setData(res.data);

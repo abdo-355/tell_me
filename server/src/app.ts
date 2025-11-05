@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 
 import authRouter from "./routes/auth";
 import messagesRouter from "./routes/messages";
+import { swaggerUi, specs } from "./swagger";
 
 const app = express();
 config();
@@ -50,6 +51,9 @@ app.get("/health", (req, res) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/messages", messagesRouter);
+
+// Swagger documentation
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 mongoose
   .set("strictQuery", false)
