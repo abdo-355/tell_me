@@ -38,13 +38,15 @@ const useAxios = (url: string, method: TMethods, body?: Object) => {
 
       // if email not verified
       if (
-        axiosErr.response!.status === 401 &&
-        axiosErr.response!.data!.message === "email not verified"
+        axiosErr.response &&
+        axiosErr.response.status === 401 &&
+        axiosErr.response.data &&
+        axiosErr.response.data.message === "email not verified"
       ) {
         navigate("/email/not-verified");
       }
       setError(axiosErr);
-      setStatusCode(axiosErr.status || 400);
+      setStatusCode(axiosErr.response?.status || 400);
     } finally {
       setloading(false);
     }

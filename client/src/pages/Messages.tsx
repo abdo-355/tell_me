@@ -25,14 +25,13 @@ const Messages = () => {
     if (!socketRef.current) {
       socketRef.current = io(process.env.REACT_APP_BACKEND!, {
         withCredentials: true,
+        transports: ['websocket'],
       });
       const socket = socketRef.current;
-      console.log("connecting socket to", process.env.REACT_APP_BACKEND);
-      socket.on("connect", () => console.log("socket connected"));
-      socket.on("connect_error", (err) => console.log("socket connect error", err));
-      socket.on("disconnect", () => console.log("socket disconnected"));
+      socket.on("connect", () => {});
+      socket.on("connect_error", (err) => {});
+      socket.on("disconnect", () => {});
       socket.on("newMessage", (message: string) => {
-        console.log("received newMessage", message);
         setMessages((prev) => [message, ...prev]);
       });
     }
@@ -40,7 +39,6 @@ const Messages = () => {
     if (data && socketRef.current) {
       setMessages(data.messages);
       socketRef.current.emit("join", data.path);
-      console.log("emitted join for", data.path);
     }
 
     return () => {

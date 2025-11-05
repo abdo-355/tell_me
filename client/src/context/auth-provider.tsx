@@ -58,7 +58,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
           }
         })
         .catch((err) => {
-          console.log("no token found");
+          // No token found
         });
     }
   }, []);

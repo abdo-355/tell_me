@@ -29,6 +29,10 @@ const isAuth: RequestHandler = (req, res, next) => {
 
       const user = await User.findById(userId);
 
+      if (!user) {
+        return res.status(401).json({ message: "User not found" });
+      }
+
       if (!user.verified) {
         return res.status(401).json({ message: "email not verified" });
       }
