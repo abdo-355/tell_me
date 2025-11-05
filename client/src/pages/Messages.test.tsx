@@ -22,12 +22,12 @@ describe("<Messages />", () => {
     expect(window.requestCalled).toBeTruthy();
   });
 
-  it("should display 'No messages sent' if there are no messages", () => {
+  it("should display 'No messages received' if there are no messages", () => {
     //@ts-ignore
     mockedData = { messages: [] };
     render(<Messages />);
 
-    expect(screen.getByText(/No messages sent/i)).toBeInTheDocument();
+    expect(screen.getByText(/No messages received/i)).toBeInTheDocument();
   });
 
   it("should display the messages returned from the server successfully", () => {
@@ -38,7 +38,7 @@ describe("<Messages />", () => {
 
     render(<Messages />);
 
-    expect(screen.queryByText(/No messages sent/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/No messages received/i)).not.toBeInTheDocument();
     expect(screen.getByText(/This is a test message/i)).toBeInTheDocument();
   });
 });

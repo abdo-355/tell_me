@@ -8,17 +8,19 @@ import { io } from "../server";
 export const getPath: RequestHandler = async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.userId });
+    const regenerate = req.query.regenerate === 'true';
 
-    if (!user.path) {
+    if (!user.path || regenerate) {
       const generatedPath = randomBytes(8).toString("hex");
       user.path = generatedPath;
       await user.save();
-      return res.status(200).json({ path: generatedPath });
+      return res.status(200).json({ path: generatedPath, regenerated: regenerate });
     }
 
-    return res.status(200).json({ path: user.path });
+    return res.status(200).json({ path: user.path, regenerated: false });
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: "Failed to generate path" });
   }
 };
 

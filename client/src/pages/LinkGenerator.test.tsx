@@ -17,7 +17,7 @@ describe("<LinkGenerator />", () => {
     render(<LinkGenerator />);
 
     //the generate button is rendered
-    const getGenButton = screen.getByRole("button", { name: /generate/i });
+    const getGenButton = screen.getByRole("button", { name: "Generate" });
     expect(getGenButton).toBeInTheDocument();
 
     //the GeneratedLink component is rendered
@@ -32,7 +32,7 @@ describe("<LinkGenerator />", () => {
   it("sends a request to the server when the 'Generate' button is clicked", () => {
     render(<LinkGenerator />);
 
-    const getGenButton = screen.getByRole("button", { name: /generate/i });
+    const getGenButton = screen.getByRole("button", { name: "Generate" });
     userEvent.click(getGenButton);
     //@ts-ignore
     expect(mockWindow.requestSent).toBeTruthy();
