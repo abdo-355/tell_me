@@ -80,8 +80,8 @@ and for the back end:
 * `FACEBOOK_APP_SECRET`
 * `FACEBOOK_REDIRECT_URL`
 * `EXPRESS_SESSION_SECRET`
-* `MAILING_EMAIL` your gmail
-* `MAILING_PASSWORD` your app password, see [this](https://medium.com/@abdoluxor366/configure-gmail-authentication-with-nodemailer-de0e0ee0e261)
+* `RESEND_API_KEY` your Resend API key
+* `RESEND_FROM_EMAIL` your verified sender email from Resend
 * `FRONT_END` your front end url
 
 #### finally

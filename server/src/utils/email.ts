@@ -1,19 +1,14 @@
-import { createTransport, SendMailOptions } from "nodemailer";
+import { Resend } from "resend";
 import { config } from "dotenv";
 
 config();
 
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 const sendMail = async (email: string, subject: string, content: string) => {
-  const transporter = createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.MAILING_EMAIL,
-      pass: process.env.MAILING_PASSWORD,
-    },
-  });
   try {
-    await transporter.sendMail({
-      from: process.env.MAILING_EMAIL,
+    await resend.emails.send({
+      from: process.env.RESEND_FROM_EMAIL || "noreply@yourdomain.com",
       to: email,
       subject: subject,
       html: content,
