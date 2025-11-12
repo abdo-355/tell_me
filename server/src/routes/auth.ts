@@ -2,6 +2,7 @@ import { Router } from "express";
 import { body, cookie } from "express-validator";
 import passport from "passport";
 
+import { config } from "../config";
 import * as authControllers from "../controllers/auth";
 import "../strategies/auth-stratigies";
 
@@ -79,7 +80,7 @@ router.post(
 // router.get(
 //   "/google/redirect",
 //   passport.authenticate("google", {
-//     failureRedirect: `${process.env.FRONT_END}/auth/login`,
+//     failureRedirect: `${config.frontEnd}/auth/login`,
 //   }),
 //   (req, res) => {
 //     res.redirect(process.env.FRONT_END);
@@ -96,7 +97,7 @@ router.post(
 // router.get(
 //   "/facebook/redirect",
 //   passport.authenticate("facebook", {
-//     failureRedirect: `${process.env.FRONT_END}/auth/login`,
+//     failureRedirect: `${config.frontEnd}/auth/login`,
 //   }),
 //   (req, res) => {
 //     res.redirect(process.env.FRONT_END);

@@ -2,8 +2,7 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 import isAuth from "./isAuth";
-
-require("dotenv").config();
+import { config } from "../config";
 
 const req = {
   headers: {},
@@ -49,7 +48,7 @@ describe("auth middleware", () => {
 
     req.headers.authorization = `Bearer ${jwt.sign(
       { userId },
-      process.env.SECRET_KEY
+      config.secretKey
     )}`;
 
     const next = jest.fn(() => {});

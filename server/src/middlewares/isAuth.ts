@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
+import { config } from "../config";
 import User from "../models/User";
 
 // to save the userId in the request object
@@ -23,7 +24,7 @@ const isAuth: RequestHandler = (req, res, next) => {
 
   jwt.verify(
     token,
-    process.env.SECRET_KEY || "default_secret",
+    config.secretKey,
     async (err: any, decoded: any) => {
       if (err) return res.status(401).json({ message: err.message });
 

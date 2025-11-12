@@ -1,11 +1,15 @@
 import app from "./app";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import { config, validateConfig } from "./config";
+
+// Validate configuration at startup
+validateConfig();
 
 const server = createServer(app);
 export const io = new Server(server, {
   cors: {
-    origin: process.env.FRONT_END,
+    origin: config.frontEnd,
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -23,7 +27,7 @@ io.on("connection", (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 8080;
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const PORT = parseInt(config.port);
+server.listen(PORT, config.host, () => {
+  console.log(`Server running on ${config.host}:${PORT}`);
 });

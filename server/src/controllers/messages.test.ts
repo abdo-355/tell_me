@@ -1,11 +1,9 @@
 import supertest from "supertest";
 import jwt from "jsonwebtoken";
-import { config } from "dotenv";
 
 import app from "../app";
 import User from "../models/User";
-
-config();
+import { config } from "../config";
 
 describe("messages", () => {
   describe("url generating", () => {
@@ -68,7 +66,7 @@ describe("messages", () => {
         .get("/messages")
         .set(
           "authorization",
-          `Bearer ${jwt.sign({ userId }, process.env.SECRET_KEY)}`
+          `Bearer ${jwt.sign({ userId }, config.secretKey)}`
         );
 
       expect(statusCode).toBe(200);
@@ -86,7 +84,7 @@ describe("messages", () => {
         .get("/messages")
         .set(
           "authorization",
-          `Bearer ${jwt.sign({ userId }, process.env.SECRET_KEY)}`
+          `Bearer ${jwt.sign({ userId }, config.secretKey)}`
         );
 
       expect(statusCode).toBe(200);

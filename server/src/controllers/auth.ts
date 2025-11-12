@@ -2,13 +2,11 @@ import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { config } from "dotenv";
 import crypto from "crypto";
 
+import { config } from "../config";
 import User from "../models/User";
 import sendMail from "../utils/email";
-
-config();
 
 export const signup: RequestHandler = async (req, res, next) => {
   try {
@@ -75,7 +73,7 @@ export const resendEmail: RequestHandler = async (req, res) => {
 
   jwt.verify(
     token,
-    process.env.SECRET_KEY || "default_secret",
+    config.secretKey,
     async (err: any, decoded: any) => {
       if (err) return res.status(401).json({ message: err.message });
 
@@ -114,7 +112,7 @@ export const verifyEmail: RequestHandler = async (req, res, next) => {
         { _id: user._id },
         { $unset: { verificationCode: 1 }, $set: { verified: true } }
       );
-      res.redirect(`${process.env.FRONT_END}/email/verified`);
+      res.redirect(`${config.frontEnd}/email/verified`);
     }
   } catch (err) {
     res.status(500).json({ message: "an error occurred" });
@@ -148,7 +146,7 @@ export const login: RequestHandler = async (req, res, next) => {
 
   const token = jwt.sign(
     { userId: user._id.toString() },
-    process.env.SECRET_KEY || "default_secret",
+    config.secretKey,
     { expiresIn: "7d" }
   );
 

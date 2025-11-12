@@ -1,12 +1,10 @@
 import passport from "passport";
 // import { Strategy as googleStrategy } from "passport-google-oauth20";
 // import { Strategy as facebookStrategy } from "passport-facebook";
-import { config } from "dotenv";
 import jwt from "jsonwebtoken";
 
+import { config } from "../config";
 import User from "../models/User";
-
-config();
 
 let token: string;
 
@@ -14,9 +12,9 @@ let token: string;
 // passport.use(
 //   new googleStrategy(
 //     {
-//       clientID: process.env.GOOGLE_CLIENT_ID,
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//       callbackURL: process.env.GOOGLE_REDIRECT_URL,
+//       clientID: config.googleClientId,
+//       clientSecret: config.googleClientSecret,
+//       callbackURL: config.googleRedirectUrl,
 //       scope: ["profile", "email"],
 //     },
 //     async (_accessToken, _refreshToken, profile, done) => {
@@ -37,14 +35,14 @@ let token: string;
 
 //           token = jwt.sign(
 //             { userId: newUser._id.toString() },
-//             process.env.SECRET_KEY,
+//             config.secretKey,
 //             { expiresIn: "7d" }
 //           );
 //         } else {
 //           // if the user exists
 //           token = jwt.sign(
 //             { userId: user._id.toString() },
-//             process.env.SECRET_KEY,
+//             config.secretKey,
 //             { expiresIn: "7d" }
 //           );
 //         }
@@ -61,9 +59,9 @@ let token: string;
 // passport.use(
 //   new facebookStrategy(
 //     {
-//       clientID: process.env.FACEBOOK_APP_ID,
-//       clientSecret: process.env.FACEBOOK_APP_SECRET,
-//       callbackURL: process.env.FACEBOOK_REDIRECT_URL,
+//       clientID: config.facebookAppId,
+//       clientSecret: config.facebookAppSecret,
+//       callbackURL: config.facebookRedirectUrl,
 //       profileFields: ["id", "name", "emails"],
 //     },
 //     async (_accessToken, _refreshToken, profile, done) => {
@@ -84,14 +82,14 @@ let token: string;
 
 //           token = jwt.sign(
 //             { userId: newUser._id.toString() },
-//             process.env.SECRET_KEY,
+//             config.secretKey,
 //             { expiresIn: "7d" }
 //           );
 //         } else {
 //           // if the user exists
 //           token = jwt.sign(
 //             { userId: user._id.toString() },
-//             process.env.SECRET_KEY,
+//             config.secretKey,
 //             { expiresIn: "7d" }
 //           );
 //         }
