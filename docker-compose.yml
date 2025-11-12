@@ -24,7 +24,6 @@ services:
       - .env
     environment:
       - MONGODB_URI=mongodb://mongo:27017/tellme
-      - FRONT_END=http://localhost:3000
       - PORT=8081
     networks:
       - tellme-network
