@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: process.env.FRONT_END || "http://localhost:3000",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     allowedHeaders: "Content-Type,Authorization",
     credentials: true,
   })
@@ -31,8 +31,8 @@ app.use(
     saveUninitialized: true,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      secure: false,
-      sameSite: "lax",
+      secure: (process.env.FRONT_END || "").startsWith("https"),
+      sameSite: (process.env.FRONT_END || "").startsWith("https") ? "none" : "lax",
     },
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI || "mongodb://mongo:27017/tellme" }),
   })
