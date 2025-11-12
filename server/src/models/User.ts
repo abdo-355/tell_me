@@ -35,13 +35,13 @@ const UserSchema = new Schema<IUser>({
   verificationCode: {
     type: String,
     required() {
-      return !this.verified;
+      return !(this as any).verified;
     },
   },
   password: {
     type: String,
     required() {
-      return !this.googleId && !this.facebookId;
+      return !(this as any).googleId && !(this as any).facebookId;
     },
   },
   googleId: {

@@ -8,6 +8,11 @@ import { io } from "../server";
 export const getPath: RequestHandler = async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.userId });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     const regenerate = req.query.regenerate === 'true';
 
     if (!user.path || regenerate) {
@@ -59,9 +64,13 @@ export const getMessages: RequestHandler = async (req, res, next) => {
   try {
     const user = await User.findById(req.userId);
 
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     res.status(200).json({ messages: user.messages.reverse(), path: user.path });
   } catch (err) {
-    res.status(500).json({ error: "ab error occured" });
+    res.status(500).json({ error: "an error occurred" });
   }
 };
 

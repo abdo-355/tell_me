@@ -75,25 +75,24 @@ export const resendEmail: RequestHandler = async (req, res) => {
 
   jwt.verify(
     token,
-    process.env.SECRET_KEY,
-    async (err, { userId }: { userId: string }) => {
+    process.env.SECRET_KEY || "default_secret",
+    async (err: any, decoded: any) => {
       if (err) return res.status(401).json({ message: err.message });
+
+      const { userId } = decoded as { userId: string };
 
       const user = await User.findById(userId);
 
+      if (!user) return res.status(404).json({ message: "User not found" });
+
+      const host = req.get("host") || "localhost:8080";
+      const code = user.verificationCode || "code";
+      const content = "<p>Thank you for registering on TellMe. Please click on the link below to verify your email:</p><a href=\"" + String(req.protocol) + "://" + host + "/auth/verify-email/" + code + "\">Verify your email</a><p>happy messaging</p>";
+
       await sendMail(
-        user.email,
+        user.email!,
         "Verify your email",
-        `
-      <p>Thank you for registering on TellMe. Please click on the link below to verify your email:
-      </p>
-      <a href="${req.protocol}://${req.get("host")}/auth/verify-email/${
-          user.verificationCode
-        }">
-        Verify your email
-        </a>
-      <p>happy messaging</p>
-    `
+        content
       );
 
       res.status(200).json({ message: "Email verification sent successfully" });
@@ -137,6 +136,10 @@ export const login: RequestHandler = async (req, res, next) => {
     return res.status(404).json({ message: "No such user exists" });
   }
 
+  if (!user.password) {
+    return res.status(403).json({ message: "Password not set for this account" });
+  }
+
   const passMatch = await bcrypt.compare(password, user.password);
 
   if (!passMatch) {
@@ -145,7 +148,7 @@ export const login: RequestHandler = async (req, res, next) => {
 
   const token = jwt.sign(
     { userId: user._id.toString() },
-    process.env.SECRET_KEY,
+    process.env.SECRET_KEY || "default_secret",
     { expiresIn: "7d" }
   );
 

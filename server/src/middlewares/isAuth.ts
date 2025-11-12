@@ -23,9 +23,11 @@ const isAuth: RequestHandler = (req, res, next) => {
 
   jwt.verify(
     token,
-    process.env.SECRET_KEY,
-    async (err, { userId }: { userId: string }) => {
+    process.env.SECRET_KEY || "default_secret",
+    async (err: any, decoded: any) => {
       if (err) return res.status(401).json({ message: err.message });
+
+      const { userId } = decoded as { userId: string };
 
       const user = await User.findById(userId);
 

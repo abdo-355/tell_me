@@ -1,0 +1,44 @@
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_BACKEND: http://localhost:8081
+    ports:
+      - "3000:80"
+    depends_on:
+      - server
+    networks:
+      - tellme-network
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongo
+    env_file:
+      - .env
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/tellme
+      - FRONT_END=http://localhost:3000
+      - PORT=8081
+    networks:
+      - tellme-network
+
+  mongo:
+    image: mongodb/mongodb-community-server:8.0-ubi8
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - tellme-network
+
+volumes:
+  mongo_data:
+
+networks:
+  tellme-network:
+    driver: bridge

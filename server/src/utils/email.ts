@@ -3,7 +3,7 @@ import { config } from "dotenv";
 
 config();
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY || "dummy");
 
 const sendMail = async (email: string, subject: string, content: string) => {
   try {

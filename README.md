@@ -8,19 +8,29 @@ A fullstack app that helps the user to know what other people think about him by
 
 ## Tech Stack
 
-
 **Client:** React, TailwindCSS, React Router, Socket.IO
 
-**Server:** Node, Express, MongoDB, Socket.IO
+**Server:** Node.js, Express, MongoDB, Socket.IO
 
-**Language:** Typescript
+**Language:** TypeScript
 
 **Testing:** Cypress.io, Jest, React Testing Library
 
+**Deployment:** Docker, Docker Compose
+
+## Docker Setup
+
+The application is fully containerized with:
+
+- **Multi-stage builds** for optimized images
+- **Private networking** for database security
+- **Latest stable versions** of all components (Node 20, MongoDB 8.0, Nginx 1.27)
+- **Environment-based configuration** via `.env` file
+
 ## Features
 
-* Multiple authentication methods (email and password, google and facbook)
-![multiple authentication meathods](https://images.zenhubusercontent.com/641e69bba2d3b289364b33b5/24dbd46f-09d7-4ba7-974c-b4536eb8a61e)
+* Multiple authentication methods (email and password, Google and Facebook)
+![multiple authentication methods](https://images.zenhubusercontent.com/641e69bba2d3b289364b33b5/24dbd46f-09d7-4ba7-974c-b4536eb8a61e)
 
 * Custom link generation for others to send messages to you through it
 ![link generation field](https://images.zenhubusercontent.com/641e69bba2d3b289364b33b5/7f7fbed3-9195-4e21-b45b-f804aad54825)
@@ -28,7 +38,7 @@ A fullstack app that helps the user to know what other people think about him by
 * Message sending page
 ![message sending page](https://images.zenhubusercontent.com/641e69bba2d3b289364b33b5/1acfef28-1637-4c73-846e-49e04dc3b908)
 
-* Recieve messages without knowing the sender identity
+* Receive messages without knowing the sender identity
 ![recieved messages page](https://images.zenhubusercontent.com/641e69bba2d3b289364b33b5/a3e8046a-ff85-4d1e-b1c2-36424ca383f6)
 
 * Real-time update whenever a new message is sent
@@ -52,40 +62,58 @@ Go to the project directory
   cd tell_me
 ```
 
-Install client and server's dependencies
+## Setup Options
 
-```bash
-  cd client
-  npm i
-  cd .. && cd server
-  npm i
-```
+### Option 1: Docker Compose (Recommended)
 
-#### Add Environment Variables
+**Prerequisites:** Docker and Docker Compose installed
 
+1. **Copy environment file**
+   ```bash
+   cp .env.example .env
+   ```
 
-To run this project, you will need to add the following environment variables to your .env file
+2. **Update environment variables**
+   Edit `.env` with your actual values:
+   - `MONGODB_URI` (defaults to Docker MongoDB)
+   - `SECRET_KEY` for JWT
+   - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, etc. for OAuth
+   - `FACEBOOK_APP_ID`, `FACEBOOK_APP_SECRET`, etc.
+   - `EXPRESS_SESSION_SECRET`
+   - `RESEND_API_KEY` and `RESEND_FROM_EMAIL` for email
+   - `FRONT_END` (defaults to http://localhost:3000)
 
-for the front end:
+3. **Start the application**
+   ```bash
+   docker-compose up --build
+   ```
 
-* `REACT_APP_BACKEND` your back end url
+4. **Access the app**
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:8080
+   - Health check: http://localhost:8080/health
 
-and for the back end:
-* `MONGODB_URI`
-* `SECRET_KEY` for jsonwebtoken
-* `GOOGLE_CLIENT_ID`
-* `GOOGLE_CLIENT_SECRET`
-* `GOOGLE_REDIRECT_URL`
-* `FACEBOOK_APP_ID`
-* `FACEBOOK_APP_SECRET`
-* `FACEBOOK_REDIRECT_URL`
-* `EXPRESS_SESSION_SECRET`
-* `RESEND_API_KEY` your Resend API key
-* `RESEND_FROM_EMAIL` your verified sender email from Resend
-* `FRONT_END` your front end url
+### Option 2: Manual Setup
 
-#### finally
-run the front end and the back end server using
-```bash
-npm start
-```
+**Prerequisites:** Node.js, MongoDB installed locally
+
+1. **Install dependencies**
+   ```bash
+   cd client && npm install
+   cd ../server && npm install
+   ```
+
+2. **Setup environment variables**
+   Copy `server/.env.example` to `server/.env` and fill in your values
+
+3. **Start MongoDB**
+   Make sure MongoDB is running locally
+
+4. **Start services**
+   ```bash
+   # Terminal 1: Start server
+   cd server && npm run start:prod
+
+   # Terminal 2: Start client
+   cd client && npm start
+   ```
