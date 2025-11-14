@@ -10,7 +10,7 @@ const Home = () => {
         src={wave}
         alt="wave background"
       />
-      <div className="relative mx-auto flex items-center h-[calc(100vh-64px)] overflow-hidden max-w-[110rem]">
+      <div className="relative mx-auto flex items-center h-[calc(100vh-64px)] max-w-[110rem]">
         <HeaderText />
         <HeaderImage />
       </div>
