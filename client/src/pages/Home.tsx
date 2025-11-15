@@ -1,15 +1,25 @@
-import wave from "../assets/wave.png";
-import HeaderText from "../components/Header/HeaderText";
-import HeaderImage from "../components/Header/HeaderImage";
+ import HeaderText from "../components/Header/HeaderText";
+ import HeaderImage from "../components/Header/HeaderImage";
 
-const Home = () => {
-  return (
-    <header className="bg-green-500">
-      <img
-        className="absolute inset-y-0 h-full w-5/12"
-        src={wave}
-        alt="wave background"
-      />
+ const Home = () => {
+   return (
+     <header className="bg-green-500">
+       <svg
+         className="absolute inset-y-0 h-full w-5/12"
+         viewBox="0 0 100 100"
+         preserveAspectRatio="none"
+       >
+         <defs>
+           <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+             <stop offset="0%" stop-color="#065f46" />
+             <stop offset="100%" stop-color="#22c55e" />
+           </linearGradient>
+         </defs>
+         <path
+           d="M0,0 Q30,30 60,20 T100,40 L100,100 L0,100 Z"
+           fill="url(#waveGradient)"
+         />
+       </svg>
       <div className="relative mx-auto flex items-center h-[calc(100vh-64px)] max-w-[110rem]">
         <HeaderText />
         <HeaderImage />
