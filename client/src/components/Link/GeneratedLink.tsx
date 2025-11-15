@@ -45,30 +45,55 @@ const GeneratedLink: React.FC<Props> = ({ data }) => {
   }, [showSuccess]);
 
   return (
-    <div className="flex bg-green-100 h-4/5 tall:h-36 md:h-3/5 w-full rounded-xl border-gray-900 border-2 items-center mx-0 tall:mx-0 md:mx-5 my-5 relative">
+    <div className="flex flex-col sm:flex-row bg-green-100 h-4/5 tall:h-36 md:h-3/5 w-full rounded-xl border-gray-900 border-2 items-center mx-0 tall:mx-0 md:mx-5 my-5 relative sm:p-0 p-4 sm:space-y-0 space-y-3">
       {showNew && (
         <div className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
           New!
         </div>
       )}
-      <button
-        title="copy to clipboard"
-        data-testid="copy-button"
-        onClick={copyToClipboard}
-        className="h-full aspect-square border-r-2 border-green-900 inline-flex justify-center items-center hover:bg-green-200 transition-colors disabled:opacity-50 rounded-l-xl"
-        disabled={!path}
-      >
-        <ClipboardDocumentIcon className={`text-gray-700 h-3/5 ${showSuccess ? 'text-green-600' : ''}`} aria-hidden />
-      </button>
-      <input
-        type="text"
-        data-testid="generated-link"
-        className={`bg-green-100 h-full w-full rounded-r-xl pl-2 xsm:pl-5 text-xl xsm:text-2xl placeholder:text-2xl sm:placeholder:text-3xl placeholder:text-gray-400 transition-colors ${showSuccess ? 'bg-green-50 border-green-300' : ''
-          }`}
-        placeholder="Click Generate to create your link"
-        value={path}
-        readOnly
-      />
+      {/* Mobile layout */}
+      <div className="sm:hidden flex flex-col space-y-3 w-full">
+        <input
+          type="text"
+          data-testid="generated-link"
+          className={`bg-white h-12 w-full rounded-lg px-3 text-lg placeholder:text-lg placeholder:text-gray-400 transition-colors border ${showSuccess ? 'bg-green-50 border-green-300' : 'border-gray-300'
+            }`}
+          placeholder="Click Generate to create your link"
+          value={path}
+          readOnly
+        />
+        <button
+          title="copy to clipboard"
+          data-testid="copy-button"
+          onClick={copyToClipboard}
+          className="bg-green-200 hover:bg-green-300 text-gray-700 px-4 py-2 rounded-lg border border-green-300 inline-flex justify-center items-center transition-colors disabled:opacity-50 text-sm font-medium"
+          disabled={!path}
+        >
+          <ClipboardDocumentIcon className="text-gray-700 h-5 w-5 mr-2" aria-hidden />
+          Copy Link
+        </button>
+      </div>
+      {/* Desktop layout */}
+      <div className="hidden sm:flex w-full h-full">
+        <button
+          title="copy to clipboard"
+          data-testid="copy-button"
+          onClick={copyToClipboard}
+          className="h-full aspect-square border-r-2 border-green-900 inline-flex justify-center items-center hover:bg-green-200 transition-colors disabled:opacity-50 rounded-l-xl"
+          disabled={!path}
+        >
+          <ClipboardDocumentIcon className={`text-gray-700 h-3/5 ${showSuccess ? 'text-green-600' : ''}`} aria-hidden />
+        </button>
+        <input
+          type="text"
+          data-testid="generated-link"
+          className={`bg-green-100 h-full w-full rounded-r-xl pl-2 xsm:pl-5 text-xl xsm:text-2xl placeholder:text-2xl sm:placeholder:text-3xl placeholder:text-gray-400 transition-colors ${showSuccess ? 'bg-green-50 border-green-300' : ''
+            }`}
+          placeholder="Click Generate to create your link"
+          value={path}
+          readOnly
+        />
+      </div>
       {showSuccess && (
         <div className="absolute -top-2 -left-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
           ✓ Copied!

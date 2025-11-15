@@ -5,14 +5,14 @@
    return (
      <header className="bg-green-500">
        <svg
-         className="absolute inset-y-0 h-full w-5/12"
+         className="absolute inset-y-0 h-full w-full sm:w-5/12"
          viewBox="0 0 100 100"
          preserveAspectRatio="none"
        >
          <defs>
            <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-             <stop offset="0%" stop-color="#065f46" />
-             <stop offset="100%" stop-color="#22c55e" />
+             <stop offset="0%" stopColor="#065f46" />
+             <stop offset="100%" stopColor="#22c55e" />
            </linearGradient>
          </defs>
          <path
