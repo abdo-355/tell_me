@@ -183,15 +183,6 @@ const SignupForm = () => {
                     />
                   ))}
                 <div id="clerk-captcha"></div>
-                <span className="text-sm text-gray-600 mt-4 px-4">
-                  By signing up you agree to our{" "}
-                  <a
-                    href="/signup"
-                    className="text-blue-900 underline underline-offset-2"
-                  >
-                    Privacy Policy
-                  </a>
-                </span>
                 <button
                   type="submit"
                   className="w-full h-12 sm:h-14 bg-green-800 text-white font-semibold text-base sm:text-lg rounded-lg transition-all hover:bg-green-700 disabled:opacity-60"
