@@ -3,14 +3,12 @@ import { Github } from "lucide-react";
 
 const GitHubButton: React.FC<{ mode: "Log in" | "Sign up" }> = ({ mode }) => {
     const { signIn } = useSignIn();
-    const { signUp } = useSignUp();
 
     const handleClick = () => {
-        const auth = mode === "Log in" ? signIn : signUp;
-        auth?.authenticateWithRedirect({
+        signIn?.authenticateWithRedirect({
             strategy: 'oauth_github',
-            redirectUrl: '/messages',
-            redirectUrlComplete: '/messages',
+            redirectUrl: '/auth/login',
+            redirectUrlComplete: mode === "Log in" ? '/messages' : '/',
         });
     };
 

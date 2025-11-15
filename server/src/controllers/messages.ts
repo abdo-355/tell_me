@@ -8,30 +8,31 @@ import { io } from "../server";
 
 export const getPath: RequestHandler = async (req, res) => {
   try {
-    let user = await User.findOne({ clerkUserId: req.userId });
-
-    if (!user) {
-      // Create user if not exists
-      const clerkUser = await clerkClient.users.getUser(req.userId);
-      user = new User({
-        clerkUserId: req.userId,
-        firstName: clerkUser.firstName || '',
-        lastName: clerkUser.lastName || '',
-        email: clerkUser.emailAddresses[0]?.emailAddress || '',
-      });
-      await user.save();
-    }
-
+    const clerkUser = await clerkClient.users.getUser(req.userId);
     const regenerate = req.query.regenerate === 'true';
 
-    if (!user.path || regenerate) {
-      const generatedPath = randomBytes(8).toString("hex");
-      user.path = generatedPath;
-      await user.save();
-      return res.status(200).json({ path: generatedPath, regenerated: regenerate });
+    const updateObj: any = {};
+    if (regenerate) {
+      updateObj.path = randomBytes(8).toString("hex");
     }
 
-    return res.status(200).json({ path: user.path, regenerated: false });
+    const user = await User.findOneAndUpdate(
+      { clerkUserId: req.userId },
+      {
+        $setOnInsert: {
+          clerkUserId: req.userId,
+          firstName: clerkUser.firstName || '',
+          lastName: clerkUser.lastName || '',
+          email: clerkUser.emailAddresses[0]?.emailAddress || '',
+          path: regenerate ? updateObj.path : randomBytes(8).toString("hex"),
+          messages: [],
+        },
+        ...updateObj,
+      },
+      { upsert: true, new: true }
+    );
+
+    return res.status(200).json({ path: user.path, regenerated: regenerate });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Failed to generate path" });
@@ -71,19 +72,22 @@ export const postMessage: RequestHandler = async (req, res) => {
 
 export const getMessages: RequestHandler = async (req, res, next) => {
   try {
-    let user = await User.findOne({ clerkUserId: req.userId });
+    const clerkUser = await clerkClient.users.getUser(req.userId);
 
-    if (!user) {
-      // Create user if not exists
-      const clerkUser = await clerkClient.users.getUser(req.userId);
-      user = new User({
-        clerkUserId: req.userId,
-        firstName: clerkUser.firstName || '',
-        lastName: clerkUser.lastName || '',
-        email: clerkUser.emailAddresses[0]?.emailAddress || '',
-      });
-      await user.save();
-    }
+    const user = await User.findOneAndUpdate(
+      { clerkUserId: req.userId },
+      {
+        $setOnInsert: {
+          clerkUserId: req.userId,
+          firstName: clerkUser.firstName || '',
+          lastName: clerkUser.lastName || '',
+          email: clerkUser.emailAddresses[0]?.emailAddress || '',
+          path: randomBytes(8).toString("hex"),
+          messages: [],
+        },
+      },
+      { upsert: true, new: true }
+    );
 
     res.status(200).json({ messages: user.messages.reverse(), path: user.path });
   } catch (err) {

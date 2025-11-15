@@ -2,14 +2,12 @@ import { useSignIn, useSignUp } from "@clerk/clerk-react";
 
 const FacebookButton: React.FC<{ mode: "Log in" | "Sign up" }> = ({ mode }) => {
     const { signIn } = useSignIn();
-    const { signUp } = useSignUp();
 
     const handleClick = () => {
-        const auth = mode === "Log in" ? signIn : signUp;
-        auth?.authenticateWithRedirect({
+        signIn?.authenticateWithRedirect({
             strategy: 'oauth_facebook',
-            redirectUrl: '/messages',
-            redirectUrlComplete: '/messages',
+            redirectUrl: '/auth/login',
+            redirectUrlComplete: mode === "Log in" ? '/messages' : '/',
         });
     };
 

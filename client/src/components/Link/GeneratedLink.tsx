@@ -45,7 +45,7 @@ const GeneratedLink: React.FC<Props> = ({ data }) => {
   }, [showSuccess]);
 
   return (
-    <div className="flex bg-green-100 h-4/5 tall:h-36 md:h-3/5 w-11/12 tall:w-11/12 md:w-2/3 rounded-xl border-gray-900 border-2 items-center ml-0 tall:ml-0 md:ml-5 my-5 relative">
+    <div className="flex bg-green-100 h-4/5 tall:h-36 md:h-3/5 w-full rounded-xl border-gray-900 border-2 items-center mx-0 tall:mx-0 md:mx-5 my-5 relative">
       {showNew && (
         <div className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
           New!

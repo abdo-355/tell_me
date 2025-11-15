@@ -27,7 +27,7 @@ const VerifyEmail = () => {
       });
 
       if (result.status === "complete") {
-        navigate("/messages");
+        window.location.href = "/messages";
       } else {
         setModalMessage("Verification failed. Please try again.");
         setModalIsOpen(true);
@@ -47,6 +47,9 @@ const VerifyEmail = () => {
           <h2 className="font-roboto text-4xl uppercase font-bold tracking-wider text-green-900 mb-10 text-center">
             Verify Your Email
           </h2>
+          <p className="text-sm text-gray-600 mb-6 text-center">
+            Please verify your email now. If you don't, you'll need to register again.
+          </p>
           <form onSubmit={formSubmitHandler} noValidate className="space-y-4">
             <div>
               <label htmlFor="code" className="block text-sm font-medium text-gray-700">
