@@ -1,12 +1,11 @@
-import { useState, useCallback, useContext } from "react";
+import { useState, useCallback } from "react";
 import axios, { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
-
-import authContext from "../context/auth-context";
+import { useAuth } from "@clerk/clerk-react";
 
 type TMethods = "get" | "post" | "put" | "patch" | "delete";
 
-const useAxios = (url: string, method: TMethods, body?: Object) => {
+const useAxios = (url: string | (() => string), method: TMethods, body?: Object) => {
   const [loading, setloading] = useState(false);
   const [error, setError] = useState<AxiosError<{ message: string }> | null>(
     null
@@ -14,20 +13,22 @@ const useAxios = (url: string, method: TMethods, body?: Object) => {
   const [data, setData] = useState<any>(null);
   const [statusCode, setStatusCode] = useState(0);
 
-  const { token } = useContext(authContext);
+  const { getToken } = useAuth();
 
   const navigate = useNavigate();
 
-  const request = useCallback(async () => {
+  const request = useCallback(async (dynamicBody?: Object) => {
     try {
       setloading(true);
+      const token = await getToken();
+      const currentUrl = typeof url === 'function' ? url() : url;
       const res = await axios.request({
-        url,
+        url: currentUrl,
         method,
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        data: body,
+        data: dynamicBody || body,
         withCredentials: true,
       });
 
@@ -50,7 +51,7 @@ const useAxios = (url: string, method: TMethods, body?: Object) => {
     } finally {
       setloading(false);
     }
-  }, [body, method, navigate, token, url]);
+  }, [body, method, navigate, getToken, url]);
 
   return { request, data, loading, error, statusCode };
 };

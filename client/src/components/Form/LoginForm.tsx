@@ -1,14 +1,15 @@
-import { useState, FormEventHandler, useContext, useEffect } from "react";
+import { useState, FormEventHandler } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { Tab } from "@headlessui/react";
+import { useSignIn } from "@clerk/clerk-react";
 
 import Input from "../UI/Input";
-import authContext from "../../context/auth-context";
 import { emailRegex } from "../../data/regex";
 import LoadingSpinner from "../UI/LoadingSpinner";
-import useAxios from "../../hooks/use-axios";
 import Modal from "../UI/Modal/Modal";
-// import GoogleButton from "../UI/Auth/GoogleButton";
-// import FacebookButton from "../UI/Auth/FacebookButton";
+import GoogleButton from "../UI/Auth/GoogleButton";
+import FacebookButton from "../UI/Auth/FacebookButton";
+import GitHubButton from "../UI/Auth/GitHubButton";
 
 export interface ILoginFields {
   email: string;
@@ -28,7 +29,7 @@ const fields: IField[] = [
 
 const LoginForm = () => {
   let formIsValid = false;
-  const auth = useContext(authContext);
+  const { signIn, isLoaded } = useSignIn();
   const navigate = useNavigate();
 
   // for the errors
@@ -45,40 +46,7 @@ const LoginForm = () => {
     password: "",
   });
 
-  const { request, data, statusCode, loading, error } = useAxios(
-    `${process.env.REACT_APP_BACKEND}/api/auth/login`,
-    "post",
-    {
-      email: formData.email,
-      password: formData.password,
-    }
-  );
-
-  const sendData = async () => {
-    if (!formIsValid) return;
-    await request();
-  };
-
-  useEffect(() => {
-    // act upon statusCode change
-    if (statusCode === 202) {
-      const { token } = data;
-      auth.addUser(token);
-      navigate("/messages");
-    } else if (
-      error &&
-      (error.response?.status === 403 || error.response?.status === 404)
-    ) {
-      setModalIsOpen(true);
-      setModalMessage("Email or password is incorrect");
-    } else if (statusCode !== 202 && statusCode !== 0) {
-      setModalIsOpen(true);
-      // setModalMessage(error)
-      setModalMessage(
-        `Oops! something went wrong, please try again. status code ${statusCode}`
-      );
-    }
-  }, [auth, data, error, navigate, statusCode]);
+  const [loading, setLoading] = useState(false);
 
   const formSubmitHandler: FormEventHandler = async (e) => {
     e.preventDefault();
@@ -98,57 +66,103 @@ const LoginForm = () => {
       formIsValid = false;
     }
 
-    await sendData();
+    if (!formIsValid || !isLoaded) return;
+
+    setLoading(true);
+    try {
+      const result = await signIn.create({
+        identifier: formData.email,
+        password: formData.password,
+      });
+
+      if (result.status === "complete") {
+        navigate("/messages");
+      } else {
+        setModalIsOpen(true);
+        setModalMessage("Sign in failed. Please try again.");
+      }
+    } catch (err: any) {
+      setModalIsOpen(true);
+      setModalMessage(err.errors?.[0]?.message || "An error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <form onSubmit={formSubmitHandler} className="mx-0 sm:mx-5 my-7" noValidate>
-      {fields.map((field) => (
-        <Input
-          key={field.id}
-          id={field.id}
-          label={field.label}
-          type={field.type}
-          error={errors[field.id]}
-          setData={setFormData}
-          setErrors={setErrors}
-        />
-      ))}
-      <div className="w-auto h-20 sm:h-[7rem] flex items-center justify-center">
-        <button
-          type="submit"
-          className="bg-green-800 text-white uppercase w-40 sm:w-80 h-10 sm:h-16 mx-5 text-xl sm:text-3xl rounded-full"
-          disabled={loading}
+    <div className="mx-0 sm:mx-5 my-7">
+        <Tab.Group>
+          <Tab.List className="flex gap-2 rounded-lg bg-green-900/10 p-1 mb-6">
+            <Tab className={({ selected }) =>
+              `w-full rounded-lg py-2 text-sm font-medium leading-5 transition-all ${
+                selected
+                  ? 'bg-white text-green-700 shadow'
+                  : 'text-green-600 hover:bg-white/[0.12] hover:text-green-700'
+              }`
+            }>
+              Email
+            </Tab>
+            <Tab className={({ selected }) =>
+              `w-full rounded-lg py-2 text-sm font-medium leading-5 transition-all ${
+                selected
+                  ? 'bg-white text-green-700 shadow'
+                  : 'text-green-600 hover:bg-white/[0.12] hover:text-green-700'
+              }`
+            }>
+              Social
+            </Tab>
+          </Tab.List>
+          <Tab.Panels className="mt-4">
+            <Tab.Panel>
+              <form onSubmit={formSubmitHandler} noValidate className="space-y-4">
+                {fields.map((field) => (
+                  <Input
+                    key={field.id}
+                    id={field.id}
+                    label={field.label}
+                    type={field.type}
+                    error={errors[field.id]}
+                    setData={setFormData}
+                    setErrors={setErrors}
+                  />
+                ))}
+                <button
+                  type="submit"
+                  className="w-full h-12 sm:h-14 bg-green-800 text-white font-semibold text-base sm:text-lg rounded-lg transition-all hover:bg-green-700 disabled:opacity-60"
+                  disabled={loading}
+                >
+                  {loading ? <LoadingSpinner /> : "log in"}
+                </button>
+              </form>
+            </Tab.Panel>
+          <Tab.Panel>
+            <div className="flex flex-col space-y-3 mt-6">
+              <GoogleButton mode="Log in" />
+              <FacebookButton mode="Log in" />
+              <GitHubButton mode="Log in" />
+            </div>
+          </Tab.Panel>
+          </Tab.Panels>
+        </Tab.Group>
+        <span className="block text-center mt-6 text-sm sm:text-base">
+          Don't have an account?{" "}
+          <NavLink
+            className="text-blue-700 hover:text-green-700 underline underline-offset-2"
+            to="/auth/signup"
+          >
+            Signup
+          </NavLink>
+        </span>
+        <Modal
+          open={modalIsOpen}
+          onClose={() => {
+            setModalIsOpen(false);
+            setModalMessage("");
+          }}
         >
-          {loading ? <LoadingSpinner /> : "log in"}
-        </button>
-      </div>
-      <p className="text-center text-2xl border-black border-opacity-30 border-b-2 leading-[.4rem] my-5 mx-8">
-        <span className="bg-green-100 px-3 text-gray-700">or</span>
-      </p>
-      <div className="flex flex-1 flex-col items-center mx-2 sm:mx-5">
-        {/* <GoogleButton mode="Log in" /> */}
-        {/* <FacebookButton mode="Log in" /> */}
-      </div>
-      <span className="block text-center -mb-3">
-        Don't have an account?{" "}
-        <NavLink
-          className="text-blue-700 hover:text-green-700 underline underline-offset-2"
-          to="/auth/signup"
-        >
-          Signup
-        </NavLink>
-      </span>
-      <Modal
-        open={modalIsOpen}
-        onClose={() => {
-          setModalIsOpen(false);
-          setModalMessage("");
-        }}
-      >
-        {modalMessage}
-      </Modal>
-    </form>
+          {modalMessage}
+        </Modal>
+    </div>
   );
 };
 

@@ -6,15 +6,25 @@ import Layout from "./Layout";
 
 const history = createMemoryHistory();
 
+jest.mock("@clerk/clerk-react");
+
+const mockUseAuth = require("@clerk/clerk-react").useAuth;
+
 describe("<Layout />", () => {
-  test("should redirect to the login page if the passed route is protected and there is no token in the localStorage", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("should redirect to the login page if the passed route is protected and user is not signed in", () => {
+    mockUseAuth.mockReturnValue({ isSignedIn: false, isLoaded: true });
     history.push("/protectedURL");
     renderLayout();
 
     expect(history.location.pathname).toBe("/auth/login");
   });
 
-  test("should render the home page waithout token", () => {
+  test("should render the home page without being signed in", () => {
+    mockUseAuth.mockReturnValue({ isSignedIn: false, isLoaded: true });
     history.push("/");
 
     renderLayout();
@@ -27,9 +37,9 @@ describe("<Layout />", () => {
     expect(homePage).toBeInTheDocument();
   });
 
-  test("should continue to the desired page with the navBar if the passed route is protected and there is a token in the localStorage", () => {
+  test("should continue to the desired page with the navBar if the passed route is protected and user is signed in", () => {
+    mockUseAuth.mockReturnValue({ isSignedIn: true, isLoaded: true });
     history.push("/protectedURL");
-    localStorage.setItem("token", "aTokenString");
     renderLayout();
 
     //the url shouldn't change

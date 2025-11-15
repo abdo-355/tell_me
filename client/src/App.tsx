@@ -6,8 +6,9 @@ import Form from "./pages/Form";
 import LinkGenerator from "./pages/LinkGenerator";
 import SendMessage from "./pages/SendMessage";
 import Messages from "./pages/Messages";
-import EmailNotVerified from "./pages/Email/EmailNotVerified"
 import EmailVerified from "./pages/Email/EmailVerified"
+import EmailNotVerified from "./pages/Email/EmailNotVerified";
+import VerifyEmail from "./pages/Email/VerifyEmail";
 import NotFound from "./pages/NotFound";
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
     <Routes>
       <Route path="/auth/*" element={<Form />} />
       <Route path="/messages/:usertpath" element={<SendMessage />} />
+      <Route path="/email/verify" element={<VerifyEmail />} />
       <Route path="/email/verified" element={<EmailVerified />} />
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />

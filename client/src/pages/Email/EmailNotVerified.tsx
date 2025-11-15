@@ -1,17 +1,17 @@
-import { useContext } from "react";
+import { useAuth } from "@clerk/clerk-react";
 
-import authContext from "../../context/auth-context";
 import useAxios from "../../hooks/use-axios";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import Card from "../../components/UI/Card";
 import styles from "../styles.module.css"
 
 const NotVerified = () => {
-    const { token } = useContext(authContext)
-    const { request, loading } = useAxios(`${process.env.REACT_APP_BACKEND}/api/auth/resend-email`, "post", { token })
+    const { getToken } = useAuth();
+    const { request, loading } = useAxios(`${process.env.REACT_APP_BACKEND}/api/auth/resend-email`, "post", {})
 
-    const handleClick = () => {
-        request()
+    const handleClick = async () => {
+        const token = await getToken();
+        request({ token });
     }
 
     return <div className={`${styles.background} h-screen relative flex justify-center items-center`}>

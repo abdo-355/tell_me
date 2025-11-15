@@ -16,11 +16,8 @@ export const config = {
   // Database
   mongoUri: requireEnv("MONGODB_URI"),
 
-  // JWT Secret
-  secretKey: requireEnv("SECRET_KEY"),
-
-  // Session Secret
-  expressSessionSecret: requireEnv("EXPRESS_SESSION_SECRET"),
+  // Clerk
+  clerkSecretKey: requireEnv("CLERK_SECRET_KEY"),
 
   // Email Configuration
   resendApiKey: requireEnv("RESEND_API_KEY"),
@@ -34,16 +31,6 @@ export const config = {
 
   // Host
   host: process.env.HOST || "0.0.0.0",
-
-  // Google OAuth
-  googleClientId: requireEnv("GOOGLE_CLIENT_ID"),
-  googleClientSecret: requireEnv("GOOGLE_CLIENT_SECRET"),
-  googleRedirectUrl: requireEnv("GOOGLE_REDIRECT_URL"),
-
-  // Facebook OAuth
-  facebookAppId: requireEnv("FACEBOOK_APP_ID"),
-  facebookAppSecret: requireEnv("FACEBOOK_APP_SECRET"),
-  facebookRedirectUrl: requireEnv("FACEBOOK_REDIRECT_URL"),
 };
 
 // Function to validate all required config at startup

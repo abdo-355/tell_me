@@ -1,49 +1,33 @@
 import { RequestHandler } from "express";
-import jwt from "jsonwebtoken";
-import { config } from "../config";
-import User from "../models/User";
+import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
+
+interface ClerkAuth {
+  userId: string;
+  user: {
+    firstName?: string;
+    lastName?: string;
+    emailAddresses?: { emailAddress: string }[];
+  };
+}
 
 // to save the userId in the request object
 declare global {
   namespace Express {
     interface Request {
       userId: string;
+      auth: ClerkAuth;
     }
   }
 }
 
+const clerkAuth = ClerkExpressRequireAuth();
+
 const isAuth: RequestHandler = (req, res, next) => {
-  const tokenHeader = req.headers["authorization"];
-  const token = tokenHeader && tokenHeader.split(" ")[1];
-
-  if (!token) {
-    return res
-      .status(401)
-      .json({ message: "No 'authorization' header was provided" });
-  }
-
-  jwt.verify(
-    token,
-    config.secretKey,
-    async (err: any, decoded: any) => {
-      if (err) return res.status(401).json({ message: err.message });
-
-      const { userId } = decoded as { userId: string };
-
-      const user = await User.findById(userId);
-
-      if (!user) {
-        return res.status(401).json({ message: "User not found" });
-      }
-
-      if (!user.verified) {
-        return res.status(401).json({ message: "email not verified" });
-      }
-
-      req.userId = userId;
-      next();
-    }
-  );
+  clerkAuth(req, res, (err) => {
+    if (err) return next(err);
+    req.userId = req.auth.userId;
+    next();
+  });
 };
 
 export default isAuth;

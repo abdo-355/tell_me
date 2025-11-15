@@ -1,14 +1,10 @@
 import { model, Schema } from "mongoose";
 
 interface IUser {
+  clerkUserId: string;
   firstName: string;
   lastName: string;
   email: string;
-  verified: boolean;
-  verificationCode: string;
-  password?: string;
-  googleId?: string;
-  facebookId?: string;
   // path to send messages to
   path: string;
   //for recieved messages
@@ -16,6 +12,11 @@ interface IUser {
 }
 
 const UserSchema = new Schema<IUser>({
+  clerkUserId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   firstName: {
     type: String,
     required: true,
@@ -28,29 +29,6 @@ const UserSchema = new Schema<IUser>({
     type: String,
     required: true,
   },
-  verified: {
-    type: Boolean,
-    required: true,
-  },
-  verificationCode: {
-    type: String,
-    required() {
-      return !(this as any).verified;
-    },
-  },
-  password: {
-    type: String,
-    required() {
-      return !(this as any).googleId && !(this as any).facebookId;
-    },
-  },
-  googleId: {
-    type: String,
-  },
-  facebookId: {
-    type: String,
-  },
-
   path: {
     type: String,
     default: "",

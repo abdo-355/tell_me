@@ -1,20 +1,20 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@clerk/clerk-react";
 
 import Modal from "../UI/Modal/Modal";
-import authContext from "../../context/auth-context";
 
 const LogoutButton = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const { removeUser } = useContext(authContext);
+  const { signOut } = useAuth();
   const navigate = useNavigate();
 
   const clickHandler = () => {
     setModalIsOpen(true);
   };
 
-  const handleLogout = () => {
-    removeUser();
+  const handleLogout = async () => {
+    await signOut();
     setModalIsOpen(false);
     navigate("/");
   };

@@ -1,7 +1,11 @@
+import { Clerk } from "@clerk/clerk-sdk-node";
 import app from "./app";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { config, validateConfig } from "./config";
+
+// Initialize Clerk
+Clerk({ secretKey: config.clerkSecretKey });
 
 // Validate configuration at startup
 validateConfig();

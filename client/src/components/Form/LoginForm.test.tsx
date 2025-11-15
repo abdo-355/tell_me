@@ -1,21 +1,19 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 import LoginForm from "./LoginForm";
 import { invalidEmails } from "../../data/testing";
 
-const mockWindow = window;
-const mockStatus = jest.fn(() => 0);
 
-jest.mock("../../hooks/use-axios", () => () => ({
-  request: jest.fn(async () => {
-    //@ts-ignore
-    mockWindow.fetchCalled = true;
-  }),
-  statusCode: mockStatus(),
-  data: { token: "token" },
+
+jest.mock("@clerk/clerk-react", () => ({
+  useSignIn: jest.fn(() => ({ signIn: { create: jest.fn(() => Promise.resolve({ status: "complete" })) }, isLoaded: true })),
 }));
+
+jest.mock("@clerk/clerk-react");
+
+const mockUseSignIn = require("@clerk/clerk-react").useSignIn;
 
 const mockNavigate = jest.fn();
 
@@ -26,7 +24,12 @@ jest.mock("react-router-dom", () => ({
 
 describe("<LoginForm />", () => {
   beforeEach(() => {
-    mockStatus.mockReturnValue(0);
+    mockUseSignIn.mockReturnValue({
+      signIn: {
+        create: jest.fn(() => Promise.resolve({ status: "complete" }))
+      },
+      isLoaded: true
+    });
   });
   describe("everything renders properly", () => {
     test("have two input fields(email and password) and 'log in' button", () => {
@@ -56,12 +59,12 @@ describe("<LoginForm />", () => {
       userEvent.click(getEmail());
       userEvent.click(getPassword());
 
-      expect(getEmail()).toHaveErrorMessage(/this field can't be empty/i);
+      expect(getEmail()).toHaveAccessibleErrorMessage(/this field can't be empty/i);
 
       userEvent.click(getPassword());
       userEvent.click(getEmail());
 
-      expect(getPassword()).toHaveErrorMessage(/this field can't be empty/i);
+      expect(getPassword()).toHaveAccessibleErrorMessage(/this field can't be empty/i);
     });
 
     test("the error message disappears when typing anything on the field", () => {
@@ -71,12 +74,12 @@ describe("<LoginForm />", () => {
       userEvent.click(getEmail());
       userEvent.click(getPassword());
 
-      expect(getEmail()).toHaveErrorMessage(/this field can't be empty/i);
+      expect(getEmail()).toHaveAccessibleErrorMessage(/this field can't be empty/i);
 
       // typing anything then clicking away from the element
       userEvent.type(getEmail(), "any string");
       userEvent.click(getPassword());
-      expect(getEmail()).toHaveErrorMessage("");
+      expect(getEmail()).toHaveAccessibleErrorMessage("");
     });
 
     describe("testing invalid input", () => {
@@ -88,7 +91,7 @@ describe("<LoginForm />", () => {
 
           clickLogin();
 
-          expect(getEmail()).toHaveErrorMessage(/please enter a valid email/i);
+          expect(getEmail()).toHaveAccessibleErrorMessage(/please enter a valid email/i);
         });
       });
     });
@@ -97,36 +100,42 @@ describe("<LoginForm />", () => {
       renderComponent();
 
       clickLogin();
-      expect(getPassword()).toHaveErrorMessage(
+      expect(getPassword()).toHaveAccessibleErrorMessage(
         /password must be atleast 8 characters/i
       );
 
       userEvent.type(getPassword(), "shortpw");
 
       clickLogin();
-      expect(getPassword()).toHaveErrorMessage(
+      expect(getPassword()).toHaveAccessibleErrorMessage(
         /password must be atleast 8 characters/i
       );
     });
 
-    test("form submits successfully and redirected to the messages page if fields are valid", () => {
+    test("form submits successfully and redirected to the messages page if fields are valid", async () => {
       renderComponent();
 
       userEvent.type(getEmail(), "email@example.com");
       userEvent.type(getPassword(), "password");
 
-      clickLogin();
+      await act(async () => {
+        clickLogin();
+      });
 
-      //@ts-ignore
-      expect(window.fetchCalled).toBe(true);
+      expect(mockNavigate).toHaveBeenCalledWith("/messages");
     });
 
-    test("component redirects to the messages page for 202 status code", () => {
-      mockStatus.mockReturnValue(202);
-
+    test("component redirects to the messages page when sign in is complete", async () => {
       renderComponent();
 
-      expect(mockNavigate).toBeCalled();
+      userEvent.type(getEmail(), "email@example.com");
+      userEvent.type(getPassword(), "password");
+
+      await act(async () => {
+        clickLogin();
+      });
+
+      expect(mockNavigate).toHaveBeenCalledWith("/messages");
     });
   });
 });

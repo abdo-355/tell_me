@@ -1,15 +1,30 @@
 import supertest from "supertest";
-import jwt from "jsonwebtoken";
+
+jest.mock("@clerk/clerk-sdk-node", () => ({
+  Clerk: jest.fn(),
+  ClerkExpressRequireAuth: jest.fn(() => (req: any, res: any, next: any) => {
+    req.auth = { userId: "testUserId" };
+    next();
+  }),
+  clerkClient: {
+    users: {
+      getUser: jest.fn(() => Promise.resolve({
+        firstName: "Test",
+        lastName: "User",
+        emailAddresses: [{ emailAddress: "test@example.com" }],
+      })),
+    },
+  },
+}));
 
 import app from "../app";
 import User from "../models/User";
-import { config } from "../config";
 
 describe("messages", () => {
   describe("url generating", () => {
     it("should return 403 for if the message is empty", async () => {
       const { statusCode, body } = await supertest(app)
-        .post("/messages/someRandomUserPath")
+        .post("/api/messages/someRandomUserPath")
         .send({ message: "" });
 
       expect(statusCode).toBe(403);
@@ -27,7 +42,7 @@ describe("messages", () => {
       jest.spyOn(User, "findOne").mockResolvedValueOnce(undefined);
 
       const { statusCode, body } = await supertest(app)
-        .post("/messages/someRandomUserPath")
+        .post("/api/messages/someRandomUserPath")
         .send({ message: "some random message" });
 
       expect(statusCode).toBe(404);
@@ -46,7 +61,7 @@ describe("messages", () => {
       });
 
       const { statusCode, body } = await supertest(app)
-        .post("/messages/someRandomUserPath")
+        .post("/api/messages/someRandomUserPath")
         .send({ message: "some random message" });
 
       expect(pushMessageMock).toBeCalledWith("some random message");
@@ -58,34 +73,20 @@ describe("messages", () => {
 
   describe("getting messages", () => {
     it("should return an empty array when no messages found", async () => {
-      const userId = "some user id";
+      jest.spyOn(User, "findOne").mockResolvedValueOnce({ messages: [] });
 
-      jest.spyOn(User, "findById").mockResolvedValueOnce({ messages: [] });
-
-      const { statusCode, body } = await supertest(app)
-        .get("/messages")
-        .set(
-          "authorization",
-          `Bearer ${jwt.sign({ userId }, config.secretKey)}`
-        );
+      const { statusCode, body } = await supertest(app).get("/api/messages");
 
       expect(statusCode).toBe(200);
       expect(body).toEqual({ messages: [] });
     });
 
     it("should return array of messages when found", async () => {
-      const userId = "some user id";
-
       const messages = ["1st message", "2nd message", "3rd message"];
 
-      jest.spyOn(User, "findById").mockResolvedValueOnce({ messages });
+      jest.spyOn(User, "findOne").mockResolvedValueOnce({ messages });
 
-      const { statusCode, body } = await supertest(app)
-        .get("/messages")
-        .set(
-          "authorization",
-          `Bearer ${jwt.sign({ userId }, config.secretKey)}`
-        );
+      const { statusCode, body } = await supertest(app).get("/api/messages");
 
       expect(statusCode).toBe(200);
       expect(body).toEqual({ messages });

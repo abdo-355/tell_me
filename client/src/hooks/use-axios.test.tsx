@@ -2,10 +2,34 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axios from "axios";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useAuth } from "@clerk/clerk-react";
 
 import useAxios from "./use-axios";
 
+jest.mock("@clerk/clerk-react", () => ({
+  useAuth: jest.fn(() => ({ getToken: jest.fn(() => Promise.resolve("token")) })),
+}));
+
+const mockUseAuth = jest.mocked(useAuth);
+
 describe("useAxios", () => {
+  beforeEach(() => {
+    mockUseAuth.mockReturnValue({
+      isLoaded: true,
+      isSignedIn: true,
+      userId: "user123",
+      sessionId: "session123",
+      sessionClaims: {} as any,
+      actor: null,
+      orgId: null,
+      orgRole: null,
+      orgSlug: null,
+      has: jest.fn(),
+      signOut: jest.fn(),
+      getToken: jest.fn(() => Promise.resolve("token")),
+    });
+  });
+
   it("should return an initial state of loading false and data null with the correct status code", () => {
     jest
       .spyOn(axios, "request")

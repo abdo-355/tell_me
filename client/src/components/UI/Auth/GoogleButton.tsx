@@ -1,10 +1,24 @@
+import { useSignIn, useSignUp } from "@clerk/clerk-react";
 import { ReactComponent as GoogleLogo } from "../../../assets/google_icon.svg"
 
 const GoogleButton: React.FC<{ mode: "Log in" | "Sign up" }> = ({ mode }) => {
-    return <a href={process.env.REACT_APP_BACKEND + "/api/auth/google"} className={`${mode === "Sign up" ? "w-full md:w-5/12" : "w-full"} relative flex justify-end xsm:justify-center items-center py-3 px-2 bg-white hover:bg-gray-100 shadow-md hover:shadow-lg focus:outline-none focus:shadow-outline-gray transition-all active:scale-95 rounded-2xl`}>
-        <GoogleLogo className={`${mode === "Sign up" ? "inline-block md:relative md:left-0 absolute left-4" : "absolute left-4"} w-10 h-10 -my-5`} />
-        <span className="inline-block relative text-gray-700 font-semibold right-2 xsm:right-0">{mode} with Google</span>
-    </a>
+    const { signIn } = useSignIn();
+    const { signUp } = useSignUp();
+
+    const handleClick = () => {
+        const auth = mode === "Log in" ? signIn : signUp;
+        auth?.authenticateWithRedirect({
+            strategy: 'oauth_google',
+            redirectUrl: '/messages',
+            redirectUrlComplete: '/messages',
+        });
+    };
+
+    return <button onClick={handleClick} className="w-full h-11 sm:h-12 bg-white border border-gray-300 rounded-lg flex items-center justify-center gap-2 transition-all hover:bg-gray-50 active:bg-gray-100">
+        <GoogleLogo className="w-5 h-5 filter brightness-0" />
+        <span className="text-sm font-medium text-gray-700 hidden sm:inline">{mode} with Google</span>
+        <span className="text-sm font-medium text-gray-700 sm:hidden">{mode}</span>
+    </button>
 }
 
 export default GoogleButton;

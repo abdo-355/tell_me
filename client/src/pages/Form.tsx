@@ -1,4 +1,5 @@
-import { Link, Routes, Route } from "react-router-dom";
+import { Link, Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "@clerk/clerk-react";
 
 import styles from "./styles.module.css";
 import ArrowLeft from "../components/UI/ArrowLeft";
@@ -7,6 +8,11 @@ import LoginForm from "../components/Form/LoginForm";
 import Card from "../components/UI/Card";
 
 const Form = () => {
+  const { isSignedIn } = useAuth();
+
+  if (isSignedIn) {
+    return <Navigate to="/messages" />;
+  }
   return (
     <div
       className={`${styles.background} h-screen relative flex justify-center items-center`}

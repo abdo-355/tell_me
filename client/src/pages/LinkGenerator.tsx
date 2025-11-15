@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import GeneratedLink from "../components/Link/GeneratedLink";
 import LoadingSpinner from "../components/UI/LoadingSpinner";
 import SocialShare from "../components/UI/SocialShare";
@@ -6,26 +6,18 @@ import useAxios from "../hooks/use-axios";
 import styles from "./styles.module.css";
 
 const LinkGenerator = () => {
-  const { request: requestGenerate, data, loading: loadingGenerate, error } = useAxios(
-    `${process.env.REACT_APP_BACKEND}/api/messages/path`,
-    "get"
-  );
-  const { request: requestRegenerate, loading: loadingRegenerate } = useAxios(
-    `${process.env.REACT_APP_BACKEND}/api/messages/path?regenerate=true`,
+  const regenerateRef = useRef(false);
+  const { request, data, loading, error } = useAxios(
+    () => `${process.env.REACT_APP_BACKEND}/api/messages/path${regenerateRef.current ? '?regenerate=true' : ''}`,
     "get"
   );
 
-  const loading = loadingGenerate || loadingRegenerate;
-
-  const generate = useCallback(async (regenerate = false) => {
+  const generate = useCallback(async (regen = false) => {
     if (loading) return;
 
-    if (regenerate) {
-      await requestRegenerate();
-    } else {
-      await requestGenerate();
-    }
-  }, [loading, requestGenerate, requestRegenerate]);
+    regenerateRef.current = regen;
+    await request();
+  }, [loading, request]);
 
   return (
     <div
@@ -37,6 +29,7 @@ const LinkGenerator = () => {
           <GeneratedLink data={data} />
           <button
             title="Generate shareable link"
+            data-testid="generate-button"
             onClick={() => generate(false)}
             className="bg-green-100 h-3/5 tall:h-4/5 sm:w-1/5 tall:w-1/5 aspect-video rounded-xl border-gray-900 border-2 text-xl sm:text-2xl md:text-3xl tall:text-3xl my-3 md:mr-5 disabled:opacity-50"
             disabled={loading}

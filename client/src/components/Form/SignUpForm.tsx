@@ -1,13 +1,15 @@
-import { useState, useEffect, FormEventHandler } from "react";
+import { useState, FormEventHandler } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import useAxios from "../../hooks/use-axios";
+import { Tab } from "@headlessui/react";
+import { useSignUp } from "@clerk/clerk-react";
 
 import Input from "../UI/Input";
 import { emailRegex } from "../../data/regex";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import Modal from "../UI/Modal/Modal";
-// import GoogleButton from "../UI/Auth/GoogleButton";
-// import FacebookButton from "../UI/Auth/FacebookButton";
+import GoogleButton from "../UI/Auth/GoogleButton";
+import FacebookButton from "../UI/Auth/FacebookButton";
+import GitHubButton from "../UI/Auth/GitHubButton";
 
 export interface ISignupFields {
   fName: string;
@@ -32,6 +34,7 @@ const fields: IInputField[] = [
 ];
 
 const SignupForm = () => {
+  const { signUp, isLoaded } = useSignUp();
   const navigate = useNavigate();
   let formIsValid = false;
 
@@ -55,24 +58,9 @@ const SignupForm = () => {
     confirmPassword: "",
   });
 
-  const { request, statusCode, loading, error } = useAxios(
-    `${process.env.REACT_APP_BACKEND}/api/auth/signup/`,
-    "post",
-    {
-      firstName: formData.fName,
-      lastName: formData.lName,
-      email: formData.email,
-      password: formData.password,
-    }
-  );
+  const [loading, setLoading] = useState(false);
 
-  const sendData = async () => {
-    if (!formIsValid) return;
-
-    await request();
-  };
-
-  const formSubmitHandler: FormEventHandler = (e) => {
+  const formSubmitHandler: FormEventHandler = async (e) => {
     e.preventDefault();
 
     formIsValid = true;
@@ -115,106 +103,138 @@ const SignupForm = () => {
       formIsValid = false;
     }
 
-    sendData();
+    if (!formIsValid || !isLoaded) return;
+
+    setLoading(true);
+    try {
+      await signUp.create({
+        firstName: formData.fName,
+        lastName: formData.lName,
+        emailAddress: formData.email,
+        password: formData.password,
+      });
+
+      if (signUp.status === "complete") {
+        navigate("/messages");
+      } else {
+        await signUp.prepareEmailAddressVerification();
+        navigate("/email/verify");
+      }
+    } catch (err: any) {
+      setModalIsOpen(true);
+      setModalMessage(err.errors?.[0]?.message || "An error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => {
-    // act upon statusCode change
-    if (statusCode === 201) {
-      navigate("/auth/login");
-    } else if (error && error.response?.status === 400) {
-      setModalIsOpen(true);
-      setModalMessage(error.response.data!.message);
-    } else if (statusCode !== 200 && statusCode !== 0) {
-      setModalIsOpen(true);
-      // setModalMessage(error)
-      setModalMessage(`Oops! something went wrong, please try again`);
-    }
-  }, [error, navigate, statusCode]);
-
   return (
-    <form
-      onSubmit={formSubmitHandler}
-      className="mt-20 xsm:mt-5 mb-5 my-7 pt-0 hsm:pt-36"
-    >
-      <div className="flex">
-        {fields
-          .filter((e, i) => i < 2)
-          .map((field) => (
-            <Input
-              key={field.id}
-              id={field.id}
-              label={field.label}
-              type={field.type}
-              error={errors[field.id]}
-              setData={setFormData}
-              setErrors={setErrors}
-            />
-          ))}
-      </div>
-      {fields
-        .filter((e, i) => i >= 2)
-        .map((field) => (
-          <Input
-            key={field.id}
-            id={field.id}
-            label={field.label}
-            type={field.type}
-            error={errors[field.id]}
-            setData={setFormData}
-            setErrors={setErrors}
-          />
-        ))}
-      <span className="block mx-6">
-        By signing up you agree to our{" "}
-        <a
-          href="/signup"
-          className="text-blue-900 underline underline-offset-2"
+    <div className="mx-0 sm:mx-5 my-7">
+        <Tab.Group>
+          <Tab.List className="flex gap-2 rounded-lg bg-green-900/10 p-1 mb-6">
+            <Tab className={({ selected }) =>
+              `w-full rounded-lg py-2 text-sm font-medium leading-5 transition-all ${
+                selected
+                  ? 'bg-white text-green-700 shadow'
+                  : 'text-green-600 hover:bg-white/[0.12] hover:text-green-700'
+              }`
+            }>
+              Email
+            </Tab>
+            <Tab className={({ selected }) =>
+              `w-full rounded-lg py-2 text-sm font-medium leading-5 transition-all ${
+                selected
+                  ? 'bg-white text-green-700 shadow'
+                  : 'text-green-600 hover:bg-white/[0.12] hover:text-green-700'
+              }`
+            }>
+              Social
+            </Tab>
+          </Tab.List>
+          <Tab.Panels className="mt-4">
+            <Tab.Panel>
+              <form onSubmit={formSubmitHandler} noValidate className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {fields
+                    .filter((e, i) => i < 2)
+                    .map((field) => (
+                      <Input
+                        key={field.id}
+                        id={field.id}
+                        label={field.label}
+                        type={field.type}
+                        error={errors[field.id]}
+                        setData={setFormData}
+                        setErrors={setErrors}
+                      />
+                    ))}
+                </div>
+                {fields
+                  .filter((e, i) => i >= 2)
+                  .map((field) => (
+                    <Input
+                      key={field.id}
+                      id={field.id}
+                      label={field.label}
+                      type={field.type}
+                      error={errors[field.id]}
+                      setData={setFormData}
+                      setErrors={setErrors}
+                    />
+                  ))}
+                 <div id="clerk-captcha"></div>
+                 <span className="text-sm text-gray-600 mt-4 px-4">
+                   By signing up you agree to our{" "}
+                   <a
+                     href="/signup"
+                     className="text-blue-900 underline underline-offset-2"
+                   >
+                     Privacy Policy
+                   </a>
+                 </span>
+                 <button
+                  type="submit"
+                  className="w-full h-12 sm:h-14 bg-green-800 text-white font-semibold text-base sm:text-lg rounded-lg transition-all hover:bg-green-700 disabled:opacity-60"
+                  disabled={loading}
+                >
+                  {loading ? <LoadingSpinner /> : "Sign up"}
+                </button>
+              </form>
+            </Tab.Panel>
+          <Tab.Panel>
+            <div className="flex flex-col space-y-3 mt-6">
+              <GoogleButton mode="Sign up" />
+              <FacebookButton mode="Sign up" />
+              <GitHubButton mode="Sign up" />
+            </div>
+          </Tab.Panel>
+          </Tab.Panels>
+        </Tab.Group>
+        <span className="block text-center mt-6 text-sm sm:text-base">
+          Already have an account?{" "}
+          <NavLink
+            className="text-blue-700 hover:text-green-700 underline underline-offset-2"
+            to="/auth/login"
+          >
+            Login
+          </NavLink>
+        </span>
+        <Modal
+          open={modalIsOpen}
+          onClose={() => {
+            setModalIsOpen(false);
+            setModalMessage("");
+          }}
         >
-          Privacy Policy
-        </a>
-      </span>
-      <div className="w-auto h-28 sm:h-[7rem] flex items-center justify-center">
-        <button
-          type="submit"
-          className="bg-green-800 text-white uppercase w-48 sm:w-80 h-12 sm:h-16 mx-5 text-xl sm:text-3xl rounded-full"
-          disabled={loading}
-        >
-          {loading ? <LoadingSpinner /> : "Sign up"}
-        </button>
-      </div>
-      <p className="text-center text-2xl border-black border-opacity-30 border-b-2 leading-[.4rem] my-2 mx-8">
-        <span className="bg-green-100 px-3 text-gray-700">or</span>
-      </p>
-      <div className="flex flex-1 flex-col md:flex-row justify-around items-center mx-2 sm:mx-5">
-        {/* <GoogleButton mode="Sign up" /> */}
-        {/* <FacebookButton mode="Sign up" /> */}
-      </div>
-      <span className="block text-center -mb-3">
-        Already have an account?{" "}
-        <NavLink
-          className="text-blue-700 hover:text-green-700 underline underline-offset-2"
-          to="/auth/login"
-        >
-          Login
-        </NavLink>
-      </span>
-      <Modal
-        open={modalIsOpen}
-        onClose={() => {
-          setModalIsOpen(false);
-          setModalMessage("");
-        }}
-      >
-        <span className="w-full mr-2">{modalMessage}</span>
-        <NavLink
-          className="text-blue-700 hover:text-green-700 underline underline-offset-2"
-          to="/auth/login"
-        >
-          Login
-        </NavLink>
-      </Modal>
-    </form>
+          <span className="w-full mr-2">{modalMessage}</span>
+          <NavLink
+            className="text-blue-700 hover:text-green-700 underline underline-offset-2"
+            to="/auth/login"
+          >
+            Login
+          </NavLink>
+        </Modal>
+    </div>
   );
 };
 

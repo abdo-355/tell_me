@@ -1,16 +1,25 @@
 import { RequestHandler } from "express";
 import { randomBytes } from "crypto";
 import { validationResult } from "express-validator";
+import { clerkClient } from "@clerk/clerk-sdk-node";
 
 import User from "../models/User";
 import { io } from "../server";
 
 export const getPath: RequestHandler = async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.userId });
+    let user = await User.findOne({ clerkUserId: req.userId });
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      // Create user if not exists
+      const clerkUser = await clerkClient.users.getUser(req.userId);
+      user = new User({
+        clerkUserId: req.userId,
+        firstName: clerkUser.firstName || '',
+        lastName: clerkUser.lastName || '',
+        email: clerkUser.emailAddresses[0]?.emailAddress || '',
+      });
+      await user.save();
     }
 
     const regenerate = req.query.regenerate === 'true';
@@ -62,10 +71,18 @@ export const postMessage: RequestHandler = async (req, res) => {
 
 export const getMessages: RequestHandler = async (req, res, next) => {
   try {
-    const user = await User.findById(req.userId);
+    let user = await User.findOne({ clerkUserId: req.userId });
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      // Create user if not exists
+      const clerkUser = await clerkClient.users.getUser(req.userId);
+      user = new User({
+        clerkUserId: req.userId,
+        firstName: clerkUser.firstName || '',
+        lastName: clerkUser.lastName || '',
+        email: clerkUser.emailAddresses[0]?.emailAddress || '',
+      });
+      await user.save();
     }
 
     res.status(200).json({ messages: user.messages.reverse(), path: user.path });

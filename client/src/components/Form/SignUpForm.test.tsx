@@ -1,22 +1,39 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 import SignupForm from "./SignUpForm";
 import { invalidEmails } from "../../data/testing";
 
-const mockWindow = window;
+const mockSignUp = {
+  status: "complete",
+  create: jest.fn(() => Promise.resolve()),
+  prepareEmailAddressVerification: jest.fn(() => Promise.resolve()),
+};
 
-jest.mock("../../hooks/use-axios", () => () => ({
-  request: jest.fn(async () => {
-    //@ts-ignore
-    mockWindow.fetchCalled = true;
-  }),
-  statusCode: 202,
-  data: { token: "token" },
+jest.mock("@clerk/clerk-react", () => ({
+  useSignUp: jest.fn(() => ({ signUp: mockSignUp, isLoaded: true })),
 }));
 
+const mockUseSignUp = jest.mocked(require("@clerk/clerk-react").useSignUp);
+
+const mockNavigate = jest.fn();
+
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: () => mockNavigate,
+}));
+
+
+
 describe("<SignupForm />", () => {
+  beforeEach(() => {
+    mockSignUp.status = "complete";
+    mockSignUp.create.mockClear();
+    mockSignUp.prepareEmailAddressVerification.mockClear();
+    mockNavigate.mockClear();
+  });
+
   describe("everything renders properly", () => {
     test("have two input fields(email and password) and 'sign up' button", () => {
       renderComponent();
@@ -48,7 +65,7 @@ describe("<SignupForm />", () => {
       userEvent.click(getEmail());
       userEvent.click(getPassword());
 
-      expect(getEmail()).toHaveErrorMessage(/this field can't be empty/i);
+      expect(getEmail()).toHaveAccessibleErrorMessage(/this field can't be empty/i);
 
       userEvent.click(getFName());
       userEvent.click(getLName());
@@ -56,10 +73,10 @@ describe("<SignupForm />", () => {
       userEvent.click(getConfirmPass());
       userEvent.click(getEmail());
 
-      expect(getFName()).toHaveErrorMessage(/this field can't be empty/i);
-      expect(getLName()).toHaveErrorMessage(/this field can't be empty/i);
-      expect(getPassword()).toHaveErrorMessage(/this field can't be empty/i);
-      expect(getConfirmPass()).toHaveErrorMessage(/this field can't be empty/i);
+      expect(getFName()).toHaveAccessibleErrorMessage(/this field can't be empty/i);
+      expect(getLName()).toHaveAccessibleErrorMessage(/this field can't be empty/i);
+      expect(getPassword()).toHaveAccessibleErrorMessage(/this field can't be empty/i);
+      expect(getConfirmPass()).toHaveAccessibleErrorMessage(/this field can't be empty/i);
     });
 
     test("the error message disappears when typing anything on the field", () => {
@@ -72,10 +89,10 @@ describe("<SignupForm />", () => {
       userEvent.click(getConfirmPass());
       userEvent.click(getEmail());
 
-      expect(getFName()).toHaveErrorMessage(/this field can't be empty/i);
-      expect(getLName()).toHaveErrorMessage(/this field can't be empty/i);
-      expect(getPassword()).toHaveErrorMessage(/this field can't be empty/i);
-      expect(getConfirmPass()).toHaveErrorMessage(/this field can't be empty/i);
+      expect(getFName()).toHaveAccessibleErrorMessage(/this field can't be empty/i);
+      expect(getLName()).toHaveAccessibleErrorMessage(/this field can't be empty/i);
+      expect(getPassword()).toHaveAccessibleErrorMessage(/this field can't be empty/i);
+      expect(getConfirmPass()).toHaveAccessibleErrorMessage(/this field can't be empty/i);
 
       // typing anything then clicking away from the element
       userEvent.type(getFName(), "some input");
@@ -84,10 +101,10 @@ describe("<SignupForm />", () => {
       userEvent.type(getConfirmPass(), "some input");
       userEvent.click(getEmail());
 
-      expect(getFName()).toHaveErrorMessage("");
-      expect(getLName()).toHaveErrorMessage("");
-      expect(getPassword()).toHaveErrorMessage("");
-      expect(getConfirmPass()).toHaveErrorMessage("");
+      expect(getFName()).toHaveAccessibleErrorMessage("");
+      expect(getLName()).toHaveAccessibleErrorMessage("");
+      expect(getPassword()).toHaveAccessibleErrorMessage("");
+      expect(getConfirmPass()).toHaveAccessibleErrorMessage("");
     });
 
     describe("testing invalid emails", () => {
@@ -99,7 +116,7 @@ describe("<SignupForm />", () => {
 
           clickSignup();
 
-          expect(getEmail()).toHaveErrorMessage(/please enter a valid email/i);
+          expect(getEmail()).toHaveAccessibleErrorMessage(/please enter a valid email/i);
         });
       });
     });
@@ -108,14 +125,14 @@ describe("<SignupForm />", () => {
       renderComponent();
 
       clickSignup();
-      expect(getPassword()).toHaveErrorMessage(
+      expect(getPassword()).toHaveAccessibleErrorMessage(
         /password must be atleast 8 characters/i
       );
 
       userEvent.type(getPassword(), "shortpw");
 
       clickSignup();
-      expect(getPassword()).toHaveErrorMessage(
+      expect(getPassword()).toHaveAccessibleErrorMessage(
         /password must be atleast 8 characters/i
       );
     });
@@ -126,12 +143,12 @@ describe("<SignupForm />", () => {
       userEvent.type(getConfirmPass(), "passwordConfirm");
 
       clickSignup();
-      expect(getConfirmPass()).toHaveErrorMessage(
+      expect(getConfirmPass()).toHaveAccessibleErrorMessage(
         /this doesn't match the entered password/i
       );
     });
 
-    test("form submits successfully if fields are valid", () => {
+    test("form submits successfully if fields are valid", async () => {
       renderComponent();
 
       userEvent.type(getFName(), "test");
@@ -140,9 +157,11 @@ describe("<SignupForm />", () => {
       userEvent.type(getPassword(), "password");
       userEvent.type(getConfirmPass(), "password");
 
-      clickSignup();
-      //@ts-ignore
-      expect(window.fetchCalled).toBeTruthy();
+      await act(async () => {
+        clickSignup();
+      });
+
+      expect(mockNavigate).toHaveBeenCalledWith("/messages");
     });
   });
 });

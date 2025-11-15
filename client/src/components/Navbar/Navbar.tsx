@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useAuth } from "@clerk/clerk-react";
 import { Disclosure } from "@headlessui/react";
 
 import NavToggler from "./NavToggler";
@@ -7,11 +7,10 @@ import PanelItem from "./PanelItem";
 import NavButton from "./NavButton";
 import NavLinks from "./NavLinks";
 import LogoutButton from "./LogoutButton";
-import authContext from "../../context/auth-context";
 import { links } from "./NavLinks";
 
 const Navbar = () => {
-  const { isLoggedIn } = useContext(authContext);
+  const { isSignedIn } = useAuth();
   return (
     <>
       <Disclosure as="nav" className="bg-green-500">
@@ -22,7 +21,7 @@ const Navbar = () => {
               <NavToggler open={open} />
               {/*---------------------*/}
               <Logo />
-              {isLoggedIn ? (
+               {isSignedIn ? (
                 <>
                   <NavLinks />
                   <LogoutButton />

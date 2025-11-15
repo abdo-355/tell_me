@@ -7,9 +7,11 @@ import userEvent from "@testing-library/user-event";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LogoutButton from "./LogoutButton";
-import authContext from "../../context/auth-context";
 
-const mockRemoveUser = jest.fn();
+jest.mock("@clerk/clerk-react");
+
+const mockUseAuth = require("@clerk/clerk-react").useAuth;
+const mockSignOut = jest.fn();
 const mockNavigate = jest.fn();
 
 jest.mock("react-router-dom", () => ({
@@ -18,6 +20,11 @@ jest.mock("react-router-dom", () => ({
 }));
 
 describe("<LogoutButton />", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockUseAuth.mockReturnValue({ signOut: mockSignOut });
+  });
+
   it("clicking on the logout button opens the modal", () => {
     renderComponent();
     clickButton();
@@ -27,15 +34,15 @@ describe("<LogoutButton />", () => {
     expect(modalText).toBeInTheDocument();
   });
 
-  it("clicking the 'yes' button triggers the userRemove method and navigates to the home page", () => {
+  it("clicking the 'yes' button triggers signOut and navigates to the home page", async () => {
     renderComponent();
     clickButton();
 
     const yesButton = screen.getByRole("button", { name: /yes/i });
 
-    userEvent.click(yesButton);
+    await userEvent.click(yesButton);
 
-    expect(mockRemoveUser).toBeCalled();
+    expect(mockSignOut).toBeCalled();
     expect(mockNavigate).toBeCalledWith("/");
   });
 
@@ -44,7 +51,6 @@ describe("<LogoutButton />", () => {
     clickButton();
 
     const noButton = screen.getByRole("button", { name: /no/i });
-    const modalText = screen.queryByText(/Are you sure you want to logout/i);
 
     userEvent.click(noButton);
 
@@ -52,8 +58,7 @@ describe("<LogoutButton />", () => {
       screen.queryByText(/Are you sure you want to logout/i)
     );
 
-    expect(mockRemoveUser).not.toBeCalled();
-    expect(modalText).not.toBeInTheDocument();
+    expect(mockSignOut).not.toBeCalled();
   });
 });
 
@@ -61,20 +66,11 @@ describe("<LogoutButton />", () => {
 
 const renderComponent = () => {
   render(
-    <authContext.Provider
-      value={{
-        addUser: () => {},
-        isLoggedIn: true,
-        removeUser: mockRemoveUser,
-        token: "token",
-      }}
-    >
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LogoutButton />} />
-        </Routes>
-      </BrowserRouter>
-    </authContext.Provider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LogoutButton />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 

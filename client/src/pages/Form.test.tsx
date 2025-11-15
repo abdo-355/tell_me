@@ -3,7 +3,18 @@ import { MemoryRouter } from "react-router-dom";
 
 import Form from "./Form";
 
+jest.mock("@clerk/clerk-react", () => ({
+  useAuth: jest.fn(() => ({ isSignedIn: false })),
+  useSignIn: () => ({ signIn: { create: jest.fn(() => Promise.resolve({ status: "complete" })) }, isLoaded: true }),
+  useSignUp: () => ({ signUp: { create: jest.fn(() => Promise.resolve({ status: "complete" })) }, isLoaded: true }),
+}));
+
+const mockUseAuth = require("@clerk/clerk-react").useAuth;
+
 describe("<Form />", () => {
+  beforeEach(() => {
+    mockUseAuth.mockReturnValue({ isSignedIn: false });
+  });
   test("signup page is displayed when the pathname is '/auth/signup'", () => {
     render(
       <MemoryRouter initialEntries={["/signup"]}>

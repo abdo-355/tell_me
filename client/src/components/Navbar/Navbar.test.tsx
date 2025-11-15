@@ -2,19 +2,19 @@ import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 
 import Navbar from "./Navbar";
-import authContext from "../../context/auth-context";
 
-const mockIsLoggedIn = jest.fn(() => true);
-const mockRemoveUser = jest.fn();
+jest.mock("@clerk/clerk-react");
+
+const mockUseAuth = require("@clerk/clerk-react").useAuth;
 
 describe("<Navbar />", () => {
   describe("if Logged in", () => {
     beforeEach(() => {
-      mockIsLoggedIn.mockReturnValue(true);
+      mockUseAuth.mockReturnValue({ isSignedIn: true });
     });
 
     it("should have navigation links to the url generator and messages page with the home page and a logout button", () => {
-      renderComponent();
+      render(<Navbar />, { wrapper: BrowserRouter });
 
       const urlLink = screen.getByRole("link", { name: /url/i });
       const messageLink = screen.getByRole("link", { name: /messages/i });
@@ -29,6 +29,10 @@ describe("<Navbar />", () => {
   });
 
   describe("if not logged in", () => {
+    beforeEach(() => {
+      mockUseAuth.mockReturnValue({ isSignedIn: false });
+    });
+
     it("clicking the 'log in' button navigates to the login page", () => {
       render(<Navbar />, { wrapper: BrowserRouter });
       const loginButton = screen.getByRole("link", {
@@ -47,20 +51,3 @@ describe("<Navbar />", () => {
     });
   });
 });
-
-const renderComponent = () => {
-  render(
-    <BrowserRouter>
-      <authContext.Provider
-        value={{
-          isLoggedIn: mockIsLoggedIn(),
-          removeUser: mockRemoveUser,
-          addUser: () => {},
-          token: "token string",
-        }}
-      >
-        <Navbar />
-      </authContext.Provider>
-    </BrowserRouter>
-  );
-};
