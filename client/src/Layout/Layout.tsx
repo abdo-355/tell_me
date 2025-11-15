@@ -1,14 +1,13 @@
-import { Outlet, useLocation, Navigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 
 import Navbar from "../components/Navbar/Navbar";
 import LoadingSpinner from "../components/UI/LoadingSpinner";
 
 const Layout = () => {
-  const { pathname } = useLocation();
-  const { isSignedIn, isLoaded } = useAuth();
+  const { isLoaded } = useAuth();
 
-  if (!isLoaded && pathname !== "/") {
+  if (!isLoaded) {
     return (
       <div className="flex justify-center items-center h-screen">
         <LoadingSpinner className="h-12 w-12" />
@@ -18,14 +17,8 @@ const Layout = () => {
 
   return (
     <>
-      {!isSignedIn && pathname !== "/" ? (
-        <Navigate to="/auth/login" />
-      ) : (
-        <>
-          <Navbar />
-          <Outlet />
-        </>
-      )}
+      <Navbar />
+      <Outlet />
     </>
   );
 };
