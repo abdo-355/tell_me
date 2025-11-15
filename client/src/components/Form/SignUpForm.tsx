@@ -182,17 +182,17 @@ const SignupForm = () => {
                       setErrors={setErrors}
                     />
                   ))}
-                 <div id="clerk-captcha"></div>
-                 <span className="text-sm text-gray-600 mt-4 px-4">
-                   By signing up you agree to our{" "}
-                   <a
-                     href="/signup"
-                     className="text-blue-900 underline underline-offset-2"
-                   >
-                     Privacy Policy
-                   </a>
-                 </span>
-                 <button
+                <div id="clerk-captcha"></div>
+                <span className="text-sm text-gray-600 mt-4 px-4">
+                  By signing up you agree to our{" "}
+                  <a
+                    href="/signup"
+                    className="text-blue-900 underline underline-offset-2"
+                  >
+                    Privacy Policy
+                  </a>
+                </span>
+                <button
                   type="submit"
                   className="w-full h-12 sm:h-14 bg-green-800 text-white font-semibold text-base sm:text-lg rounded-lg transition-all hover:bg-green-700 disabled:opacity-60"
                   disabled={loading}
@@ -202,10 +202,22 @@ const SignupForm = () => {
               </form>
             </Tab.Panel>
           <Tab.Panel>
-            <div className="flex flex-col space-y-3 mt-6">
+            <div className="flex flex-col space-y-3 mt-6 relative">
               <GoogleButton mode="Sign up" />
               <FacebookButton mode="Sign up" />
               <GitHubButton mode="Sign up" />
+              {process.env.REACT_APP_SOCIAL_AUTH_ENABLED !== 'true' && (
+                <div className="absolute inset-0 bg-white bg-opacity-75 backdrop-blur-sm flex items-center justify-center rounded-lg">
+                  <div className="text-center p-4">
+                    <p className="text-sm text-gray-700 mb-2">
+                      Social authentication has been disabled for this portfolio project to streamline deployment and avoid platform-specific configurations.
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      To explore social login functionality, please clone the repository and integrate your own Clerk application keys.
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </Tab.Panel>
           </Tab.Panels>

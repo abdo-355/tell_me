@@ -136,10 +136,22 @@ const LoginForm = () => {
               </form>
             </Tab.Panel>
           <Tab.Panel>
-            <div className="flex flex-col space-y-3 mt-6">
+            <div className="flex flex-col space-y-3 mt-6 relative">
               <GoogleButton mode="Log in" />
               <FacebookButton mode="Log in" />
               <GitHubButton mode="Log in" />
+              {process.env.REACT_APP_SOCIAL_AUTH_ENABLED !== 'true' && (
+                <div className="absolute inset-0 bg-white bg-opacity-75 backdrop-blur-sm flex items-center justify-center rounded-lg">
+                  <div className="text-center p-4">
+                    <p className="text-sm text-gray-700 mb-2">
+                      Social authentication has been disabled for this portfolio project to streamline deployment and avoid platform-specific configurations.
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      To explore social login functionality, please clone the repository and integrate your own Clerk application keys.
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </Tab.Panel>
           </Tab.Panels>

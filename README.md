@@ -29,7 +29,7 @@ The application is fully containerized with:
 
 ## Features
 
-* Multiple authentication methods (email and password, Google and Facebook)
+* Multiple authentication methods (email and password, optionally Google, Facebook, and GitHub)
 ![multiple authentication methods](https://images.zenhubusercontent.com/641e69bba2d3b289364b33b5/24dbd46f-09d7-4ba7-974c-b4536eb8a61e)
 
 * Custom link generation for others to send messages to you through it
@@ -77,11 +77,12 @@ Go to the project directory
    Edit `.env` with your actual values:
    - `MONGODB_URI` (defaults to Docker MongoDB)
    - `SECRET_KEY` for JWT
-   - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, etc. for OAuth
-   - `FACEBOOK_APP_ID`, `FACEBOOK_APP_SECRET`, etc.
+   - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, etc. for OAuth (optional)
+   - `FACEBOOK_APP_ID`, `FACEBOOK_APP_SECRET`, etc. (optional)
    - `EXPRESS_SESSION_SECRET`
    - `RESEND_API_KEY` and `RESEND_FROM_EMAIL` for email
    - `FRONT_END` (defaults to http://localhost:3000)
+   - `REACT_APP_SOCIAL_AUTH_ENABLED` (set to `true` to enable social auth, defaults to `false`)
 
 3. **Start the application**
    ```bash
@@ -105,6 +106,7 @@ Go to the project directory
 
 2. **Setup environment variables**
    Copy `server/.env.example` to `server/.env` and fill in your values
+   Copy `client/.env.example` to `client/.env` and fill in your values (especially `REACT_APP_SOCIAL_AUTH_ENABLED` if enabling social auth)
 
 3. **Start MongoDB**
    Make sure MongoDB is running locally

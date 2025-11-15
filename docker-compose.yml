@@ -6,6 +6,7 @@ services:
       args:
         REACT_APP_BACKEND: http://localhost:8081
         REACT_APP_CLERK_PUBLISHABLE_KEY: ${REACT_APP_CLERK_PUBLISHABLE_KEY}
+        REACT_APP_SOCIAL_AUTH_ENABLED: ${REACT_APP_SOCIAL_AUTH_ENABLED}
     ports:
       - "3000:80"
     depends_on:
