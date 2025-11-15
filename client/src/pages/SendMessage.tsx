@@ -33,7 +33,10 @@ const SendMessage = () => {
   };
 
   const showModal = useCallback(() => {
-    if (statusCode !== 201 && statusCode !== 0) {
+    if (statusCode === 404) {
+      setModalMessage("This link is no longer valid. The recipient may have regenerated their link.");
+      setModalIsOpen(true);
+    } else if (statusCode !== 201 && statusCode !== 0) {
       setModalMessage(
         `Something went wrong! please try again status-code: ${statusCode}`
       );
