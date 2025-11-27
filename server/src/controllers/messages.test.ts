@@ -73,23 +73,29 @@ describe("messages", () => {
 
   describe("getting messages", () => {
     it("should return an empty array when no messages found", async () => {
-      jest.spyOn(User, "findOne").mockResolvedValueOnce({ messages: [] });
+      jest.spyOn(User, "findOneAndUpdate").mockResolvedValueOnce({
+        messages: [],
+        path: "test-path"
+      });
 
       const { statusCode, body } = await supertest(app).get("/api/messages");
 
       expect(statusCode).toBe(200);
-      expect(body).toEqual({ messages: [] });
+      expect(body).toEqual({ messages: [], path: "test-path" });
     });
 
     it("should return array of messages when found", async () => {
       const messages = ["1st message", "2nd message", "3rd message"];
 
-      jest.spyOn(User, "findOne").mockResolvedValueOnce({ messages });
+      jest.spyOn(User, "findOneAndUpdate").mockResolvedValueOnce({
+        messages,
+        path: "test-path"
+      });
 
       const { statusCode, body } = await supertest(app).get("/api/messages");
 
       expect(statusCode).toBe(200);
-      expect(body).toEqual({ messages });
+      expect(body).toEqual({ messages: ["3rd message", "2nd message", "1st message"], path: "test-path" });
     });
   });
 });

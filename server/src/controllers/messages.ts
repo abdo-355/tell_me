@@ -4,7 +4,13 @@ import { validationResult } from "express-validator";
 import { clerkClient } from "@clerk/clerk-sdk-node";
 
 import User from "../models/User";
-import { io } from "../server";
+import logger from "../utils/logger";
+
+// Conditionally import io to avoid starting server during tests
+let io: any;
+if (process.env.NODE_ENV !== 'test') {
+  io = require("../server").io;
+}
 
 export const getPath: RequestHandler = async (req, res) => {
   try {
@@ -34,7 +40,7 @@ export const getPath: RequestHandler = async (req, res) => {
 
     return res.status(200).json({ path: user.path, regenerated: regenerate });
   } catch (err) {
-    console.log(err);
+    logger.error('Error generating path', err);
     res.status(500).json({ error: "Failed to generate path" });
   }
 };
@@ -61,11 +67,14 @@ export const postMessage: RequestHandler = async (req, res) => {
     user.messages.push(message);
     await user.save();
 
-    io.to(path).emit("newMessage", message);
-    console.log("emitted newMessage to", path);
+    if (io) {
+      io.to(path).emit("newMessage", message);
+      logger.info(`Emitted newMessage to room: ${path}`);
+    }
 
     res.status(201).json({ message: "message sent successfully" });
   } catch (err) {
+    logger.error('Error posting message', err);
     res.status(500).json({ message: "something went wrong" });
   }
 };
@@ -91,6 +100,7 @@ export const getMessages: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ messages: user.messages.reverse(), path: user.path });
   } catch (err) {
+    logger.error('Error getting messages', err);
     res.status(500).json({ error: "an error occurred" });
   }
 };
