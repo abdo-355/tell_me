@@ -6,11 +6,18 @@ import { clerkClient } from "@clerk/clerk-sdk-node";
 import User from "../models/User";
 import logger from "../utils/logger";
 
-// Conditionally import io to avoid starting server during tests
+// Lazy import io to avoid loading server during tests
 let io: any;
-if (process.env.NODE_ENV !== 'test') {
-  io = require("../server").io;
-}
+const getIo = () => {
+  if (!io && process.env.NODE_ENV !== 'test') {
+    try {
+      io = require("../server").io;
+    } catch (error) {
+      // Server not started yet or in test environment
+    }
+  }
+  return io;
+};
 
 export const getPath: RequestHandler = async (req, res) => {
   try {
@@ -67,8 +74,9 @@ export const postMessage: RequestHandler = async (req, res) => {
     user.messages.push(message);
     await user.save();
 
-    if (io) {
-      io.to(path).emit("newMessage", message);
+    const ioInstance = getIo();
+    if (ioInstance) {
+      ioInstance.to(path).emit("newMessage", message);
       logger.info(`Emitted newMessage to room: ${path}`);
     }
 

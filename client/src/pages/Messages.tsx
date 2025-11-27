@@ -25,13 +25,27 @@ const Messages = () => {
     if (!socketRef.current) {
       socketRef.current = io(process.env.REACT_APP_BACKEND!, {
         withCredentials: true,
-        transports: ['websocket'],
+        transports: ['websocket', 'polling'],
+        upgrade: true,
+        rememberUpgrade: true,
+        timeout: 20000,
+        forceNew: false,
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
       });
       const socket = socketRef.current;
-      socket.on("connect", () => {});
-      socket.on("connect_error", (err) => {});
-      socket.on("disconnect", () => {});
+      socket.on("connect", () => {
+        console.log("Socket connected");
+      });
+      socket.on("connect_error", (err) => {
+        console.error("Socket connection error:", err);
+      });
+      socket.on("disconnect", (reason) => {
+        console.log("Socket disconnected:", reason);
+      });
       socket.on("newMessage", (message: string) => {
+        console.log("New message received:", message);
         setMessages((prev) => [message, ...prev]);
       });
     }

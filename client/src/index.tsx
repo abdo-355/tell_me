@@ -6,6 +6,11 @@ import { ClerkProvider } from "@clerk/clerk-react";
 import "./index.css";
 import App from "./App";
 
+// Fix for socket.io chrome extension detection
+if (typeof window !== 'undefined' && !(window as any).chrome) {
+  (window as any).chrome = {};
+}
+
 const PUBLISHABLE_KEY = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
