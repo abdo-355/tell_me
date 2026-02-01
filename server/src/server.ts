@@ -1,13 +1,9 @@
-import { Clerk } from "@clerk/clerk-sdk-node";
 import app from "./app";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
 import { config, validateConfig } from "./config";
 import logger from "./utils/logger";
-
-// Initialize Clerk
-Clerk({ secretKey: config.clerkSecretKey });
 
 // Validate configuration at startup
 validateConfig();
