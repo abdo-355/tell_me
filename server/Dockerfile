@@ -26,9 +26,6 @@ COPY package*.json ./
 # Install only production dependencies (ignore scripts to avoid prepare hook)
 RUN npm ci --only=production --ignore-scripts && npm cache clean --force
 
-# Rebuild bcrypt for Alpine
-RUN npm rebuild bcrypt
-
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 

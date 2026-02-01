@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 
-jest.mock("@clerk/clerk-sdk-node", () => ({
-  Clerk: jest.fn(),
-  ClerkExpressRequireAuth: jest.fn(() => (req: any, res: any, next: any) => {
+jest.mock("@clerk/express", () => ({
+  requireAuth: jest.fn(() => (req: any, res: any, next: any) => {
     req.auth = { userId: "testUserId" };
     next();
   }),

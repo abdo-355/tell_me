@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { ClerkExpressRequireAuth } from "@clerk/clerk-sdk-node";
+import { requireAuth } from "@clerk/express";
 
 interface ClerkAuth {
   userId: string;
@@ -20,7 +20,7 @@ declare global {
   }
 }
 
-const clerkAuth = ClerkExpressRequireAuth();
+const clerkAuth = requireAuth();
 
 const isAuth: RequestHandler = (req, res, next) => {
   clerkAuth(req, res, (err) => {

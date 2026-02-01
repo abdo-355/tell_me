@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { randomBytes } from "crypto";
 import { validationResult } from "express-validator";
-import { clerkClient } from "@clerk/clerk-sdk-node";
+import { clerkClient } from "@clerk/express";
 
 import User from "../models/User";
 import logger from "../utils/logger";
