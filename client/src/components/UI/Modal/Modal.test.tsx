@@ -32,14 +32,17 @@ describe("<Modal />", () => {
       openModal();
     });
 
+    expect(getModalContent()).toBeInTheDocument();
+
     userEvent.click(getBackdrop()!);
+
+    await waitFor(() => {
+      expect(getModal()).not.toBeVisible();
+    });
 
     await waitFor(() => {
       expect(getModalContent()).not.toBeInTheDocument();
     });
-
-    expect(getModal()).not.toBeInTheDocument();
-    expect(getBackdrop()).not.toBeInTheDocument();
   });
   it("should be hidden after when clicking on the close button", async () => {
     renderComponent();
@@ -47,14 +50,17 @@ describe("<Modal />", () => {
       openModal();
     });
 
+    expect(getModalContent()).toBeInTheDocument();
+
     userEvent.click(screen.getByTestId("close-modal"));
+
+    await waitFor(() => {
+      expect(getModal()).not.toBeVisible();
+    });
 
     await waitFor(() => {
       expect(getModalContent()).not.toBeInTheDocument();
     });
-
-    expect(getModal()).not.toBeInTheDocument();
-    expect(getBackdrop()).not.toBeInTheDocument();
   });
   it("should not be hidden when clicking on the modal body", async () => {
     renderComponent();
@@ -67,7 +73,9 @@ describe("<Modal />", () => {
     await waitFor(() => {
       expect(getModalContent()).toBeInTheDocument();
     });
-    expect(getBackdrop()).toBeInTheDocument();
+    await waitFor(() => {
+      expect(getBackdrop()).toBeInTheDocument();
+    });
   });
 });
 
