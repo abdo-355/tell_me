@@ -3,4 +3,5 @@ module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
   testPathIgnorePatterns: ["fixtures"],
+  setupFiles: ["<rootDir>/jest.setup.ts"],
 };
