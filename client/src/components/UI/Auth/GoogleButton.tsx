@@ -1,4 +1,4 @@
-import { useSignIn, useSignUp } from "@clerk/clerk-react";
+import { useSignIn } from "@clerk/clerk-react";
 import { ReactComponent as GoogleLogo } from "../../../assets/google_icon.svg"
 
 const GoogleButton: React.FC<{ mode: "Log in" | "Sign up" }> = ({ mode }) => {

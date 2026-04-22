@@ -1,6 +1,5 @@
 import { useState, FormEventHandler } from "react";
 import { useSignUp } from "@clerk/clerk-react";
-import { useNavigate } from "react-router-dom";
 
 import Card from "../../components/UI/Card";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
@@ -9,7 +8,6 @@ import styles from "../styles.module.css";
 
 const VerifyEmail = () => {
   const { signUp, isLoaded } = useSignUp();
-  const navigate = useNavigate();
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);

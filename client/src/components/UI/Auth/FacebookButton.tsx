@@ -1,4 +1,4 @@
-import { useSignIn, useSignUp } from "@clerk/clerk-react";
+import { useSignIn } from "@clerk/clerk-react";
 
 const FacebookButton: React.FC<{ mode: "Log in" | "Sign up" }> = ({ mode }) => {
     const { signIn } = useSignIn();
