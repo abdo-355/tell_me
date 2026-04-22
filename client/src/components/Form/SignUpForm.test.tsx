@@ -11,11 +11,13 @@ const mockSignUp = {
   prepareEmailAddressVerification: jest.fn(() => Promise.resolve()),
 };
 
-jest.mock("@clerk/clerk-react", () => ({
-  useSignUp: jest.fn(() => ({ signUp: mockSignUp, isLoaded: true })),
-}));
+jest.mock("@clerk/clerk-react");
 
-const mockUseSignUp = jest.mocked(require("@clerk/clerk-react").useSignUp);
+jest.mock("../UI/Auth/GoogleButton", () => () => <div />);
+jest.mock("../UI/Auth/FacebookButton", () => () => <div />);
+jest.mock("../UI/Auth/GitHubButton", () => () => <div />);
+
+const mockUseSignUp = require("@clerk/clerk-react").useSignUp;
 
 const mockNavigate = jest.fn();
 
@@ -28,6 +30,7 @@ jest.mock("react-router-dom", () => ({
 
 describe("<SignupForm />", () => {
   beforeEach(() => {
+    mockUseSignUp.mockReturnValue({ signUp: mockSignUp, isLoaded: true });
     mockSignUp.status = "complete";
     mockSignUp.create.mockClear();
     mockSignUp.prepareEmailAddressVerification.mockClear();

@@ -15,12 +15,13 @@ describe("<Layout />", () => {
     jest.clearAllMocks();
   });
 
-  test("should redirect to the login page if the passed route is protected and user is not signed in", () => {
+  test("should render protected routes after auth state is loaded", () => {
     mockUseAuth.mockReturnValue({ isSignedIn: false, isLoaded: true });
     history.push("/protectedURL");
     renderLayout();
 
-    expect(history.location.pathname).toBe("/auth/login");
+    expect(history.location.pathname).toBe("/protectedURL");
+    expect(screen.getByText("this should be protected")).toBeInTheDocument();
   });
 
   test("should render the home page without being signed in", () => {
@@ -33,8 +34,10 @@ describe("<Layout />", () => {
     expect(history.location.pathname).toBe("/");
 
     const homePage = screen.getByText("this is the home page");
+    const navBar = screen.getByRole("navigation");
 
     expect(homePage).toBeInTheDocument();
+    expect(navBar).toBeInTheDocument();
   });
 
   test("should continue to the desired page with the navBar if the passed route is protected and user is signed in", () => {

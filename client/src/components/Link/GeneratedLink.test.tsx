@@ -45,9 +45,9 @@ describe("<GeneratedLink />", () => {
 // helper functions
 
 const getField = () => {
-  return screen.getByRole("textbox") as HTMLInputElement;
+  return screen.getAllByTestId("generated-link")[0] as HTMLInputElement;
 };
 
 const getButton = () => {
-  return screen.getByRole("button", { name: /copy to clipboard/i });
+  return screen.getAllByTestId("copy-button")[0];
 };
